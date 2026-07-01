@@ -1,0 +1,6 @@
+{
+  "name": "LapyZone",
+  "description": "Premium device repair and refurbished technology services in Delhi NCR. Specializing in laptops, MacBooks, tablets, and mobile devices.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
