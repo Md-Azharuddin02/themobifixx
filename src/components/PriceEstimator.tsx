@@ -1,362 +1,518 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion } from 'motion/react';
 import { 
   Laptop, Smartphone, Tablet, ShieldCheck, 
-  CheckCircle2, ArrowRight, Clock, HelpCircle, 
-  Cpu, Wrench, Settings, Activity, Sparkles 
+  ArrowRight, Clock, Sparkles, CheckSquare, Square
 } from 'lucide-react';
 
 interface PricingRule {
   min: number;
   max: number;
   time: string;
+  timeInMin: number;
 }
 
-// Logical price estimation logic based on selected combination
-export function getPriceEstimate(device: string, brand: string, issue: string): PricingRule {
-  const isApple = brand.toLowerCase() === 'apple';
-  
-  if (device === 'macbook') {
-    if (issue.includes('Screen')) return { min: 9499, max: 18499, time: '3 - 5 Hours' };
-    if (issue.includes('Battery')) return { min: 4499, max: 7999, time: '60 - 90 Minutes' };
-    if (issue.includes('Keyboard')) return { min: 3499, max: 5999, time: '2 - 3 Hours' };
-    if (issue.includes('Logic')) return { min: 6499, max: 12999, time: '1 - 2 Days' };
-    if (issue.includes('Storage')) return { min: 2999, max: 6499, time: '45 - 60 Minutes' };
-    return { min: 899, max: 1499, time: '30 - 45 Minutes' };
-  }
-  
-  if (device === 'laptop') {
-    if (issue.includes('Screen')) return { min: 3999, max: 7499, time: '60 - 90 Minutes' };
-    if (issue.includes('Battery')) return { min: 1899, max: 3499, time: '30 - 45 Minutes' };
-    if (issue.includes('Keyboard')) return { min: 1299, max: 2499, time: '45 - 60 Minutes' };
-    if (issue.includes('Motherboard')) return { min: 2499, max: 5999, time: '1 - 2 Days' };
-    if (issue.includes('Storage')) return { min: 1499, max: 3999, time: '30 - 45 Minutes' };
-    return { min: 599, max: 999, time: '30 - 45 Minutes' };
-  }
-  
-  if (device === 'mobile') {
-    if (issue.includes('Screen')) {
-      return isApple 
-        ? { min: 4999, max: 11999, time: '45 - 60 Minutes' } 
-        : { min: 2499, max: 5999, time: '45 - 60 Minutes' };
-    }
-    if (issue.includes('Battery')) {
-      return isApple
-        ? { min: 1999, max: 3999, time: '30 - 45 Minutes' }
-        : { min: 1299, max: 2499, time: '30 - 45 Minutes' };
-    }
-    if (issue.includes('IC')) {
-      return isApple
-        ? { min: 2999, max: 6499, time: '1 - 2 Days' }
-        : { min: 1899, max: 3999, time: '1 - 2 Days' };
-    }
-    if (issue.includes('Charging')) {
-      return isApple
-        ? { min: 1299, max: 2499, time: '30 - 45 Minutes' }
-        : { min: 799, max: 1499, time: '30 - 45 Minutes' };
-    }
-    return isApple
-      ? { min: 1899, max: 3999, time: '60 - 90 Minutes' }
-      : { min: 999, max: 1899, time: '60 - 90 Minutes' };
-  }
-  
-  if (device === 'tablet') {
-    if (issue.includes('Screen')) {
-      return isApple
-        ? { min: 5499, max: 12499, time: '2 - 3 Hours' }
-        : { min: 3499, max: 7999, time: '2 - 3 Hours' };
-    }
-    if (issue.includes('Battery')) {
-      return isApple
-        ? { min: 2499, max: 4499, time: '60 - 90 Minutes' }
-        : { min: 1899, max: 3499, time: '60 - 90 Minutes' };
-    }
-    if (issue.includes('IC')) {
-      return isApple
-        ? { min: 3499, max: 7999, time: '1 - 2 Days' }
-        : { min: 2499, max: 5499, time: '1 - 2 Days' };
-    }
-    return isApple
-      ? { min: 1499, max: 2499, time: '45 - 60 Minutes' }
-      : { min: 999, max: 1899, time: '45 - 60 Minutes' };
-  }
-  
-  return { min: 499, max: 999, time: '30 - 45 Minutes' };
+interface IssueOption {
+  id: string;
+  name: string;
+  getPrice: (brand: string) => PricingRule;
 }
+
+// Structured price lookup map for all device types and brands
+const issuesMap: Record<'laptop' | 'macbook' | 'mobile' | 'tablet', IssueOption[]> = {
+  macbook: [
+    {
+      id: 'mac_screen',
+      name: 'Screen shattered/flickering (Retina display)',
+      getPrice: () => ({ min: 9499, max: 18499, time: '3 - 5 Hours', timeInMin: 300 })
+    },
+    {
+      id: 'mac_battery',
+      name: 'Battery replacement (90d Warranty)',
+      getPrice: () => ({ min: 4499, max: 7999, time: '60 - 90 Minutes', timeInMin: 90 })
+    },
+    {
+      id: 'mac_keyboard',
+      name: 'Keyboard or Trackpad unresponsive',
+      getPrice: () => ({ min: 3499, max: 5999, time: '2 - 3 Hours', timeInMin: 180 })
+    },
+    {
+      id: 'mac_logic',
+      name: 'Logic Board chip-level micro-soldering',
+      getPrice: () => ({ min: 6499, max: 12999, time: '1 - 2 Days', timeInMin: 2880 })
+    },
+    {
+      id: 'mac_storage',
+      name: 'High-speed SSD or RAM upgrade',
+      getPrice: () => ({ min: 2999, max: 6499, time: '45 - 60 Minutes', timeInMin: 60 })
+    },
+    {
+      id: 'mac_thermal',
+      name: 'Thermal service & fan cleaning',
+      getPrice: () => ({ min: 899, max: 1499, time: '30 - 45 Minutes', timeInMin: 45 })
+    }
+  ],
+  laptop: [
+    {
+      id: 'lap_screen',
+      name: 'Screen shattered/flickering (FHD Panel)',
+      getPrice: () => ({ min: 3999, max: 7499, time: '60 - 90 Minutes', timeInMin: 90 })
+    },
+    {
+      id: 'lap_battery',
+      name: 'Battery replacement (OEM quality)',
+      getPrice: () => ({ min: 1899, max: 3499, time: '30 - 45 Minutes', timeInMin: 45 })
+    },
+    {
+      id: 'lap_keyboard',
+      name: 'Keyboard or Trackpad replacement',
+      getPrice: () => ({ min: 1299, max: 2499, time: '45 - 60 Minutes', timeInMin: 60 })
+    },
+    {
+      id: 'lap_motherboard',
+      name: 'Motherboard repair & micro-soldering',
+      getPrice: () => ({ min: 2499, max: 5999, time: '1 - 2 Days', timeInMin: 2880 })
+    },
+    {
+      id: 'lap_storage',
+      name: 'High-speed NVMe SSD or RAM upgrade',
+      getPrice: () => ({ min: 1499, max: 3999, time: '30 - 45 Minutes', timeInMin: 45 })
+    },
+    {
+      id: 'lap_thermal',
+      name: 'Thermal service & dust cleaning',
+      getPrice: () => ({ min: 599, max: 999, time: '30 - 45 Minutes', timeInMin: 45 })
+    }
+  ],
+  mobile: [
+    {
+      id: 'mob_screen',
+      name: 'Screen replacement (OLED/LCD display)',
+      getPrice: (brand) => {
+        const isApple = brand.toLowerCase() === 'apple';
+        return isApple
+          ? { min: 4999, max: 11999, time: '45 - 60 Minutes', timeInMin: 60 }
+          : { min: 2499, max: 5999, time: '45 - 60 Minutes', timeInMin: 60 };
+      }
+    },
+    {
+      id: 'mob_battery',
+      name: 'High-capacity battery replacement',
+      getPrice: (brand) => {
+        const isApple = brand.toLowerCase() === 'apple';
+        return isApple
+          ? { min: 1999, max: 3999, time: '30 - 45 Minutes', timeInMin: 45 }
+          : { min: 1299, max: 2499, time: '30 - 45 Minutes', timeInMin: 45 };
+      }
+    },
+    {
+      id: 'mob_ic',
+      name: 'IC/Motherboard chip-level servicing',
+      getPrice: (brand) => {
+        const isApple = brand.toLowerCase() === 'apple';
+        return isApple
+          ? { min: 2999, max: 6499, time: '1 - 2 Days', timeInMin: 2880 }
+          : { min: 1899, max: 3999, time: '1 - 2 Days', timeInMin: 2880 };
+      }
+    },
+    {
+      id: 'mob_charging',
+      name: 'Charging strip / port repair',
+      getPrice: (brand) => {
+        const isApple = brand.toLowerCase() === 'apple';
+        return isApple
+          ? { min: 1299, max: 2499, time: '30 - 45 Minutes', timeInMin: 45 }
+          : { min: 799, max: 1499, time: '30 - 45 Minutes', timeInMin: 45 };
+      }
+    },
+    {
+      id: 'mob_backglass',
+      name: 'Rear glass frame restoration',
+      getPrice: (brand) => {
+        const isApple = brand.toLowerCase() === 'apple';
+        return isApple
+          ? { min: 1899, max: 3999, time: '60 - 90 Minutes', timeInMin: 90 }
+          : { min: 999, max: 1899, time: '60 - 90 Minutes', timeInMin: 90 };
+      }
+    }
+  ],
+  tablet: [
+    {
+      id: 'tab_screen',
+      name: 'Display glass/digitizer replacement',
+      getPrice: (brand) => {
+        const isApple = brand.toLowerCase() === 'apple';
+        return isApple
+          ? { min: 5499, max: 12499, time: '2 - 3 Hours', timeInMin: 180 }
+          : { min: 3499, max: 7999, time: '2 - 3 Hours', timeInMin: 180 };
+      }
+    },
+    {
+      id: 'tab_battery',
+      name: 'High capacity battery replacement',
+      getPrice: (brand) => {
+        const isApple = brand.toLowerCase() === 'apple';
+        return isApple
+          ? { min: 2499, max: 4499, time: '60 - 90 Minutes', timeInMin: 90 }
+          : { min: 1899, max: 3499, time: '60 - 90 Minutes', timeInMin: 90 };
+      }
+    },
+    {
+      id: 'tab_ic',
+      name: 'IC board repair & dead restore',
+      getPrice: (brand) => {
+        const isApple = brand.toLowerCase() === 'apple';
+        return isApple
+          ? { min: 3499, max: 7999, time: '1 - 2 Days', timeInMin: 2880 }
+          : { min: 2499, max: 5499, time: '1 - 2 Days', timeInMin: 2880 };
+      }
+    },
+    {
+      id: 'tab_charging',
+      name: 'Charging port module service',
+      getPrice: (brand) => {
+        const isApple = brand.toLowerCase() === 'apple';
+        return isApple
+          ? { min: 1499, max: 2499, time: '45 - 60 Minutes', timeInMin: 60 }
+          : { min: 999, max: 1899, time: '45 - 60 Minutes', timeInMin: 60 };
+      }
+    }
+  ]
+};
 
 export default function PriceEstimator() {
   const [selectedDevice, setSelectedDevice] = useState<'laptop' | 'macbook' | 'mobile' | 'tablet'>('macbook');
   const [selectedBrand, setSelectedBrand] = useState<string>('Apple');
-  const [selectedIssue, setSelectedIssue] = useState<string>('');
+  const [selectedIssues, setSelectedIssues] = useState<string[]>([]);
 
-  // Device options definitions
+  // Device selections
   const devices = [
-    { id: 'macbook', name: 'MacBook / iMac', icon: Laptop, color: 'text-slate-700 bg-slate-50 border-slate-200' },
-    { id: 'laptop', name: 'Windows Laptop', icon: Laptop, color: 'text-indigo-700 bg-indigo-50/50 border-indigo-100' },
-    { id: 'mobile', name: 'Smartphone', icon: Smartphone, color: 'text-emerald-700 bg-emerald-50/50 border-emerald-100' },
-    { id: 'tablet', name: 'iPad & Tablet', icon: Tablet, color: 'text-amber-700 bg-amber-50/50 border-amber-100' },
+    { id: 'macbook', name: 'MacBook / iMac', icon: Laptop },
+    { id: 'laptop', name: 'Windows Laptop', icon: Laptop },
+    { id: 'mobile', name: 'Smartphone', icon: Smartphone },
+    { id: 'tablet', name: 'iPad & Tablet', icon: Tablet },
   ] as const;
 
-  // Dynamic Brands list based on selected device type
+  // Brands lookup map
   const brandsMap: Record<'laptop' | 'macbook' | 'mobile' | 'tablet', string[]> = {
     macbook: ['Apple'],
-    laptop: ['Dell', 'HP', 'Lenovo', 'Asus', 'Acer', 'Samsung'],
-    mobile: ['Apple', 'Samsung', 'OnePlus', 'Xiaomi', 'Realme', 'Google'],
+    laptop: ['Dell', 'HP', 'Lenovo', 'Asus', 'Acer', 'Microsoft', 'Samsung'],
+    mobile: ['Apple', 'Samsung', 'OnePlus', 'Google', 'Xiaomi', 'Realme'],
     tablet: ['Apple', 'Samsung', 'Lenovo'],
   };
 
-  // Dynamic Issues list based on selected device type
-  const issuesMap: Record<'laptop' | 'macbook' | 'mobile' | 'tablet', string[]> = {
-    macbook: [
-      'Screen shattered/flickering (Retina display)',
-      'Battery swelling/draining fast (90d Warranty)',
-      'Keyboard or Trackpad unresponsive',
-      'Logic Board chip-level micro-soldering',
-      'High-speed SSD or RAM upgrade',
-      'Thermal service & internal fan cleaning'
-    ],
-    laptop: [
-      'Screen shattered/flickering (FHD/IPS Panel)',
-      'Battery swelling/draining fast (OEM quality)',
-      'Keyboard or Trackpad replacement',
-      'Motherboard repair & micro-soldering',
-      'High-speed NVMe SSD or RAM upgrade',
-      'Thermal service & dust cleaning'
-    ],
-    mobile: [
-      'Screen shattered/flickering (OLED/LCD display)',
-      'Battery swelling/draining fast',
-      'IC/Motherboard chip-level servicing',
-      'Charging strip / port repair',
-      'Rear glass frame restoration'
-    ],
-    tablet: [
-      'Display digitizer replacement',
-      'High capacity battery replacement',
-      'IC board soldering & dead restore',
-      'Charging port module service'
-    ],
-  };
-
-  // Reset brand and issue when device changes
+  // Trigger state reset when switching devices
   useEffect(() => {
     const availableBrands = brandsMap[selectedDevice];
     setSelectedBrand(availableBrands[0] || 'Apple');
     
+    // Auto-select the first issue of the selected device to prevent empty states
     const availableIssues = issuesMap[selectedDevice];
-    setSelectedIssue(availableIssues[0] || '');
+    if (availableIssues && availableIssues.length > 0) {
+      setSelectedIssues([availableIssues[0].id]);
+    } else {
+      setSelectedIssues([]);
+    }
   }, [selectedDevice]);
 
   const currentBrands = brandsMap[selectedDevice];
   const currentIssues = issuesMap[selectedDevice];
 
-  // Calculate pricing estimates
-  const priceResult = getPriceEstimate(selectedDevice, selectedBrand, selectedIssue);
+  // Handle toggling of issues
+  const toggleIssue = (issueId: string) => {
+    if (selectedIssues.includes(issueId)) {
+      // Allow deselecting only if it's not the last remaining selected issue
+      if (selectedIssues.length > 1) {
+        setSelectedIssues(selectedIssues.filter(id => id !== issueId));
+      }
+    } else {
+      setSelectedIssues([...selectedIssues, issueId]);
+    }
+  };
+
+  // Compile calculations
+  let subtotalMin = 0;
+  let subtotalMax = 0;
+  let maxTimeMin = 0;
+  let estimatedTimeStr = '30 - 45 Minutes';
+
+  selectedIssues.forEach((issueId) => {
+    const issueObj = currentIssues.find(item => item.id === issueId);
+    if (issueObj) {
+      const priceRule = issueObj.getPrice(selectedBrand);
+      subtotalMin += priceRule.min;
+      subtotalMax += priceRule.max;
+      if (priceRule.timeInMin > maxTimeMin) {
+        maxTimeMin = priceRule.timeInMin;
+        estimatedTimeStr = priceRule.time;
+      }
+    }
+  });
+
+  const hasMultipleIssues = selectedIssues.length > 1;
+  const displayTime = hasMultipleIssues ? `${estimatedTimeStr} (Concurrent Services)` : estimatedTimeStr;
 
   return (
-    <section className="py-20 bg-slate-50/30 border-y border-slate-200/40 relative overflow-hidden" id="price-estimator">
-      {/* Background decoration elements */}
-      <div className="absolute top-1/2 left-0 w-72 h-72 bg-blue-100/20 rounded-full blur-3xl pointer-events-none -translate-y-1/2"></div>
-      <div className="absolute bottom-12 right-0 w-80 h-80 bg-orange-50/20 rounded-full blur-3xl pointer-events-none"></div>
+    <section className="py-24 bg-slate-50/40 border-b-2 border-slate-900 relative overflow-hidden" id="price-estimator">
+      {/* Dynamic blurred backdrop blobs */}
+      <div className="absolute top-1/3 left-0 w-80 h-80 bg-blue-100/20 rounded-full blur-3xl pointer-events-none -translate-x-12"></div>
+      <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-emerald-100/20 rounded-full blur-3xl pointer-events-none translate-x-12"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
-        {/* Header */}
+        {/* Title Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-          <div className="inline-flex items-center space-x-2 bg-blue-50 border border-blue-100 text-[#0F4CFF] px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest">
-            <Sparkles className="w-3.5 h-3.5 animate-pulse" />
-            <span>Smart Tariff Calculator</span>
-          </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0A1020] tracking-tight">
-            Instant Device Repair Price Estimator
+            Configure Your Custom Repair Invoice
           </h2>
           <p className="text-base text-slate-500 max-w-xl mx-auto leading-relaxed">
-            Get an instant, transparent diagnostic cost breakdown range in real time before scheduling your doorstep pickup in Delhi NCR.
+            Select multiple repair services and upgrades concurrently. Watch your live diagnostics breakdown adapt instantly below.
           </p>
         </div>
 
-        {/* Main Interface */}
-        <div className="max-w-5xl mx-auto bg-white border border-slate-200/80 rounded-[32px] p-6 md:p-10 shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
-          
-          {/* Inputs Section (Left Side - 7 Cols) */}
-          <div className="lg:col-span-7 space-y-8">
+        {/* Dynamic Estimation Container - Retro Offset Design */}
+        <div className="max-w-6xl mx-auto relative group">
+          {/* Retro offset shadow outline on the bottom-left of the estimator card */}
+          <div className="absolute -left-[6px] -bottom-[6px] inset-0 border-b-4 border-l-4 border-slate-900 rounded-[32px] bg-transparent pointer-events-none z-0"></div>
+
+          <div className="relative z-10 bg-white border-4 border-slate-900 rounded-[32px] p-6 lg:p-10 shadow-2xl grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
             
-            {/* Step 1: Device Type */}
-            <div className="space-y-3.5">
-              <span className="text-[10px] font-black uppercase tracking-widest text-[#0F4CFF] bg-blue-50/70 border border-blue-100 px-3 py-1 rounded-full inline-block">
-                01. Select Device Type
-              </span>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                {devices.map((device) => {
-                  const Icon = device.icon;
-                  const isSelected = selectedDevice === device.id;
-                  return (
-                    <button
-                      key={device.id}
-                      onClick={() => setSelectedDevice(device.id)}
-                      className={`flex flex-col items-center justify-center p-4 rounded-2xl border text-center transition-all duration-300 cursor-pointer ${
-                        isSelected
-                          ? 'border-[#0F4CFF] bg-blue-50/30 ring-2 ring-blue-100/50'
-                          : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50/50'
-                      }`}
-                    >
-                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 border ${
-                        isSelected ? 'bg-[#0F4CFF] text-white border-[#0F4CFF]' : 'bg-slate-50 text-slate-600 border-slate-100'
-                      }`}>
-                        <Icon className="w-5 h-5" />
-                      </div>
-                      <span className="text-xs font-black tracking-tight text-slate-800 leading-none">
-                        {device.name}
+            {/* Inputs Panel (Left Side - 7 Cols) */}
+            <div className="lg:col-span-7 space-y-8 text-left">
+              
+              {/* Step 1: Device */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <span className="w-6 h-6 rounded-full bg-slate-900 border-2 border-slate-900 text-white flex items-center justify-center text-[10px] font-black">1</span>
+                  <h3 className="text-xs font-black uppercase tracking-wider text-slate-800">Select Device Category</h3>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  {devices.map((dev) => {
+                    const Icon = dev.icon;
+                    const isSelected = selectedDevice === dev.id;
+                    return (
+                      <button
+                        key={dev.id}
+                        onClick={() => setSelectedDevice(dev.id)}
+                        className={`flex flex-col items-center justify-center p-4.5 rounded-2xl border-2 text-center transition-all duration-200 cursor-pointer ${
+                          isSelected
+                            ? 'border-slate-900 bg-blue-50 text-slate-800 shadow-[1px_1px_0px_#0A1020] translate-x-[1.5px] translate-y-[1.5px]'
+                            : 'border-slate-900 bg-white text-slate-800 shadow-[3px_3px_0px_#0A1020] hover:-translate-x-[1px] hover:-translate-y-[1px] hover:shadow-[4px_4px_0px_#0A1020] active:translate-x-[1px] active:translate-y-[1px]'
+                        }`}
+                      >
+                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 border-2 ${
+                          isSelected ? 'bg-[#0D0D0D] text-white border-[#0D0D0D]' : 'bg-slate-50 text-slate-600 border-slate-900'
+                        }`}>
+                          <Icon className="w-5 h-5" />
+                        </div>
+                        <span className="text-xs font-black tracking-tight text-slate-800 leading-none">
+                          {dev.name}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Step 2: Brand */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <span className="w-6 h-6 rounded-full bg-slate-900 border-2 border-slate-900 text-white flex items-center justify-center text-[10px] font-black">2</span>
+                  <h3 className="text-xs font-black uppercase tracking-wider text-slate-800">Choose Hardware Brand</h3>
+                </div>
+                <div className="flex flex-wrap gap-2.5">
+                  {currentBrands.map((brand) => {
+                    const isSelected = selectedBrand === brand;
+                    return (
+                      <button
+                        key={brand}
+                        onClick={() => setSelectedBrand(brand)}
+                        className={`px-4.5 py-2 rounded-xl text-xs font-black transition-all duration-200 border-2 border-slate-900 cursor-pointer ${
+                          isSelected
+                            ? 'bg-[#0D0D0D] text-white shadow-[1px_1px_0px_#0A1020] translate-x-[1.5px] translate-y-[1.5px]'
+                            : 'bg-white text-slate-700 shadow-[3px_3px_0px_#0A1020] hover:-translate-x-[1px] hover:-translate-y-[1px] hover:shadow-[4px_4px_0px_#0A1020] active:translate-x-[1px] active:translate-y-[1px]'
+                        }`}
+                      >
+                        {brand}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Step 3: Multi-Select Issues */}
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="w-6 h-6 rounded-full bg-slate-900 border-2 border-slate-900 text-white flex items-center justify-center text-[10px] font-black">3</span>
+                    <h3 className="text-xs font-black uppercase tracking-wider text-slate-800">Select Repairs Needed (Select Multiple)</h3>
+                  </div>
+                  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">
+                    {selectedIssues.length} Selected
+                  </span>
+                </div>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {currentIssues.map((issue) => {
+                    const isChecked = selectedIssues.includes(issue.id);
+                    const priceRange = issue.getPrice(selectedBrand);
+                    return (
+                      <button
+                        key={issue.id}
+                        onClick={() => toggleIssue(issue.id)}
+                        className={`w-full flex items-start gap-3 p-4 rounded-xl border-2 border-slate-900 text-left transition-all duration-200 cursor-pointer ${
+                          isChecked
+                            ? 'bg-blue-50/10 shadow-[1px_1px_0px_#0A1020] translate-x-[1.5px] translate-y-[1.5px]'
+                            : 'bg-white shadow-[3px_3px_0px_#0A1020] hover:-translate-x-[1px] hover:-translate-y-[1px] hover:shadow-[4px_4px_0px_#0A1020] active:translate-x-[1px] active:translate-y-[1px]'
+                        }`}
+                      >
+                        <div className="mt-0.5 shrink-0">
+                          {isChecked ? (
+                            <CheckSquare className="w-4 h-4 text-[#0F4CFF]" />
+                          ) : (
+                            <Square className="w-4 h-4 text-slate-800" />
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className={`text-[11px] leading-snug font-bold ${
+                            isChecked ? 'text-slate-900' : 'text-slate-600'
+                          }`}>
+                            {issue.name}
+                          </div>
+                          <span className="inline-block mt-2 text-[9px] font-bold tracking-wider text-emerald-600 bg-emerald-50 border border-emerald-100 px-2 py-0.5 rounded-full">
+                            Est: ₹{priceRange.min} - ₹{priceRange.max}
+                          </span>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+            </div>
+
+            {/* Live Invoice Results Panel (Right Side - 5 Cols) - Retro Offset */}
+            <div className="relative lg:col-span-5 flex flex-col justify-between h-full">
+              {/* Retro offset shadow outline for invoice card */}
+              <div className="absolute -left-[4px] -bottom-[4px] inset-0 border-b-2 border-l-2 border-slate-900 rounded-[24px] bg-transparent pointer-events-none z-0"></div>
+
+              <div className="relative z-10 bg-[#0b1410] border-2 border-slate-900 text-white rounded-[24px] p-6 lg:p-8 flex flex-col justify-between h-full overflow-hidden shadow-xl shadow-emerald-950/20">
+                {/* Ambient visual glowing light */}
+                <div className="absolute -bottom-16 -right-16 w-52 h-52 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                
+                <div className="space-y-6 relative z-10 text-left">
+                  {/* Header */}
+                  <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                    <div className="space-y-0.5">
+                      <span className="text-[10px] font-black uppercase text-slate-400 tracking-wider">
+                        Invoice Summary
                       </span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
+                      <div className="text-[9px] text-slate-400 capitalize">
+                        {selectedBrand} • {selectedDevice}
+                      </div>
+                    </div>
+                    <span className="text-[8px] font-bold text-[#a3e635] bg-[#a3e635]/10 border border-[#a3e635]/20 px-2 py-0.5 rounded-full uppercase tracking-widest shrink-0">
+                      Live Calculator
+                    </span>
+                  </div>
 
-            {/* Step 2: Brand Selection */}
-            <div className="space-y-3.5">
-              <span className="text-[10px] font-black uppercase tracking-widest text-[#0F4CFF] bg-blue-50/70 border border-blue-100 px-3 py-1 rounded-full inline-block">
-                02. Choose Brand
-              </span>
-              <div className="flex flex-wrap gap-2.5">
-                {currentBrands.map((brand) => {
-                  const isSelected = selectedBrand === brand;
-                  return (
-                    <button
-                      key={brand}
-                      onClick={() => setSelectedBrand(brand)}
-                      className={`px-4.5 py-2 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer border ${
-                        isSelected
-                          ? 'bg-[#0A1020] border-[#0A1020] text-white'
-                          : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300 hover:bg-slate-50'
-                      }`}
+                  {/* Itemized Price Breakdown */}
+                  <div className="space-y-3 max-h-[160px] overflow-y-auto pr-1" id="invoice-breakdown">
+                    {selectedIssues.map((issueId) => {
+                      const issueObj = currentIssues.find(item => item.id === issueId);
+                      if (!issueObj) return null;
+                      const price = issueObj.getPrice(selectedBrand);
+                      return (
+                        <div key={issueId} className="flex justify-between items-start text-[10px] pb-2.5 border-b border-white/5">
+                          <span className="text-slate-300 font-medium max-w-[70%] leading-normal line-clamp-2">
+                            {issueObj.name}
+                          </span>
+                          <span className="text-slate-100 font-bold shrink-0">
+                            ₹{price.min} - ₹{price.max}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Price Calculations Total display */}
+                  <div className="space-y-1 pt-2">
+                    <span className="text-[9px] text-slate-400 block font-bold uppercase tracking-wider">Total Est. Cost Range</span>
+                    <div className="flex items-baseline gap-1.5 flex-wrap">
+                      <span className="text-3xl lg:text-4xl font-black text-white tracking-tight">
+                        ₹{subtotalMin.toLocaleString('en-IN')}
+                      </span>
+                      <span className="text-sm font-semibold text-slate-400">-</span>
+                      <span className="text-3xl lg:text-4xl font-black text-white tracking-tight">
+                        ₹{subtotalMax.toLocaleString('en-IN')}
+                      </span>
+                    </div>
+                    <span className="text-[9px] text-[#a3e635] font-semibold block pt-1 leading-normal">
+                      * Dynamic estimate subject to physical inspection.
+                    </span>
+                  </div>
+
+                  {/* Breakdown diagnostic parameters */}
+                  <div className="space-y-3.5 border-t border-white/5 pt-6 text-xs font-semibold">
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-400">Diag. Fee</span>
+                      <span className="text-[#a3e635] font-bold">FREE (With Repair)</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-400">Est. Repair Time</span>
+                      <span className="text-slate-200 font-bold flex items-center gap-1">
+                        <Clock className="w-3.5 h-3.5 text-blue-400" />
+                        <span>{displayTime}</span>
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-400">Transit & Pickup</span>
+                      <span className="text-[#a3e635] font-bold">FREE (Delhi NCR)</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-400">Warranty Protection</span>
+                      <span className="text-slate-200 font-bold">90 Days Certificate</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Booking CTA Button */}
+                <div className="pt-8 border-t border-white/10 relative z-10 space-y-4">
+                  <div className="relative w-full h-[52px] group select-none cursor-pointer">
+                    {/* Outer offset thin black outline boundary */}
+                    <div className="absolute -left-[3px] -top-[3px] w-[calc(100%+6px)] h-[calc(100%+6px)] border-2 border-slate-900 rounded-xl pointer-events-none z-0"></div>
+
+                    {/* Yellow backing offset block */}
+                    <div className="absolute inset-0 bg-[#FFB800] rounded-xl -translate-x-1.5 translate-y-1.5 z-0 transition-transform duration-200 group-hover:-translate-x-2"></div>
+
+                    {/* Main button link element */}
+                    <Link
+                      to={`/contact?tab=booking&device=${selectedDevice}&brand=${encodeURIComponent(selectedBrand)}&issues=${encodeURIComponent(
+                        selectedIssues.map(id => currentIssues.find(item => item.id === id)?.name || '').join(', ')
+                      )}`}
+                      className="absolute inset-0 z-10 bg-[#0D0D0D] border-2 border-[#0D0D0D] hover:bg-black text-white font-black text-xs tracking-widest uppercase rounded-xl flex items-center justify-center gap-2 transition-all duration-150 shadow-sm active:translate-y-[1px] active:translate-x-[1px]"
                     >
-                      {brand}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Step 3: Issue Selection */}
-            <div className="space-y-3.5">
-              <span className="text-[10px] font-black uppercase tracking-widest text-[#0F4CFF] bg-blue-50/70 border border-blue-100 px-3 py-1 rounded-full inline-block">
-                03. Choose Issue / Symptom
-              </span>
-              <div className="relative">
-                <select
-                  value={selectedIssue}
-                  onChange={(e) => setSelectedIssue(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-200 text-slate-800 font-bold text-xs uppercase tracking-wider rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-[#0F4CFF] appearance-none"
-                >
-                  {currentIssues.map((issue) => (
-                    <option key={issue} value={issue}>
-                      {issue}
-                    </option>
-                  ))}
-                </select>
-                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 font-bold text-xs">
-                  ▼
+                      <span className="relative pb-0.5">
+                        Confirm & Book Pickup
+                        <span className="absolute left-0 -bottom-0.5 w-full h-[1.5px] bg-[#FFB800]"></span>
+                      </span>
+                      <ArrowRight className="w-4 h-4 text-[#FFB800]" />
+                    </Link>
+                  </div>
+                  
+                  <div className="flex items-center justify-center gap-2 pt-2">
+                    <ShieldCheck className="w-4 h-4 text-[#a3e635]" />
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                      ISO 9001 Lab Diagnostic Standards
+                    </span>
+                  </div>
                 </div>
+
               </div>
             </div>
 
           </div>
-
-          {/* Results Block (Right Side - 5 Cols) */}
-          <div className="lg:col-span-5 bg-[#0A1020] text-white rounded-[24px] p-6 md:p-8 flex flex-col justify-between relative overflow-hidden shadow-xl shadow-blue-900/10">
-            {/* Ambient visual blob */}
-            <div className="absolute -bottom-24 -right-24 w-52 h-52 bg-[#0F4CFF]/20 rounded-full blur-3xl pointer-events-none"></div>
-            
-            <div className="space-y-6 relative z-10">
-              <div className="flex items-center justify-between border-b border-white/5 pb-4">
-                <span className="text-[10px] font-black uppercase text-slate-400 tracking-wider">
-                  Diagnostic Invoice Range
-                </span>
-                <span className="text-[9px] font-bold text-[#00C48C] bg-[#00C48C]/10 border border-[#00C48C]/20 px-2 py-0.5 rounded-full uppercase tracking-widest">
-                  Live Estimate
-                </span>
-              </div>
-
-              {/* Price Display */}
-              <div className="space-y-1">
-                <span className="text-[10px] text-slate-400 block font-bold uppercase tracking-wider">Estimated Cost</span>
-                <div className="flex items-baseline gap-1.5">
-                  <span className="text-3xl sm:text-4xl font-black text-white tracking-tight">
-                    ₹{priceResult.min.toLocaleString('en-IN')}
-                  </span>
-                  <span className="text-sm font-semibold text-slate-400">-</span>
-                  <span className="text-3xl sm:text-4xl font-black text-white tracking-tight">
-                    ₹{priceResult.max.toLocaleString('en-IN')}
-                  </span>
-                </div>
-                <span className="text-[10px] text-[#00C48C] font-semibold block pt-1">
-                  * All prices are flat-rate. No hidden visiting charges.
-                </span>
-              </div>
-
-              {/* Breakdown metrics */}
-              <div className="space-y-3.5 border-t border-white/5 pt-6 text-xs font-semibold">
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-400">Diagnosis Fee</span>
-                  <span className="text-[#00C48C] font-bold">FREE (With Repair)</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-400">Turnaround Time</span>
-                  <span className="text-slate-200 font-bold flex items-center gap-1">
-                    <Clock className="w-3.5 h-3.5 text-blue-400" />
-                    <span>{priceResult.time}</span>
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-400">Doorstep Transit</span>
-                  <span className="text-[#00C48C] font-bold">FREE (Delhi NCR)</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-400">Warranty Card</span>
-                  <span className="text-slate-200 font-bold">90 Days Secured</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Direct Booking CTA with dynamic prefilled variables */}
-            <div className="pt-8 border-t border-white/5 relative z-10 space-y-4">
-              <Link
-                to={`/contact?tab=booking&device=${selectedDevice}&brand=${encodeURIComponent(selectedBrand)}&issue=${encodeURIComponent(selectedIssue)}`}
-                className="relative overflow-hidden w-full bg-[#FF7A00] hover:bg-[#E06B00] text-white font-black text-xs uppercase tracking-widest py-4 rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-orange-900/10 hover:scale-[1.02] active:scale-95 transition-all duration-200 group"
-              >
-                {/* Live shining sweep animation strictly inside button */}
-                <motion.div
-                  initial={{ left: "-100%" }}
-                  animate={{ left: "100%" }}
-                  transition={{
-                    repeat: Infinity,
-                    repeatDelay: 1.4,
-                    duration: 1.4,
-                    ease: "easeInOut",
-                  }}
-                  className="absolute top-0 w-1/2 h-full bg-gradient-to-r from-transparent via-white/25 to-transparent -skew-x-12 pointer-events-none"
-                />
-                <span className="relative z-10">Book Doorstep Pickup</span>
-                <ArrowRight className="w-4 h-4 relative z-10 group-hover:translate-x-1.5 transition-transform duration-300" />
-              </Link>
-              <div className="flex items-center justify-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-[#00C48C]" />
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                  Secure Chip-Level Lab Servicing
-                </span>
-              </div>
-            </div>
-
-          </div>
-
         </div>
 
       </div>

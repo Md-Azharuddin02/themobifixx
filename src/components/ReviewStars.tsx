@@ -1,8 +1,3 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import { Star } from 'lucide-react';
 
 interface ReviewStarsProps {

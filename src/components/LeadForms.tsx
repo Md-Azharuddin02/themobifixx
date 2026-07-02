@@ -1,8 +1,3 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useSearchParams } from 'react-router-dom';
@@ -71,7 +66,7 @@ export function InquiryForm() {
             <CheckCircle2 className="w-16 h-16 text-[#00C48C] mb-4" />
             <h4 className="text-lg font-bold text-slate-900 mb-2">Inquiry Submitted!</h4>
             <p className="text-sm text-slate-600 max-w-sm">
-              Thank you for contacting LapyZone. Our customer support expert will call or WhatsApp you shortly.
+              Thank you for contacting TheMobifixx. Our customer support expert will call or WhatsApp you shortly.
             </p>
             <button
               onClick={() => setSubmitStatus('idle')}
@@ -488,7 +483,7 @@ export function RepairBookingForm({ initialDeviceType = 'laptop' }: RepairBookin
                     <span className="text-xs text-red-500 mt-1 block">{errors.pickupAddress.message}</span>
                   )}
                   <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-1">
-                    * Transit insurance covered by LapyZone.
+                    * Transit insurance covered by TheMobifixx.
                   </p>
                 </motion.div>
               )}
@@ -497,7 +492,7 @@ export function RepairBookingForm({ initialDeviceType = 'laptop' }: RepairBookin
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full flex items-center justify-center space-x-2 bg-[#FF7A00] hover:bg-[#E06B00] disabled:bg-slate-300 text-white font-black text-sm uppercase tracking-wider py-4 rounded-lg cursor-pointer transition-all duration-200 shadow-md hover:shadow-lg"
+              className="w-full flex items-center justify-center gap-2 bg-[#0F4CFF] disabled:bg-slate-300 disabled:shadow-none disabled:cursor-not-allowed text-white font-black text-sm uppercase tracking-wider py-4 rounded-xl border-2 border-slate-900 shadow-[4px_4px_0px_#0A1020] hover:shadow-[5px_5px_0px_#0A1020] hover:-translate-y-[2px] hover:-translate-x-[2px] active:translate-y-[1.5px] active:translate-x-[1.5px] active:shadow-[0.5px_0.5px_0px_#0A1020] transition-all cursor-pointer"
             >
               {isSubmitting ? (
                 <>

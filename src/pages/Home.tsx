@@ -1,56 +1,192 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { Phone, MessageSquare, ArrowRight, ShieldCheck, CheckCircle2, UserCheck, Star, Sparkles, AlertCircle, Wrench, Hammer, ArrowUpRight, Cpu, MapPin, Clock } from 'lucide-react';
+import { Phone, ArrowRight, Star, ArrowUpRight, MapPin, Clock } from 'lucide-react';
 import { ServiceCategory, Technician, Testimonial } from '../types';
 import ServiceIcon from '../components/ServiceIcon';
 import ReviewStars from '../components/ReviewStars';
 import PriceEstimator from '../components/PriceEstimator';
-import InteractiveLaptop3D from '../components/InteractiveLaptop3D';
+import DeviceComparison from '../components/DeviceComparison';
 
-const HERO_SLIDES = [
-  {
-    badge: "Premium Doorstep Service",
-    subBadge: "Delhi • Gurugram • Noida",
-    titleLine1: "MacBook & Laptop Repairs",
-    titleLine2: "Done at Your Doorstep.",
-    titleLine2Color: "text-[#0F4CFF]",
-    description: "Certified hardware engineers providing quick diagnostics, secure pickup, and guaranteed quality. Skip the crowded local tech markets—we handle the end-to-end repair process safely.",
-    btnText: "Schedule Free Pickup",
-    btnLink: "/contact?tab=booking"
-  },
-  {
-    badge: "Advanced Chip-Level Lab",
-    subBadge: "Dedicated Micro-Soldering Facility",
-    titleLine1: "Logic Board Repair &",
-    titleLine2: "Component Engineering.",
-    titleLine2Color: "text-emerald-600",
-    description: "Solving complex board failures under advanced binocular microscopes. We repair liquid spills, backlight faults, power failures, and IC errors without expensive motherboard replacements.",
-    btnText: "Our Repair Services",
-    btnLink: "/services"
-  },
-  {
-    badge: "Guaranteed Workmanship",
-    subBadge: "90-Day Comprehensive Warranty",
-    titleLine1: "Genuine Spares Only,",
-    titleLine2: "Zero Compromises.",
-    titleLine2Color: "text-amber-500",
-    description: "Every keyboard, battery, and display replacement undergoes a strict 24-point quality test. Backed by an official warranty certificate and direct WhatsApp tracking.",
-    btnText: "Track Current Repair",
-    btnLink: "/tracker"
+const BRAND_LOGOS: Record<string, React.ReactNode> = {
+  Apple: (
+    <svg className="w-8 h-8 fill-slate-900 shrink-0" viewBox="0 0 170 170" aria-hidden="true">
+      <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.39.13-9.13-1.85-14.23-5.96-3.29-2.7-7.23-7.44-11.83-14.23-9.87-14.52-16.14-30.82-18.82-48.87-1.46-9.76-.94-18.73 1.56-26.9 2.5-8.17 6.64-14.72 12.42-19.65 5.78-4.93 12.35-7.44 19.7-7.55 4.39 0 9.03 1.21 13.91 3.63 4.88 2.42 8.1 3.63 9.68 3.63 1.37 0 4.67-1.21 9.9-3.63 5.23-2.42 9.87-3.57 13.91-3.46 14.34.8 25.17 6.13 32.48 16.01-11.71 7.12-17.44 16.89-17.2 29.31.24 9.9 3.86 18.23 10.87 24.99 7.01 6.76 15.35 10.36 25.02 10.8-2.52 7.29-6.02 14.6-10.51 21.94zM118.96 37.16c0-7.39 2.62-14.16 7.86-20.3 5.24-6.14 11.66-9.9 19.26-11.28 1.48 8.01-1.21 15.52-8.07 22.52-6.86 7-14.07 10.32-21.6 9.96.2-.3.39-.6.55-.9z" />
+    </svg>
+  ),
+  Dell: (
+    <svg className="w-9 h-9 fill-slate-900 shrink-0" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-3.5-5.5h2.2c1.8 0 2.8-1 2.8-2.5s-1-2.5-2.8-2.5H8.5v5zm1.5-3.8h.7c.8 0 1.3.4 1.3 1.3s-.5 1.3-1.3 1.3H10v-2.6z" />
+      <path d="M6.5 8.5h1.5v7H6.5zm7.3 1.5h1.5v5.5h-1.5zm3.2 0h1.5v5.5h-1.5z" />
+    </svg>
+  ),
+  HP: (
+    <svg className="w-10 h-10 fill-slate-900 shrink-0" viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="2" />
+      <path d="M9.5 7v10M14.5 7v10M9.5 12h5" stroke="currentColor" strokeWidth="2" />
+    </svg>
+  ),
+  Lenovo: (
+    <div className="bg-slate-900 text-white font-black px-3 py-1 text-[11px] uppercase tracking-widest rounded-md border-2 border-slate-900">
+      Lenovo
+    </div>
+  ),
+  Samsung: (
+    <div className="border-2 border-slate-900 rounded-full px-3 py-1 bg-white text-slate-900 font-extrabold text-[10px] tracking-wider uppercase">
+      Samsung
+    </div>
+  ),
+  OnePlus: (
+    <div className="flex items-center gap-1 bg-[#F5001C] text-white border-2 border-slate-900 rounded-lg px-2.5 py-1 font-black text-xs shadow-[1.5px_1.5px_0px_#0A1020]">
+      <span>1</span>
+      <span className="text-[10px] font-black">+</span>
+    </div>
+  )
+};
+
+// Generates dynamic green shades for the mosaic grid, darker towards the center.
+const getBlockColor = (index: number) => {
+  const gridCols = 16;
+  const col = index % gridCols;
+  const row = Math.floor(index / gridCols);
+  
+  // Deterministic pseudo-random seed based on position hash
+  const random = Math.sin(index * 12.9898 + row * 78.233) * 43758.5453;
+  const hash = Math.abs(random) % 1;
+  
+  // Uniformly bright, premium green mosaic palette matching the reference image's vibrant segments
+  const colors = [
+    'bg-[#84cc16]/75',  
+    'bg-[#a3e635]/80',  
+    'bg-[#bef264]/70',  
+    'bg-[#22c55e]/60',  
+    'bg-[#16a34a]/50',  
+    'bg-[#15803d]/45',  
+    'bg-[#f7fee7]/40',  
+    'bg-[#d9f99d]/75',  
+    'bg-[#a3e635]/90',  
+    'bg-[#f7fee7]/85',  
+  ];
+  
+  return colors[Math.floor(hash * colors.length)];
+};
+function ServiceCard({ s }: { s: ServiceCategory }) {
+  const [rotate, setRotate] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    // Set 3D rotation angles (up to 12 degrees)
+    setRotate({
+      x: -(y / (rect.height / 2)) * 12,
+      y: (x / (rect.width / 2)) * 12
+    });
+  };
+
+  const handleMouseLeave = () => {
+    setRotate({ x: 0, y: 0 });
+  };
+
+  return (
+    <div
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className="bg-white border-2 border-slate-900 hover:border-slate-900 rounded-2xl p-6 transition-all duration-200 relative group flex flex-col justify-between h-full select-none cursor-pointer shadow-[4px_4px_0px_#0A1020] hover:shadow-[6px_6px_0px_#0A1020]"
+      style={{ 
+        transform: `perspective(1000px) rotateX(${rotate.x}deg) rotateY(${rotate.y}deg) scale3d(${rotate.x || rotate.y ? '1.03, 1.03, 1.03' : '1, 1, 1'})`,
+        transformStyle: 'preserve-3d',
+        transition: 'transform 0.15s ease-out, shadow 0.2s, border-color 0.2s'
+      }}
+    >
+      <div style={{ transform: 'translateZ(25px)', transformStyle: 'preserve-3d' }}>
+        <div className="w-11 h-11 bg-slate-50 text-[#0F4CFF] border-2 border-slate-900 rounded-xl flex items-center justify-center mb-6 group-hover:bg-[#0D0D0D] group-hover:text-white transition-all duration-200">
+          <ServiceIcon name={s.icon} className="w-5 h-5" />
+        </div>
+        <h4 className="text-lg font-black text-[#0A1020] group-hover:text-[#0F4CFF] transition-colors mb-2.5">
+          {s.title}
+        </h4>
+        <p className="text-sm text-slate-500 leading-relaxed mb-6">
+          {s.description}
+        </p>
+      </div>
+
+      <div 
+        className="pt-4 border-t-2 border-slate-900 flex items-center justify-between"
+        style={{ transform: 'translateZ(15px)' }}
+      >
+        <span className="text-[10px] font-black text-emerald-700 tracking-wide bg-emerald-50 border-2 border-slate-900 px-3 py-1 rounded-full">
+          {s.pricing || 'Starts ₹299'}
+        </span>
+        <Link
+          to={`/services/${s.slug}`}
+          className="text-slate-800 hover:text-[#0F4CFF] text-xs font-black uppercase tracking-wider flex items-center gap-1 group-hover:translate-x-1.5 transition-all"
+        >
+          <span>Details</span>
+          <ArrowUpRight className="w-3.5 h-3.5" />
+        </Link>
+      </div>
+    </div>
+  );
+}
+
+const getStepSVG = (num: string) => {
+  if (num === '01') {
+    return (
+      <svg className="w-5 h-5 text-blue-600 group-hover:text-white transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+      </svg>
+    );
   }
-];
+  if (num === '02') {
+    return (
+      <svg className="w-5 h-5 text-[#84cc16] group-hover:text-white transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+      </svg>
+    );
+  }
+  if (num === '03') {
+    return (
+      <svg className="w-5 h-5 text-cyan-500 group-hover:text-white transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2z" />
+      </svg>
+    );
+  }
+  if (num === '04') {
+    return (
+      <svg className="w-5 h-5 text-amber-500 group-hover:text-white transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+      </svg>
+    );
+  }
+  return (
+    <svg className="w-5 h-5 text-emerald-500 group-hover:text-white transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+    </svg>
+  );
+};
 
 export default function Home() {
   const [services, setServices] = useState<ServiceCategory[]>([]);
   const [technicians, setTechnicians] = useState<Technician[]>([]);
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedTech, setSelectedTech] = useState<Technician | null>(null);
+  const [isHoursDropdownOpen, setIsHoursDropdownOpen] = useState(false);
+
+  const heroSlides = [
+    'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=1600&auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1597733336794-12d05021d510?w=1600&auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=1600&auto=format&fit=crop&q=80'
+  ];
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -74,10 +210,10 @@ export default function Home() {
 
   const trustMetrics = [
     { value: '5000+', label: 'Devices Repaired', desc: 'Laptops, MacBooks & Phones' },
-    { value: '1000+', label: 'Happy Customers', desc: '5-star reviewed in Delhi NCR' },
-    { value: '10+', label: 'Expert Technicians', desc: 'Certified logical board specialists' },
-    { value: '5+', label: 'Years Experience', desc: 'Established in Nehru Place' },
-    { value: '100+', label: 'Corporate Devices Serviced', desc: 'AMCs for leading startups' },
+    { value: '100+', label: 'Corporate AMCs', desc: 'AMCs for leading startups' },
+    { value: '4.9 / 5.0', label: 'Trust Rating', desc: '5-star reviewed in Delhi NCR' },
+    { value: '90-Min', label: 'Doorstep Transit', desc: 'Delhi • Gurugram • Noida' },
+    { value: '90 Days', label: 'Ironclad Warranty', desc: 'Guaranteed workmanship' }
   ];
 
   const steps = [
@@ -128,7 +264,7 @@ export default function Home() {
     },
     {
       q: "What warranty do you offer on screen and motherboard repairs?",
-      a: "LapyZone offers a robust 90-day warranty on all chips/motherboards and up to 1-year manufacturer warranty on screen panels, batteries, RAMs, and SSDs. If the same issue recurs, we fix it for free!"
+      a: "TheMobifixx offers a robust 90-day warranty on all chips/motherboards and up to 1-year manufacturer warranty on screen panels, batteries, RAMs, and SSDs. If the same issue recurs, we fix it for free!"
     },
     {
       q: "Are my personal files and data safe during repair?",
@@ -141,233 +277,107 @@ export default function Home() {
   ];
 
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
-  const [currentSlide, setCurrentSlide] = useState(0);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length);
-    }, 6500);
-    return () => clearInterval(timer);
-  }, []);
-
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length);
-  };
-
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + HERO_SLIDES.length) % HERO_SLIDES.length);
-  };
 
   const toggleFaq = (index: number) => {
     setActiveFaq(activeFaq === index ? null : index);
   };
 
   return (
-    <div className="pt-24 pb-12 overflow-x-hidden">
+    <div className="pt-20 md:pt-32 pb-12 overflow-x-hidden">
       {/* SECTION 1: HERO SECTION */}
-      <section className="relative bg-gradient-to-b from-slate-50 to-white py-16 lg:py-24" id="hero-section">
-        {/* Subtle background radial blob */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-100/30 rounded-full blur-[100px] pointer-events-none"></div>
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-emerald-50/20 rounded-full blur-[100px] pointer-events-none"></div>
+      <section className="relative bg-[#022c22] py-8 sm:py-12 lg:py-16 overflow-hidden border-b-2 border-slate-900" id="hero-section">
+        {/* Mosaic Interactive Grid in Background */}
+        <div 
+          className="absolute inset-0 gap-[1.5px] opacity-75 select-none z-0"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(16, minmax(0, 1fr))',
+            gridTemplateRows: 'repeat(8, minmax(0, 1fr))'
+          }}
+        >
+          {Array.from({ length: 128 }).map((_, idx) => (
+            <motion.div 
+              key={idx} 
+              className={`w-full h-full ${getBlockColor(idx)}`}
+              whileHover={{
+                scale: 1.25,
+                backgroundColor: '#bef264',
+                boxShadow: '0 0 12px rgba(163, 230, 53, 0.8)',
+                zIndex: 20,
+              }}
+              transition={{ type: 'spring', stiffness: 400, damping: 18 }}
+            />
+          ))}
+        </div>
 
+        {/* Slideshow Card Container - Centered with margins on all sides */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            {/* Left Content Column */}
-            <div className="lg:col-span-7 text-center lg:text-left relative min-h-[460px] flex flex-col justify-center">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={currentSlide}
-                  initial={{ opacity: 0, x: 24 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -24 }}
-                  transition={{ duration: 0.45, ease: [0.25, 1, 0.5, 1] }}
-                  className="space-y-6 sm:space-y-8"
-                >
-                  <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3">
-                    <div className="inline-flex items-center space-x-2 bg-blue-50 border border-blue-100 text-blue-700 px-4 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider">
-                      <span className="w-2 h-2 bg-[#00C48C] rounded-full animate-pulse"></span>
-                      <span>{HERO_SLIDES[currentSlide].badge}</span>
-                    </div>
-                    
-                    <div className="inline-flex items-center space-x-2 bg-emerald-50 border border-emerald-100 text-emerald-700 px-3.5 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider shadow-sm">
-                      <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-ping shrink-0" />
-                      <span>{HERO_SLIDES[currentSlide].subBadge}</span>
-                    </div>
-                  </div>
-                  
-                  <h1 
-                    className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#0A1020] leading-[1.15] select-none"
-                    style={{
-                      transformStyle: 'preserve-3d',
-                    }}
-                  >
-                    <span 
-                      className="inline-block"
-                      style={{
-                        textShadow: '1px 1px 0px #e2e8f0, 2px 2px 0px #cbd5e1, 3px 3px 0px #94a3b8, 4px 4px 8px rgba(10, 16, 32, 0.12)',
-                        transform: 'translateZ(15px)',
-                      }}
-                    >
-                      {HERO_SLIDES[currentSlide].titleLine1}
-                    </span>
-                    <br/>
-                    <span 
-                      className={`${HERO_SLIDES[currentSlide].titleLine2Color} inline-block mt-1 sm:mt-2`}
-                      style={{
-                        textShadow: '1px 1px 0px #e2e8f0, 2px 2px 0px #cbd5e1, 3px 3px 12px rgba(15, 76, 255, 0.15)',
-                        transform: 'translateZ(30px)',
-                      }}
-                    >
-                      {HERO_SLIDES[currentSlide].titleLine2}
-                    </span>
-                  </h1>
-                  
-                  <p className="text-base sm:text-lg text-slate-500 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-                    {HERO_SLIDES[currentSlide].description}
-                  </p>
-
-                  <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-                    <Link
-                      to={HERO_SLIDES[currentSlide].btnLink}
-                      className="relative overflow-hidden w-full sm:w-auto text-center bg-[#FF7A00] hover:bg-[#E06B00] text-white font-bold px-8 py-4 rounded-xl shadow-xl shadow-orange-100 flex items-center justify-center gap-2 transition-all hover:scale-[1.02] active:scale-95 group"
-                    >
-                      <motion.div
-                        initial={{ left: "-100%" }}
-                        animate={{ left: "100%" }}
-                        transition={{
-                          repeat: Infinity,
-                          repeatDelay: 1.4,
-                          duration: 1.4,
-                          ease: "easeInOut",
-                        }}
-                        className="absolute top-0 w-1/2 h-full bg-gradient-to-r from-transparent via-white/25 to-transparent -skew-x-12 pointer-events-none"
-                      />
-                      <span className="relative z-10">{HERO_SLIDES[currentSlide].btnText}</span>
-                      <ArrowRight className="w-4 h-4 relative z-10 group-hover:translate-x-1.5 transition-transform duration-300" />
-                    </Link>
-                    <Link
-                      to="/services"
-                      className="w-full sm:w-auto text-center bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold px-8 py-4 rounded-xl shadow-sm transition-all flex items-center justify-center gap-1.5"
-                    >
-                      <span>Explore Services</span>
-                    </Link>
-                    <motion.a
-                      href="https://wa.me/919999999999?text=Hi%20LapyZone"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="relative overflow-hidden w-full sm:w-auto text-center bg-white border border-slate-200 hover:border-emerald-500 text-emerald-600 font-bold px-8 py-4 rounded-xl shadow-sm flex items-center justify-center gap-2 group cursor-pointer transition-all duration-300"
-                      whileHover={{ 
-                        scale: 1.03, 
-                      }}
-                      whileTap={{ scale: 0.97 }}
-                      transition={{ type: "spring", stiffness: 300, damping: 15 }}
-                    >
-                      <motion.div
-                        initial={{ left: "-100%" }}
-                        whileHover={{ left: "100%" }}
-                        transition={{ duration: 0.8, ease: "easeInOut" }}
-                        className="absolute top-0 w-1/2 h-full bg-gradient-to-r from-transparent via-emerald-500/10 to-transparent -skew-x-12 pointer-events-none"
-                      />
-                      <MessageSquare className="w-4 h-4 text-[#00C48C] group-hover:scale-125 transition-transform duration-300" />
-                      <span className="relative z-10">WhatsApp Us</span>
-                    </motion.a>
-                  </div>
-                </motion.div>
-              </AnimatePresence>
-
-              {/* Progress and control pagination row */}
-              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-6 pt-10 border-t border-slate-100 mt-10">
-                {/* 3D Arrow Controllers */}
-                <div className="flex items-center gap-2">
-                  <button 
-                    onClick={prevSlide}
-                    className="w-9 h-9 bg-white border border-slate-200 text-slate-600 rounded-lg flex items-center justify-center shadow-sm hover:bg-slate-50 hover:border-slate-300 active:scale-95 transition-all cursor-pointer"
-                    aria-label="Previous slide"
-                  >
-                    &larr;
-                  </button>
-                  <button 
-                    onClick={nextSlide}
-                    className="w-9 h-9 bg-white border border-slate-200 text-slate-600 rounded-lg flex items-center justify-center shadow-sm hover:bg-slate-50 hover:border-slate-300 active:scale-95 transition-all cursor-pointer"
-                    aria-label="Next slide"
-                  >
-                    &rarr;
-                  </button>
-                </div>
-
-                {/* Progress Indicators */}
-                <div className="flex items-center gap-2.5">
-                  {HERO_SLIDES.map((slide, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => setCurrentSlide(idx)}
-                      className="group relative h-2 rounded-full bg-slate-200 transition-all cursor-pointer overflow-hidden"
-                      style={{ width: idx === currentSlide ? "64px" : "14px" }}
-                      aria-label={`Go to slide ${idx + 1}`}
-                    >
-                      {idx === currentSlide && (
-                        <motion.div
-                          className="absolute inset-y-0 left-0 bg-[#0F4CFF] rounded-full"
-                          initial={{ width: "0%" }}
-                          animate={{ width: "100%" }}
-                          transition={{ duration: 6.5, ease: "linear" }}
-                          key={currentSlide}
-                        />
-                      )}
-                    </button>
-                  ))}
-                </div>
-
-                {/* Quality Badges inline */}
-                <div className="hidden sm:flex items-center gap-4 text-[10px] font-extrabold text-slate-400 uppercase tracking-widest pl-2 border-l border-slate-200">
-                  <div className="flex items-center gap-1">
-                    <ShieldCheck className="w-3.5 h-3.5 text-[#0F4CFF]" />
-                    <span>ISO 9001 Lab</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-[#0F4CFF]" />
-                    <span>Secure Intranet</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Column: Clean Minimalism Abstract Tech Mockup */}
-            <div className="lg:col-span-5 relative flex justify-center">
-              <InteractiveLaptop3D activeSlide={currentSlide} />
-            </div>
+          <div className="relative w-full h-[280px] sm:h-[380px] lg:h-[500px] rounded-[32px] border-4 border-slate-900 overflow-hidden shadow-[8px_8px_0px_#0A1020] bg-slate-950">
+            {/* Background Slideshow Fades - Clearly Visible inside the console card */}
+            {heroSlides.map((slide, idx) => (
+              <motion.div
+                key={slide}
+                initial={{ opacity: 0, scale: 1.04 }}
+                animate={{ 
+                  opacity: currentSlide === idx ? 1.0 : 0,
+                  scale: currentSlide === idx ? 1.0 : 1.04
+                }}
+                transition={{ duration: 1.5, ease: "easeInOut" }}
+                className="absolute inset-0 bg-cover bg-center"
+                style={{ backgroundImage: `url(${slide})` }}
+              />
+            ))}
           </div>
         </div>
       </section>
 
       {/* SECTION 2: TRUST METRICS */}
-      <section className="bg-white border-y border-slate-200/60 py-10" id="metrics-section">
+      <section className="bg-slate-50/30 border-b-2 border-slate-900 py-12" id="metrics-section">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap justify-around items-center gap-y-6 gap-x-12">
-            <div className="text-center px-4">
-              <div className="text-3xl font-extrabold text-[#0A1020]">5000+</div>
-              <div className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Devices Repaired</div>
-            </div>
-            <div className="hidden lg:block w-px h-10 bg-slate-200"></div>
-            <div className="text-center px-4">
-              <div className="text-3xl font-extrabold text-[#0A1020]">100+</div>
-              <div className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Corporate AMCs</div>
-            </div>
-            <div className="hidden lg:block w-px h-10 bg-slate-200"></div>
-            <div className="text-center px-4">
-              <div className="text-3xl font-extrabold text-[#0A1020]">4.9 / 5.0</div>
-              <div className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Trust Rating</div>
-            </div>
-            <div className="hidden lg:block w-px h-10 bg-slate-200"></div>
-            <div className="text-center px-4">
-              <div className="text-3xl font-extrabold text-[#0A1020]">90-Min</div>
-              <div className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Doorstep Transit</div>
-            </div>
-            <div className="hidden lg:block w-px h-10 bg-slate-200"></div>
-            <div className="text-center px-4">
-              <div className="text-3xl font-extrabold text-[#0A1020]">90 Days</div>
-              <div className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Ironclad Warranty</div>
-            </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+            {trustMetrics.map((m, idx) => (
+              <motion.div 
+                key={idx}
+                initial={{ opacity: 0, y: 24, scale: 0.96 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true, margin: "-45px" }}
+                transition={{ duration: 0.6, ease: [0.25, 1, 0.5, 1], delay: idx * 0.06 }}
+                className="relative overflow-hidden bg-white border-2 border-slate-900 rounded-2xl p-5 text-center shadow-[4px_4px_0px_#0A1020] flex flex-col justify-between h-full transition-all duration-200 hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[6px_6px_0px_#0A1020] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[2px_2px_0px_#0A1020] group cursor-default"
+              >
+                {/* Tech glowing accent line on card top hover */}
+                <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-blue-600 via-indigo-600 to-[#a3e635] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-center rounded-t-2xl"></div>
+
+                <div>
+                  <motion.div 
+                    initial={{ opacity: 0, y: 12 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: 0.12 + idx * 0.06 }}
+                    className="text-3xl font-extrabold text-[#0A1020] tracking-tight group-hover:text-blue-600 transition-colors"
+                  >
+                    {m.value}
+                  </motion.div>
+                  <motion.div 
+                    initial={{ opacity: 0, y: 6 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: 0.18 + idx * 0.06 }}
+                    className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-2"
+                  >
+                    {m.label}
+                  </motion.div>
+                  <motion.div 
+                    initial={{ opacity: 0, y: 4 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.24 + idx * 0.06 }}
+                    className="text-xs text-slate-500 mt-2 font-medium leading-relaxed"
+                  >
+                    {m.desc}
+                  </motion.div>
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
@@ -376,7 +386,7 @@ export default function Home() {
       <PriceEstimator />
 
       {/* SECTION 3: SERVICE CATEGORIES GRID */}
-      <section className="py-20 bg-slate-50/50" id="services-grid-section">
+      <section className="py-20 bg-slate-50/50 border-b-2 border-slate-900" id="services-grid-section">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div 
             className="text-center max-w-3xl mx-auto mb-16 space-y-4"
@@ -397,101 +407,111 @@ export default function Home() {
           </motion.div>
 
           {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="flex flex-row overflow-x-auto pb-8 gap-4 px-5 -mx-5 md:grid md:grid-cols-3 md:gap-8 md:overflow-visible md:pb-0 md:px-0 md:mx-0">
               {[1, 2, 3].map((n) => (
-                <div key={n} className="h-64 bg-white rounded-2xl border border-slate-100 animate-pulse"></div>
+                <div key={n} className="w-[calc(100vw-40px)] md:w-auto h-64 bg-white rounded-2xl border-2 border-slate-900 animate-pulse shrink-0"></div>
               ))}
             </div>
           ) : (
             <motion.div 
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+              className="flex flex-row overflow-x-auto pb-8 gap-4 px-5 -mx-5 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-8 md:overflow-visible md:pb-0 md:px-0 md:mx-0 snap-x snap-mandatory scrollbar-none"
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.8, delay: 0.1 }}
             >
-              {services.map((s, index) => (
-                <motion.div
-                  key={s.slug}
-                  whileHover={{ y: -6, scale: 1.01 }}
-                  className="bg-white border border-slate-200/60 hover:border-blue-400 hover:shadow-xl hover:shadow-blue-500/5 rounded-2xl p-6 transition-all duration-300 relative group flex flex-col justify-between"
-                >
-                  <div>
-                    <div className="w-11 h-11 bg-slate-50 text-[#0F4CFF] border border-slate-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-[#0F4CFF] group-hover:text-white group-hover:border-[#0F4CFF] transition-all duration-300">
-                      <ServiceIcon name={s.icon} className="w-5 h-5" />
-                    </div>
-                    <h4 className="text-lg font-bold text-[#0A1020] group-hover:text-[#0F4CFF] transition-colors mb-2.5">
-                      {s.title}
-                    </h4>
-                    <p className="text-sm text-slate-500 leading-relaxed mb-6">
-                      {s.description}
-                    </p>
-                  </div>
-
-                  <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-                    <span className="text-[11px] font-bold text-emerald-600 tracking-wide bg-emerald-50 border border-emerald-100 px-3 py-1 rounded-full">
-                      {s.pricing || 'Starts ₹299'}
-                    </span>
-                    <Link
-                      to={`/services/${s.slug}`}
-                      className="text-slate-600 hover:text-[#0F4CFF] text-xs font-bold uppercase tracking-wider flex items-center gap-1 group-hover:translate-x-1 transition-all"
-                    >
-                      <span>Details</span>
-                      <ArrowUpRight className="w-3.5 h-3.5" />
-                    </Link>
-                  </div>
-                </motion.div>
+              {services.map((s) => (
+                <div key={s.slug} className="w-[calc(100vw-40px)] md:w-auto snap-start self-stretch shrink-0">
+                  <ServiceCard s={s} />
+                </div>
               ))}
             </motion.div>
           )}
 
-          <div className="text-center mt-12">
+          <motion.div 
+            className="text-center mt-12"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+          >
             <Link
               to="/services"
-              className="inline-flex items-center space-x-2 text-sm font-bold text-[#0F4CFF] hover:text-[#0A3DCC] transition-colors"
+              className="inline-flex items-center space-x-2 text-sm font-black text-[#0F4CFF] hover:text-[#0A3DCC] transition-all group"
             >
-              <span>View All 15 Specialized Repairs & Upgrades</span>
-              <ArrowRight className="w-4 h-4" />
+              <span className="relative pb-0.5">
+                View All 15 Specialized Repairs & Upgrades
+                <span className="absolute bottom-0 left-0 w-full h-[1.5px] bg-[#0F4CFF] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+              </span>
+              <motion.span
+                animate={{ x: [0, 6, 0] }}
+                transition={{
+                  repeat: Infinity,
+                  duration: 1.4,
+                  ease: "easeInOut"
+                }}
+              >
+                <ArrowRight className="w-4 h-4" />
+              </motion.span>
             </Link>
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* SECTION 4: HOW IT WORKS */}
-      <section className="py-20 bg-white" id="how-it-works-section">
+      <section className="py-20 bg-white border-b-2 border-slate-900" id="how-it-works-section">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
             <div className="inline-flex items-center space-x-2 bg-blue-50 border border-blue-100 text-[#0F4CFF] px-3.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest">
               <span>How it Works</span>
             </div>
             <h3 className="text-3xl sm:text-4xl font-extrabold text-[#0A1020] tracking-tight">
-              The LapyZone Service Journey
+              The TheMobifixx Service Journey
             </h3>
             <p className="text-base text-slate-500 max-w-2xl mx-auto leading-relaxed">
               From secure, door-to-door transit to cleanroom diagnostics, we make high-quality gadget repair stress-free.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 lg:gap-8 [perspective:1000px] relative">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 lg:gap-8 relative">
             {steps.map((st, idx) => (
-              <div key={idx} className="relative group">
-                <motion.div
-                  whileHover={{
-                    scale: 1.04,
-                    rotateX: 6,
-                    rotateY: -6,
-                    translateZ: 10,
-                  }}
-                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                  className="relative bg-white border border-slate-200/80 rounded-2xl p-6 transition-all duration-300 hover:border-blue-400/40 hover:shadow-xl hover:shadow-blue-500/5 cursor-default h-full z-10"
-                >
-                  <div className="text-4xl font-black text-slate-100 group-hover:text-[#0F4CFF]/10 transition-colors duration-300 mb-4">{st.num}</div>
-                  <h4 className="font-bold text-[#0A1020] text-sm mb-2 group-hover:text-[#0F4CFF] transition-colors duration-300">{st.title}</h4>
-                  <p className="text-xs text-slate-500 leading-relaxed group-hover:text-slate-600 transition-colors duration-300">{st.desc}</p>
+              <motion.div 
+                key={idx} 
+                initial={{ opacity: 0, y: 30, scale: 0.97 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.6, ease: [0.25, 1, 0.5, 1], delay: idx * 0.08 }}
+                className="relative group h-full transition-transform duration-200"
+              >
+                <div className="relative bg-white border-2 border-slate-900 rounded-2xl p-6 cursor-default h-full z-10 overflow-hidden transition-all duration-200 hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[6px_6px_0px_#0A1020] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[2px_2px_0px_#0A1020] shadow-[4px_4px_0px_#0A1020]">
+                  {/* Tech dot grid background */}
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:8px_8px] opacity-20 group-hover:opacity-40 transition-opacity duration-300 z-0"></div>
+
+                  <div className="flex items-center justify-between mb-6 relative z-10">
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center border-2 border-slate-900 transition-all duration-200 ${
+                      idx === 0 ? 'bg-blue-50 text-blue-600 group-hover:bg-[#0D0D0D] group-hover:text-white group-hover:border-[#0D0D0D]' :
+                      idx === 1 ? 'bg-lime-50 text-[#84cc16] group-hover:bg-[#0D0D0D] group-hover:text-white group-hover:border-[#0D0D0D]' :
+                      idx === 2 ? 'bg-cyan-50 text-cyan-600 group-hover:bg-[#0D0D0D] group-hover:text-white group-hover:border-[#0D0D0D]' :
+                      idx === 3 ? 'bg-amber-50 text-amber-600 group-hover:bg-[#0D0D0D] group-hover:text-white group-hover:border-[#0D0D0D]' :
+                      'bg-emerald-50 text-emerald-600 group-hover:bg-[#0D0D0D] group-hover:text-white group-hover:border-[#0D0D0D]'
+                    }`}>
+                      {getStepSVG(st.num)}
+                    </div>
+                    <div className="text-xs font-mono font-black text-slate-300 group-hover:text-slate-500 transition-colors duration-200">{st.num}</div>
+                  </div>
+
+                  <h4 className="font-black text-[#0A1020] text-sm mb-2 group-hover:text-[#0F4CFF] transition-colors duration-200">{st.title}</h4>
+                  <p className="text-xs text-slate-500 leading-relaxed group-hover:text-slate-600 transition-colors duration-200">{st.desc}</p>
                   
                   {/* Active hover corner light */}
-                  <div className="absolute top-3 right-3 w-1.5 h-1.5 rounded-full bg-[#0F4CFF] opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-[0_0_8px_rgba(15,76,255,0.8)]"></div>
-                </motion.div>
+                  <div className={`absolute top-3 right-3 w-1.5 h-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-md ${
+                    idx === 0 ? 'bg-blue-500 shadow-blue-500/80' :
+                    idx === 1 ? 'bg-lime-500 shadow-lime-500/80' :
+                    idx === 2 ? 'bg-cyan-500 shadow-cyan-500/80' :
+                    idx === 3 ? 'bg-amber-500 shadow-amber-500/80' :
+                    'bg-emerald-500 shadow-emerald-500/80'
+                  }`}></div>
+                </div>
 
                 {/* Horizontal Interconnecting Pipeline for Desktop (lg) */}
                 {idx < 4 && (
@@ -510,14 +530,39 @@ export default function Home() {
                     <span className="text-[10px] font-bold text-slate-300 group-hover:text-[#0F4CFF]/60 transition-colors duration-300 mt-0.5">&darr;</span>
                   </div>
                 )}
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
+      {/* SECTION 4.5: INTERACTIVE BEFORE/AFTER COMPARISON */}
+      <section className="py-20 bg-white border-b-2 border-slate-900" id="comparison-section">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div 
+            className="text-center max-w-3xl mx-auto mb-16 space-y-4"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.7 }}
+          >
+            <div className="inline-flex items-center space-x-2 bg-blue-50 border border-blue-100 text-[#0F4CFF] px-3.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest">
+              <span>Before & After</span>
+            </div>
+            <h3 className="text-3xl sm:text-4xl font-extrabold text-[#0A1020] tracking-tight">
+              Compare Our Precision Repair Quality
+            </h3>
+            <p className="text-base text-slate-500 max-w-2xl mx-auto leading-relaxed">
+              Drag the slider to see side-by-side comparisons of typical device conditions before and after under-the-microscope servicing.
+            </p>
+          </motion.div>
+
+          <DeviceComparison />
+        </div>
+      </section>
+
       {/* SECTION 5: TECHNICIAN SHOWCASE */}
-      <section className="py-20 bg-slate-50/40 border-y border-slate-100" id="technicians-section">
+      <section className="py-20 bg-slate-50/40 border-b-2 border-slate-900" id="technicians-section">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-center md:items-end justify-between mb-12 gap-6">
             <div className="max-w-2xl space-y-4 text-center md:text-left">
@@ -564,9 +609,9 @@ export default function Home() {
           </div>
 
           {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="flex flex-row overflow-x-auto pb-6 gap-4 px-5 -mx-5">
               {[1, 2, 3].map((n) => (
-                <div key={n} className="h-80 bg-slate-50 rounded-2xl animate-pulse"></div>
+                <div key={n} className="w-[calc(100vw-40px)] sm:w-[340px] md:w-[360px] h-96 bg-slate-50 border-2 border-slate-900 rounded-3xl animate-pulse shrink-0"></div>
               ))}
             </div>
           ) : (
@@ -574,47 +619,53 @@ export default function Home() {
               {/* Horizontally scrollable flex row */}
               <div 
                 id="tech-cards-viewport"
-                className="flex overflow-x-auto scrollbar-none gap-6 pb-6 px-1.5 scroll-smooth snap-x snap-mandatory"
+                className="flex overflow-x-auto scrollbar-none gap-4 pb-6 px-5 -mx-5 scroll-smooth snap-x snap-mandatory"
               >
                 {technicians.map((t) => (
                   <div 
                     key={t.name} 
-                    className="min-w-[280px] sm:min-w-[340px] md:min-w-[360px] max-w-[380px] snap-start shrink-0 bg-white border border-slate-200/60 rounded-3xl overflow-hidden shadow-sm group hover:shadow-xl hover:border-blue-100 transition-all duration-300"
+                    onClick={() => setSelectedTech(t)}
+                    className="w-[calc(100vw-40px)] sm:w-[340px] md:w-[360px] max-w-[380px] snap-start shrink-0 bg-white border-2 border-slate-900 rounded-3xl overflow-hidden shadow-[4px_4px_0px_#0A1020] hover:shadow-[6px_6px_0px_#0A1020] transition-all duration-200 hover:-translate-y-[2px] hover:-translate-x-[2px] cursor-pointer group flex flex-col justify-between h-[470px] sm:h-[450px]"
                   >
-                    <div className="h-64 overflow-hidden relative">
+                    <div className="aspect-[4/3] sm:h-56 overflow-hidden relative border-b-2 border-slate-900 shrink-0">
                       <img
                         src={t.profileImage}
                         alt={t.name}
                         referrerPolicy="no-referrer"
                         className="w-full h-full object-cover object-top group-hover:scale-[1.04] transition-transform duration-500"
                       />
-                      <div className="absolute bottom-4 left-4 bg-[#0A1020]/90 backdrop-blur px-3 py-1.5 rounded-full text-white text-[10px] font-bold uppercase tracking-wider shadow-sm">
+                      <div className="absolute bottom-4 left-4 bg-slate-950/90 border border-white/10 backdrop-blur px-3 py-1.5 rounded-full text-white text-[10px] font-bold uppercase tracking-wider shadow-sm">
                         {t.experience} Years Experience
                       </div>
                     </div>
-                    <div className="p-6 space-y-4">
+                    <div className="p-6 space-y-4 flex-1 flex flex-col justify-between">
                       <div>
-                        <h4 className="font-bold text-[#0A1020] text-lg">{t.name}</h4>
-                        <p className="text-xs text-[#0F4CFF] font-semibold">{t.designation}</p>
+                        <h4 className="font-black text-[#0A1020] text-lg leading-tight">{t.name}</h4>
+                        <p className="text-xs text-[#0F4CFF] font-black mt-0.5">{t.designation}</p>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-2 text-xs border-y border-slate-100 py-3">
+                      <div className="grid grid-cols-2 gap-2 text-xs border-y-2 border-slate-900 py-3">
                         <div>
-                          <span className="text-slate-400 block uppercase font-bold tracking-wider text-[9px]">Completed</span>
-                          <span className="text-slate-800 font-bold">{t.repairsCompleted}+ Repairs</span>
+                          <span className="text-slate-400 block uppercase font-black tracking-wider text-[8px] mb-0.5">Completed</span>
+                          <span className="text-slate-800 font-black">{t.repairsCompleted}+ Repairs</span>
                         </div>
                         <div>
-                          <span className="text-slate-400 block uppercase font-bold tracking-wider text-[9px]">Rating</span>
+                          <span className="text-slate-400 block uppercase font-black tracking-wider text-[8px] mb-0.5">Rating</span>
                           <div className="flex items-center gap-1">
                             <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                            <span className="text-slate-800 font-bold">{t.rating} / 5.0</span>
+                            <span className="text-slate-800 font-black">{t.rating} / 5.0</span>
                           </div>
                         </div>
                       </div>
 
-                      <div>
-                        <span className="text-slate-400 block uppercase font-bold tracking-wider text-[9px] mb-1">Specialization</span>
-                        <span className="text-xs font-bold text-slate-600">{t.specialization}</span>
+                      <div className="flex items-center justify-between">
+                        <div className="min-w-0 flex-1 mr-3">
+                          <span className="text-slate-400 block uppercase font-black tracking-wider text-[8px] mb-0.5">Specialization</span>
+                          <span className="text-xs font-bold text-slate-600 truncate block">{t.specialization}</span>
+                        </div>
+                        <span className="text-[9px] font-black text-[#0F4CFF] uppercase tracking-widest shrink-0 bg-blue-50 border border-blue-100 px-2.5 py-1 rounded-full group-hover:bg-[#0D0D0D] group-hover:text-white group-hover:border-[#0D0D0D] transition-colors duration-200">
+                          Details &rarr;
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -626,32 +677,56 @@ export default function Home() {
       </section>
 
       {/* SECTION 6: BRANDS SUPPORTED */}
-      <section className="py-16 bg-gradient-to-b from-slate-50 to-white border-y border-slate-200/50" id="brands-section">
+      <section className="py-16 bg-white border-y-2 border-slate-900" id="brands-section">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <span className="text-[10px] text-slate-400 uppercase font-black tracking-widest bg-slate-100 border border-slate-200/60 px-3.5 py-1 rounded-full">
-              Brands We Service
-            </span>
+          <div className="text-center mb-10 space-y-3">
+            <div className="inline-flex items-center space-x-2 bg-slate-50 border-2 border-slate-900 text-slate-800 px-3.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">
+              <span>Brands We Service</span>
+            </div>
+            <h3 className="text-2xl sm:text-3xl font-extrabold text-[#0A1020] tracking-tight">
+              OEM Calibration & Diagnostics Support
+            </h3>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-            {brands.map((b) => (
-              <motion.div
-                key={b.name}
-                whileHover={{ 
-                  scale: 1.05, 
-                  y: -4,
-                  boxShadow: "0 12px 30px rgba(15, 76, 255, 0.08)"
-                }}
-                className="flex flex-col items-center justify-center p-6 bg-white border border-slate-100/80 rounded-2xl cursor-default transition-all duration-300 group shadow-sm hover:border-blue-150"
-              >
-                <span className="text-xs font-extrabold text-slate-400 group-hover:text-[#0F4CFF] transition-colors uppercase tracking-widest">
-                  {b.name}
-                </span>
-                <span className="text-[8px] text-slate-300 group-hover:text-[#0F4CFF]/60 transition-colors font-black uppercase tracking-widest mt-1">
-                  OEM Specifications
-                </span>
-              </motion.div>
-            ))}
+          
+          <div className="relative w-full overflow-hidden py-4 bg-slate-50 border-2 border-slate-900 rounded-[28px] shadow-[4px_4px_0px_#0A1020] select-none animate-marquee-hover-pause">
+            {/* Masking gradients on sides */}
+            <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-slate-50 to-transparent z-10 pointer-events-none"></div>
+            <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-slate-50 to-transparent z-10 pointer-events-none"></div>
+
+            <div className="flex gap-6 w-max">
+              {/* Track 1 */}
+              <div className="animate-marquee flex gap-6">
+                {brands.map((b, idx) => (
+                  <div
+                    key={`t1-${idx}`}
+                    className="flex flex-col items-center justify-center min-w-[150px] px-6 py-4 bg-white border-2 border-slate-900 rounded-2xl shadow-[3px_3px_0px_#0A1020] hover:-translate-y-[2px] hover:-translate-x-[2px] hover:shadow-[5px_5px_0px_#0A1020] transition-all cursor-default select-none shrink-0"
+                  >
+                    <div className="h-10 flex items-center justify-center">
+                      {BRAND_LOGOS[b.name] || <span className="font-bold text-xs">{b.name}</span>}
+                    </div>
+                    <span className="text-[8px] text-slate-400 font-black uppercase tracking-widest mt-2">
+                      OEM Specifications
+                    </span>
+                  </div>
+                ))}
+              </div>
+              {/* Track 2 */}
+              <div className="animate-marquee flex gap-6" aria-hidden="true">
+                {brands.map((b, idx) => (
+                  <div
+                    key={`t2-${idx}`}
+                    className="flex flex-col items-center justify-center min-w-[150px] px-6 py-4 bg-white border-2 border-slate-900 rounded-2xl shadow-[3px_3px_0px_#0A1020] hover:-translate-y-[2px] hover:-translate-x-[2px] hover:shadow-[5px_5px_0px_#0A1020] transition-all cursor-default select-none shrink-0"
+                  >
+                    <div className="h-10 flex items-center justify-center">
+                      {BRAND_LOGOS[b.name] || <span className="font-bold text-xs">{b.name}</span>}
+                    </div>
+                    <span className="text-[8px] text-slate-400 font-black uppercase tracking-widest mt-2">
+                      OEM Specifications
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -660,7 +735,7 @@ export default function Home() {
       <section className="py-20 bg-white" id="reviews-section">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-            <div className="inline-flex items-center space-x-2 bg-blue-50 border border-blue-100 text-[#0F4CFF] px-3.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest">
+            <div className="inline-flex items-center space-x-2 bg-slate-50 border-2 border-slate-900 text-slate-800 px-3.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">
               <span>Customer Reviews</span>
             </div>
             <h3 className="text-3xl sm:text-4xl font-extrabold text-[#0A1020] tracking-tight">
@@ -679,22 +754,22 @@ export default function Home() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {testimonials.map((t, idx) => (
-                <div key={idx} className="bg-slate-50/50 border border-slate-200/60 rounded-2xl p-6 md:p-8 shadow-sm space-y-6 flex flex-col justify-between hover:shadow-md transition-shadow">
+                <div key={idx} className="bg-white border-2 border-slate-900 rounded-3xl p-6 md:p-8 space-y-6 flex flex-col justify-between shadow-[4px_4px_0px_#0A1020] hover:shadow-[6px_6px_0px_#0A1020] transition-all duration-200 hover:-translate-y-[2px] hover:-translate-x-[2px]">
                   <p className="text-slate-600 text-sm leading-relaxed italic">
                     "{t.review}"
                   </p>
-                  <div className="flex items-center space-x-4 pt-4 border-t border-slate-200/60">
+                  <div className="flex items-center space-x-4 pt-4 border-t-2 border-slate-900">
                     <img
                       src={t.image}
                       alt={t.customerName}
                       referrerPolicy="no-referrer"
-                      className="w-12 h-12 rounded-full object-cover shrink-0 border border-slate-200"
+                      className="w-12 h-12 rounded-full object-cover shrink-0 border-2 border-slate-900 shadow-[1px_1px_0px_#0A1020]"
                     />
                     <div>
-                      <h4 className="font-bold text-[#0A1020] text-sm">{t.customerName}</h4>
+                      <h4 className="font-black text-[#0A1020] text-sm">{t.customerName}</h4>
                       <div className="flex items-center gap-2 mt-0.5">
                         <ReviewStars rating={t.rating} />
-                        <span className="text-[9px] font-mono text-[#0F4CFF] uppercase font-bold bg-blue-50 border border-blue-100 px-2 py-0.5 rounded-full">
+                        <span className="text-[9px] font-mono text-[#0F4CFF] uppercase font-black bg-blue-50 border-2 border-slate-900 px-2.5 py-0.5 rounded-full shadow-[1px_1px_0px_#0A1020]">
                           {t.deviceType}
                         </span>
                       </div>
@@ -708,94 +783,160 @@ export default function Home() {
           <div className="text-center mt-12">
             <Link
               to="/testimonials"
-              className="inline-flex items-center gap-2 bg-[#0A1020] text-white hover:bg-[#0F4CFF] text-xs font-bold uppercase tracking-widest px-8 py-4 rounded-full shadow-lg transition-all cursor-pointer"
+              className="inline-flex items-center space-x-2 text-sm font-black text-[#0F4CFF] hover:text-[#0A3DCC] transition-all group"
             >
-              <span>Read All Reviews & Leave Feedback</span>
-              <ArrowRight className="w-4 h-4" />
+              <span className="relative pb-0.5">
+                Read All Reviews & Leave Feedback
+                <span className="absolute bottom-0 left-0 w-full h-[1.5px] bg-[#0F4CFF] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+              </span>
+              <motion.span
+                animate={{ x: [0, 6, 0] }}
+                transition={{
+                  repeat: Infinity,
+                  duration: 1.4,
+                  ease: "easeInOut"
+                }}
+              >
+                <ArrowRight className="w-4 h-4" />
+              </motion.span>
             </Link>
           </div>
         </div>
       </section>
 
       {/* SECTION 7.5: PHYSICAL LAB LOCATION (NEHRU PLACE) */}
-      <section className="py-20 bg-white border-t border-b border-slate-100" id="lab-location-section">
+      <section className="py-20 bg-white border-b-2 border-slate-900" id="lab-location-section">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             
-            {/* Left Info Card */}
-            <div className="lg:col-span-5 space-y-6 text-left">
-              <div className="inline-flex items-center space-x-2 bg-blue-50 border border-blue-100 text-[#0F4CFF] px-3.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest">
-                <span>Our Master Lab</span>
-              </div>
-              <h3 className="text-3xl sm:text-4xl font-extrabold text-[#0A1020] tracking-tight">
-                Visit Us in Nehru Place Market
-              </h3>
-              <p className="text-slate-500 text-sm sm:text-base leading-relaxed">
-                If you prefer to drop off your device personally rather than utilizing our free doorstep pickup service, you can visit our Master Lab in New Delhi's primary tech hub.
-              </p>
-              
-              <div className="space-y-4 pt-2">
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center text-[#0F4CFF] shrink-0 mt-0.5">
-                    <MapPin className="w-4 h-4" />
+            {/* Left Info Card - Retro 3D Offset Card */}
+            <div className="lg:col-span-5 relative w-full text-left">
+              {/* Retro offset shadow outline */}
+              <div className="absolute -left-[5px] -bottom-[5px] inset-0 border-b-3 border-l-3 border-slate-900 rounded-[28px] bg-transparent pointer-events-none z-0"></div>
+
+              <div className="relative z-10 bg-white border-2 border-slate-900 rounded-[28px] p-6 sm:p-8 space-y-6">
+                <div className="space-y-4">
+                  <div className="inline-flex items-center space-x-2 bg-slate-50 border-2 border-slate-900 text-slate-800 px-3.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">
+                    <span>Our Master Lab</span>
                   </div>
-                  <div>
-                    <h4 className="font-bold text-[#0A1020] text-sm">Full Address</h4>
-                    <p className="text-xs text-slate-500 mt-0.5">G-12, Ground Floor, Nehru Place, New Delhi, Delhi 110019</p>
-                    <p className="text-[11px] text-[#0F4CFF] font-medium mt-1">Landmark: Opposite Nehru Place Metro Station Exit 2</p>
+                  <h3 className="text-2xl sm:text-3xl font-black text-[#0A1020] tracking-tight leading-tight">
+                    Visit Us in Nehru Place Market
+                  </h3>
+                  <p className="text-slate-500 text-xs sm:text-sm leading-relaxed">
+                    If you prefer to drop off your device personally rather than utilizing our free doorstep pickup service, you can visit our Master Lab in New Delhi's primary tech hub.
+                  </p>
+                </div>
+                
+                <div className="space-y-4 border-y-2 border-slate-900 py-5">
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-blue-50 border-2 border-slate-900 flex items-center justify-center text-[#0F4CFF] shrink-0 mt-0.5 shadow-[1.5px_1.5px_0px_#0A1020]">
+                      <MapPin className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h4 className="font-black text-[#0A1020] text-sm">Full Address</h4>
+                      <p className="text-xs text-slate-500 mt-0.5">G-12, Ground Floor, Nehru Place, New Delhi, Delhi 110019</p>
+                      <p className="text-[10px] text-[#0F4CFF] font-black mt-1">Landmark: Opposite Nehru Place Metro Station Exit 2</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-emerald-50 border-2 border-slate-900 flex items-center justify-center text-[#00C48C] shrink-0 mt-0.5 shadow-[1.5px_1.5px_0px_#0A1020]">
+                      <Clock className="w-4 h-4" />
+                    </div>
+                    <div className="flex-1">
+                      <button
+                        onClick={() => setIsHoursDropdownOpen(!isHoursDropdownOpen)}
+                        className="flex items-center gap-1.5 font-black text-[#0A1020] text-sm hover:text-[#0F4CFF] transition-colors focus:outline-none cursor-pointer group/hours"
+                      >
+                        <span>Support Hours</span>
+                        <motion.span 
+                          animate={{ rotate: isHoursDropdownOpen ? 180 : 0 }}
+                          transition={{ duration: 0.2 }}
+                          className="text-[10px] text-slate-400 group-hover/hours:text-[#0F4CFF] transition-colors inline-block"
+                        >
+                          ▼
+                        </motion.span>
+                      </button>
+                      <p className="text-xs text-slate-500 mt-0.5">9:00 AM - 9:00 PM (Open 7 Days a Week)</p>
+
+                      {/* Dropdown Day Table with smooth motion animation */}
+                      <AnimatePresence initial={false}>
+                        {isHoursDropdownOpen && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.25, ease: 'easeInOut' }}
+                            className="overflow-hidden"
+                          >
+                            <div className="mt-3 bg-slate-50 border-2 border-slate-900 rounded-xl p-3 space-y-1.5 shadow-[2px_2px_0px_#0A1020]">
+                              {[
+                                { day: 'Monday', time: '9:00 AM - 9:00 PM' },
+                                { day: 'Tuesday', time: '9:00 AM - 9:00 PM' },
+                                { day: 'Wednesday', time: '9:00 AM - 9:00 PM' },
+                                { day: 'Thursday', time: '9:00 AM - 9:00 PM' },
+                                { day: 'Friday', time: '9:00 AM - 9:00 PM' },
+                                { day: 'Saturday', time: '9:00 AM - 9:00 PM' },
+                                { day: 'Sunday', time: '9:00 AM - 9:00 PM' },
+                              ].map((d, i) => (
+                                <div key={i} className="flex justify-between text-[11px] font-bold text-slate-600 border-b border-slate-200 last:border-0 pb-1 last:pb-0">
+                                  <span className="text-slate-800">{d.day}</span>
+                                  <span className="font-mono text-emerald-700">{d.time}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-amber-50 border-2 border-slate-900 flex items-center justify-center text-amber-650 shrink-0 mt-0.5 shadow-[1.5px_1.5px_0px_#0A1020]">
+                      <Phone className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h4 className="font-black text-[#0A1020] text-sm">Contact Hotline</h4>
+                      <p className="text-xs text-slate-500 mt-0.5">Call: +91 99999 99999</p>
+                    </div>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-100 flex items-center justify-center text-[#00C48C] shrink-0 mt-0.5">
-                    <Clock className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-[#0A1020] text-sm">Support Hours</h4>
-                    <p className="text-xs text-slate-500 mt-0.5">9:00 AM - 9:00 PM (Open 7 Days a Week)</p>
-                  </div>
-                </div>
+                <div className="flex flex-col sm:flex-row gap-4 pt-2">
+                  
+                  {/* Google Maps Button - Precise Neobrutalist */}
+                  <a
+                    href="https://maps.google.com/?q=G-12,%20Nehru%20Place,%20New%20Delhi,%20Delhi%20110019"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 inline-flex items-center justify-center gap-2 bg-[#0D0D0D] text-white border-2 border-slate-900 font-black text-xs tracking-widest uppercase py-3.5 px-6 rounded-xl shadow-[3px_3px_0px_#FFB800] hover:shadow-[4px_4px_0px_#FFB800] hover:-translate-x-[1px] hover:-translate-y-[1px] active:translate-x-[1.5px] active:translate-y-[1.5px] active:shadow-[1.5px_1.5px_0px_#FFB800] transition-all cursor-pointer text-center"
+                  >
+                    <span>Open Maps</span>
+                    <ArrowUpRight className="w-4 h-4 text-[#FFB800]" />
+                  </a>
 
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-500 shrink-0 mt-0.5">
-                    <Phone className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-[#0A1020] text-sm">Contact Hotline</h4>
-                    <p className="text-xs text-slate-500 mt-0.5">Call: +91 99999 99999</p>
-                  </div>
-                </div>
-              </div>
+                  {/* Free Pickup Button - Precise Neobrutalist */}
+                  <Link
+                    to="/contact?tab=booking"
+                    className="flex-1 inline-flex items-center justify-center gap-2 bg-white text-slate-900 border-2 border-slate-900 font-black text-xs tracking-widest uppercase py-3.5 px-6 rounded-xl shadow-[3px_3px_0px_#0A1020] hover:shadow-[4px_4px_0px_#0A1020] hover:-translate-x-[1px] hover:-translate-y-[1px] active:translate-x-[1.5px] active:translate-y-[1.5px] active:shadow-[1.5px_1.5px_0px_#0A1020] transition-all cursor-pointer text-center"
+                  >
+                    <span>Book Pickup</span>
+                  </Link>
 
-              <div className="pt-4 flex flex-col sm:flex-row gap-4">
-                <a
-                  href="https://maps.google.com/?q=G-12,%20Nehru%20Place,%20New%20Delhi,%20Delhi%20110019"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 bg-[#0A1020] hover:bg-[#0F4CFF] text-white text-xs font-bold uppercase tracking-wider px-6 py-3.5 rounded-xl shadow-md transition-all cursor-pointer"
-                >
-                  <span>Open in Google Maps</span>
-                  <ArrowUpRight className="w-4 h-4" />
-                </a>
-                <Link
-                  to="/contact?tab=booking"
-                  className="inline-flex items-center justify-center gap-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-[#0A1020] text-xs font-bold uppercase tracking-wider px-6 py-3.5 rounded-xl shadow-xs transition-all"
-                >
-                  <span>Book Free Pickup</span>
-                </Link>
+                </div>
               </div>
             </div>
 
-            {/* Right Map Embed Card */}
-            <div className="lg:col-span-7 h-[360px] sm:h-[420px] rounded-3xl overflow-hidden border border-slate-200/80 shadow-lg relative group">
+            {/* Right Map Embed Card - Retro 3D Outline */}
+            <div className="lg:col-span-7 h-[360px] sm:h-[420px] rounded-3xl overflow-hidden border-2 border-slate-900 shadow-[4px_4px_0px_#0A1020] relative group">
               <iframe
-                title="LapyZone Nehru Place Master Lab Location Map"
+                title="TheMobifixx Nehru Place Master Lab Location Map"
                 src="https://maps.google.com/maps?q=G-12,%20Nehru%20Place,%20New%20Delhi,%20Delhi%20110019&t=&z=16&ie=UTF8&iwloc=&output=embed"
                 className="w-full h-full border-0 absolute inset-0 group-hover:scale-[1.01] transition-transform duration-700 ease-out"
                 loading="lazy"
                 allowFullScreen
               />
-              <div className="absolute top-4 left-4 bg-[#0A1020]/95 text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-lg border border-white/10 shadow-md backdrop-blur-xs flex items-center gap-2">
+              <div className="absolute top-4 left-4 bg-slate-950/90 text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-lg border border-white/10 shadow-md backdrop-blur-xs flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                 <span>Verified Shop Address Pin</span>
               </div>
@@ -806,34 +947,51 @@ export default function Home() {
       </section>
 
       {/* SECTION 8: FAQ */}
-      <section className="py-20 bg-slate-50/50" id="faq-section">
+      <section className="py-20 bg-slate-50/50 border-b-2 border-slate-900" id="faq-section">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16 space-y-4">
-            <div className="inline-flex items-center space-x-2 bg-blue-50 border border-blue-100 text-[#0F4CFF] px-3.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest">
+            <div className="inline-flex items-center space-x-2 bg-slate-50 border-2 border-slate-900 text-slate-800 px-3.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">
               <span>FAQ</span>
             </div>
-            <h3 className="text-3xl font-extrabold text-[#0A1020] tracking-tight">
+            <h3 className="text-3xl font-black text-[#0A1020] tracking-tight">
               Frequently Asked Questions
             </h3>
           </div>
 
           <div className="space-y-4">
             {faqs.map((faq, index) => (
-              <div key={index} className="border border-slate-200/60 bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all">
+              <div 
+                key={index} 
+                className="bg-white border-2 border-slate-900 rounded-2xl overflow-hidden shadow-[3px_3px_0px_#0A1020] hover:shadow-[5px_5px_0px_#0A1020] hover:-translate-x-[1px] hover:-translate-y-[1px] transition-all duration-200"
+              >
                 <button
                   onClick={() => toggleFaq(index)}
-                  className="w-full flex items-center justify-between p-5 text-left font-bold text-[#0A1020] hover:bg-slate-50/30 transition-colors focus:outline-none"
+                  className="w-full flex items-center justify-between p-5 text-left font-black text-[#0A1020] hover:bg-slate-50/40 transition-colors focus:outline-none cursor-pointer"
                 >
-                  <span className="text-sm">{faq.q}</span>
-                  <span className="text-lg font-bold text-[#0F4CFF] ml-4">
+                  <span className="text-xs sm:text-sm tracking-tight pr-4">{faq.q}</span>
+                  <motion.span 
+                    animate={{ rotate: activeFaq === index ? 90 : 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="text-md font-black text-[#0F4CFF] shrink-0"
+                  >
                     {activeFaq === index ? '−' : '+'}
-                  </span>
+                  </motion.span>
                 </button>
-                {activeFaq === index && (
-                  <div className="p-5 bg-white border-t border-slate-100 text-sm text-slate-500 leading-relaxed">
-                    {faq.a}
-                  </div>
-                )}
+                <AnimatePresence initial={false}>
+                  {activeFaq === index && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.25, ease: 'easeInOut' }}
+                      className="overflow-hidden"
+                    >
+                      <div className="p-5 bg-slate-50 border-t-2 border-slate-900 text-xs sm:text-sm text-slate-500 leading-relaxed font-bold">
+                        {faq.a}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             ))}
           </div>
@@ -842,39 +1000,155 @@ export default function Home() {
 
       {/* SECTION 9: CTA BANNER */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12" id="cta-banner">
-        <div className="bg-[#0A1020] text-white rounded-3xl p-8 md:p-16 text-center space-y-6 relative overflow-hidden shadow-2xl">
+        <div className="bg-[#0A1020] text-white border-4 border-slate-900 rounded-[32px] p-8 md:p-16 text-center space-y-6 relative overflow-hidden shadow-[8px_8px_0px_#FFB800]">
           {/* Accent light glow effect inside container */}
           <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-blue-500/20 rounded-full blur-[100px] pointer-events-none"></div>
           <div className="absolute -top-40 -right-40 w-96 h-96 bg-emerald-500/10 rounded-full blur-[100px] pointer-events-none"></div>
 
           <div className="relative z-10 space-y-6">
-            <div className="inline-flex items-center space-x-2 bg-white/10 text-white px-3.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest">
+            <div className="inline-flex items-center space-x-2 bg-[#FFB800] border-2 border-slate-900 text-slate-900 px-3.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest shadow-[2px_2px_0px_#0A1020]">
               <span>Get Started</span>
             </div>
-            <h3 className="text-2xl sm:text-4xl font-extrabold tracking-tight max-w-3xl mx-auto leading-tight">
+            <h3 className="text-2xl sm:text-4xl font-black tracking-tight max-w-3xl mx-auto leading-tight">
               Ready to restore your device to original performance?
             </h3>
-            <p className="text-slate-400 max-w-2xl mx-auto text-sm leading-relaxed">
+            <p className="text-slate-400 max-w-2xl mx-auto text-sm leading-relaxed font-bold">
               Book a secure, doorstep pickup across Delhi NCR or schedule an appointment to visit our central lab. Our certified engineers will diagnose your device with full transparency.
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-5 pt-4">
+              
+              {/* Doorstep Pickup Button */}
               <Link
                 to="/contact?tab=booking"
-                className="w-full sm:w-auto text-center bg-[#FF7A00] hover:bg-[#E06B00] text-white font-bold px-8 py-3.5 rounded-full shadow-lg shadow-orange-500/10 hover:scale-[1.02] transition-transform"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#FFB800] text-slate-900 border-2 border-slate-900 font-black text-xs tracking-widest uppercase py-3.5 px-8 rounded-xl shadow-[3px_3px_0px_#0D0D0D] hover:shadow-[4px_4px_0px_#0D0D0D] hover:-translate-x-[1px] hover:-translate-y-[1px] active:translate-x-[1.5px] active:translate-y-[1.5px] active:shadow-[1.5px_1.5px_0px_#0D0D0D] transition-all cursor-pointer text-center"
               >
-                Book Doorstep Pickup
+                <span>Book Doorstep Pickup</span>
+                <ArrowRight className="w-4 h-4" />
               </Link>
+
+              {/* Call Hotline Button */}
               <a
                 href="tel:+919999999999"
-                className="w-full sm:w-auto text-center bg-white text-slate-900 hover:bg-slate-50 font-bold px-8 py-3.5 rounded-full shadow-md flex items-center justify-center gap-2 hover:scale-[1.02] transition-transform"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white text-slate-900 border-2 border-slate-900 font-black text-xs tracking-widest uppercase py-3.5 px-8 rounded-xl shadow-[3px_3px_0px_#0D0D0D] hover:shadow-[4px_4px_0px_#0D0D0D] hover:-translate-x-[1px] hover:-translate-y-[1px] active:translate-x-[1.5px] active:translate-y-[1.5px] active:shadow-[1.5px_1.5px_0px_#0D0D0D] transition-all cursor-pointer text-center"
               >
                 <Phone className="w-4 h-4 text-[#0F4CFF]" />
                 <span>Call +91 99999 99999</span>
               </a>
+
             </div>
           </div>
         </div>
       </section>
+
+      {/* Technician Details Modal */}
+      {selectedTech && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md">
+          {/* Backdrop Click Dismiss */}
+          <div className="absolute inset-0 cursor-default" onClick={() => setSelectedTech(null)}></div>
+
+          {/* Modal Content - Retro 3D Outline */}
+          <div className="relative max-w-lg w-full z-10 animate-in fade-in zoom-in-95 duration-200">
+            {/* Retro offset shadow outline */}
+            <div className="absolute -left-[6px] -bottom-[6px] inset-0 border-b-4 border-l-4 border-slate-900 rounded-[32px] bg-transparent pointer-events-none z-0"></div>
+
+            <div className="relative z-10 bg-white border-4 border-slate-900 rounded-[32px] p-6 sm:p-8 overflow-hidden shadow-2xl flex flex-col gap-6 text-left">
+              {/* Header with Close */}
+              <div className="flex items-center justify-between border-b-2 border-slate-900 pb-4">
+                <span className="text-[10px] font-black uppercase text-slate-400 tracking-wider">
+                  Technician Profile
+                </span>
+                <button
+                  onClick={() => setSelectedTech(null)}
+                  className="w-8 h-8 rounded-full border-2 border-slate-900 bg-white hover:bg-slate-100 flex items-center justify-center text-slate-900 font-black cursor-pointer shadow-[2px_2px_0px_#0A1020] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_#0A1020] transition-all"
+                >
+                  ✕
+                </button>
+              </div>
+
+              {/* Bio Details */}
+              <div className="flex items-start gap-4.5">
+                <img
+                  src={selectedTech.profileImage}
+                  alt={selectedTech.name}
+                  className="w-20 h-20 rounded-2xl border-2 border-slate-900 object-cover object-top shrink-0 shadow-[2px_2px_0px_#0A1020]"
+                />
+                <div className="space-y-1">
+                  <h4 className="font-black text-[#0A1020] text-xl leading-none">{selectedTech.name}</h4>
+                  <p className="text-xs text-[#0F4CFF] font-black">{selectedTech.designation}</p>
+                  <div className="inline-flex items-center gap-1 bg-amber-50 border-2 border-slate-900 px-2 py-0.5 rounded-md mt-1">
+                    <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                    <span className="text-[10px] text-slate-800 font-black">{selectedTech.rating} / 5.0 Rating</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Stats Breakdown */}
+              <div className="grid grid-cols-3 gap-2 border-y-2 border-slate-900 py-4 text-center">
+                <div>
+                  <span className="text-slate-400 block uppercase font-black tracking-wider text-[8px] mb-0.5">Experience</span>
+                  <span className="text-slate-800 font-black text-xs">{selectedTech.experience} Years</span>
+                </div>
+                <div className="border-x-2 border-slate-900">
+                  <span className="text-slate-400 block uppercase font-black tracking-wider text-[8px] mb-0.5">Repairs Done</span>
+                  <span className="text-slate-800 font-black text-xs">{selectedTech.repairsCompleted}+ Jobs</span>
+                </div>
+                <div>
+                  <span className="text-slate-400 block uppercase font-black tracking-wider text-[8px] mb-0.5">Location</span>
+                  <span className="text-slate-800 font-black text-[10px] leading-tight block truncate" title={selectedTech.serviceAreas.join(', ')}>
+                    Delhi NCR
+                  </span>
+                </div>
+              </div>
+
+              {/* Specialization & Certifications */}
+              <div className="space-y-3.5">
+                <div className="space-y-1">
+                  <span className="text-slate-400 block uppercase font-black tracking-wider text-[9px]">Specialty Area</span>
+                  <p className="text-xs font-semibold text-slate-700 leading-relaxed bg-slate-50 border-2 border-slate-900 rounded-xl p-2.5">
+                    {selectedTech.specialization}
+                  </p>
+                </div>
+
+                {selectedTech.certifications && selectedTech.certifications.length > 0 && (
+                  <div className="space-y-1.5">
+                    <span className="text-slate-400 block uppercase font-black tracking-wider text-[9px]">Professional Certifications</span>
+                    <div className="flex flex-col gap-1.5">
+                      {selectedTech.certifications.map((cert, i) => (
+                        <div key={i} className="flex items-center gap-2 text-xs text-slate-700 font-bold">
+                          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 border border-emerald-600 flex items-center justify-center shrink-0"></span>
+                          <span>{cert}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Bottom booking CTA */}
+              <div className="pt-4 border-t-2 border-slate-900 flex items-center justify-end">
+                <div className="relative w-full h-[46px] group select-none cursor-pointer">
+                  {/* Outer offset thin black outline boundary */}
+                  <div className="absolute -left-[3px] -top-[3px] w-[calc(100%+6px)] h-[calc(100%+6px)] border-2 border-slate-900 rounded-xl pointer-events-none z-0"></div>
+
+                  {/* Yellow backing offset block */}
+                  <div className="absolute inset-0 bg-[#FFB800] rounded-xl -translate-x-1.5 translate-y-1.5 z-0 transition-transform duration-200 group-hover:-translate-x-2"></div>
+
+                  {/* Main button link element */}
+                  <Link
+                    to={`/contact?tab=booking&tech=${encodeURIComponent(selectedTech.name)}`}
+                    onClick={() => setSelectedTech(null)}
+                    className="absolute inset-0 z-10 bg-[#0D0D0D] border-2 border-[#0D0D0D] hover:bg-black text-white font-black text-xs tracking-widest uppercase rounded-xl flex items-center justify-center gap-2 transition-all duration-150 shadow-sm active:translate-y-[1px] active:translate-x-[1px]"
+                  >
+                    <span>Request diagnostics with {selectedTech.name.split(' ')[0]}</span>
+                    <ArrowRight className="w-4 h-4 text-[#FFB800]" />
+                  </Link>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

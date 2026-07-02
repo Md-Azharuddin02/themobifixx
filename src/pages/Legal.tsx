@@ -1,8 +1,3 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import { Shield, Hammer, Info, CheckCircle2 } from 'lucide-react';
 
 export function PrivacyPolicy() {
@@ -21,7 +16,7 @@ export function PrivacyPolicy() {
         <div className="prose prose-slate prose-sm text-slate-600 space-y-6 text-sm leading-relaxed border-t border-slate-100 pt-8">
           <h2 className="font-bold text-slate-900 text-lg">1. Introduction</h2>
           <p>
-            Welcome to LapyZone ("we," "our," or "us"). We are committed to protecting your privacy and ensuring your personal devices, hard drives, and system credentials are handled with the highest standards of safety and data confidentiality. This Privacy Policy describes how we collect, use, and secure your personal details and diagnostic files during your service cycle.
+            Welcome to TheMobifixx ("we," "our," or "us"). We are committed to protecting your privacy and ensuring your personal devices, hard drives, and system credentials are handled with the highest standards of safety and data confidentiality. This Privacy Policy describes how we collect, use, and secure your personal details and diagnostic files during your service cycle.
           </p>
 
           <h2 className="font-bold text-slate-900 text-lg">2. Information We Collect</h2>
@@ -36,7 +31,7 @@ export function PrivacyPolicy() {
 
           <h2 className="font-bold text-slate-900 text-lg">3. Hard Drive & Data Privacy Guarantee</h2>
           <p>
-            LapyZone adheres to an ironclad data privacy policy:
+            TheMobifixx adheres to an ironclad data privacy policy:
           </p>
           <div className="bg-slate-50 border border-slate-100 rounded-xl p-5 space-y-2">
             <div className="flex items-center gap-2 text-slate-900 font-bold">
@@ -60,7 +55,7 @@ export function PrivacyPolicy() {
 
           <h2 className="font-bold text-slate-900 text-lg">6. Contacting Our Data Officer</h2>
           <p>
-            If you have any questions about our privacy methods, please email our security officer at: <a href="mailto:privacy@lapyzone.in" className="text-[#0F4CFF] hover:underline font-bold">privacy@lapyzone.in</a> or call +91 99999 99999.
+            If you have any questions about our privacy methods, please email our security officer at: <a href="mailto:privacy@themobifixx.in" className="text-[#0F4CFF] hover:underline font-bold">privacy@themobifixx.in</a> or call +91 99999 99999.
           </p>
         </div>
       </div>
@@ -84,7 +79,7 @@ export function TermsAndConditions() {
         <div className="prose prose-slate prose-sm text-slate-600 space-y-6 text-sm leading-relaxed border-t border-slate-100 pt-8">
           <h2 className="font-bold text-slate-900 text-lg">1. Repair Agreements</h2>
           <p>
-            By booking a repair or requesting doorstep pickup with LapyZone, you authorize our certified engineers to execute diagnostic scans and open system panels to assess hardware faults.
+            By booking a repair or requesting doorstep pickup with TheMobifixx, you authorize our certified engineers to execute diagnostic scans and open system panels to assess hardware faults.
           </p>
 
           <h2 className="font-bold text-slate-900 text-lg">2. Diagnosis & Inspection Fee Waiver</h2>
@@ -102,23 +97,23 @@ export function TermsAndConditions() {
               We offer a solid 90-day warranty on all logic-board, chip-level, and component repairs.
             </p>
             <p className="text-xs text-slate-500 leading-relaxed">
-              Warranty is immediately voided in cases of subsequent physical drops, water ingress, or third-party disassembly attempts after LapyZone's tamper seal is broken.
+              Warranty is immediately voided in cases of subsequent physical drops, water ingress, or third-party disassembly attempts after TheMobifixx's tamper seal is broken.
             </p>
           </div>
 
           <h2 className="font-bold text-slate-900 text-lg">4. Data Loss & Storage Liabilities</h2>
           <p>
-            While LapyZone uses state-of-the-art procedures to protect physical disks, hardware failures can be highly unpredictable. The client is strongly advised to perform a full system backup before handing over any device. LapyZone is not liable for data loss occurring due to pre-existing motherboard failures.
+            While TheMobifixx uses state-of-the-art procedures to protect physical disks, hardware failures can be highly unpredictable. The client is strongly advised to perform a full system backup before handing over any device. TheMobifixx is not liable for data loss occurring due to pre-existing motherboard failures.
           </p>
 
           <h2 className="font-bold text-slate-900 text-lg">5. Storage of Repaired Devices</h2>
           <p>
-            Devices remaining in our laboratory for more than 45 days after repair completion notice without payment will carry a storage holding fee. After 90 days, LapyZone reserves the rights to recycle or auction the device components to recover outstanding spare parts bills.
+            Devices remaining in our laboratory for more than 45 days after repair completion notice without payment will carry a storage holding fee. After 90 days, TheMobifixx reserves the rights to recycle or auction the device components to recover outstanding spare parts bills.
           </p>
 
           <h2 className="font-bold text-slate-900 text-lg">6. Jurisdictions</h2>
           <p>
-            Any legal disputes or complaints originating from LapyZone contracts shall fall strictly under the exclusive jurisdiction of the state courts of Delhi NCR, India.
+            Any legal disputes or complaints originating from TheMobifixx contracts shall fall strictly under the exclusive jurisdiction of the state courts of Delhi NCR, India.
           </p>
         </div>
       </div>

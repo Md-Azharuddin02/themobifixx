@@ -1,0 +1,193 @@
+[
+  {
+    "name": "Soiab Malik",
+    "designation": "Display Expert",
+    "experience": 5,
+    "specialization": "Frontglass & Backglass Replacement, Display/Battery, Iphone and Android all mobile repair",
+    "repairsCompleted": 420,
+    "rating": 4.5,
+    "serviceAreas": [
+      "Nehru Place"
+    ],
+    "profileImage": "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&auto=format&fit=crop&q=60",
+    "certifications": [
+      "Display Master"
+    ],
+    "createdAt": "2026-07-01T13:16:17.809Z"
+  },
+  {
+    "name": "Sandeep Verma",
+    "designation": "Motherboard expert",
+    "experience": 3,
+    "specialization": "iphone & android all mobile repair like display/ motherboard/ battery/ back glass/ iWatch / ipad / tablet etc.",
+    "repairsCompleted": 260,
+    "rating": 4.5,
+    "serviceAreas": [
+      "Noida Sector 62",
+      "Noida Sector 18",
+      "Indirapuram",
+      "Mayur Vihar"
+    ],
+    "profileImage": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&auto=format&fit=crop&q=60",
+    "certifications": [
+      "Motherboard Expert Certificate"
+    ],
+    "createdAt": "2026-07-01T13:16:17.809Z"
+  },
+  {
+    "name": "Amit Sharma",
+    "designation": "Motherboard and Display Expert",
+    "experience": 3,
+    "specialization": "iphone & android all mobile repair like display/ motherboard/ battery/ back glass/ iWatch / ipad / tablet etc.",
+    "repairsCompleted": 380,
+    "rating": 4.7,
+    "serviceAreas": [
+      "Nehru Place"
+    ],
+    "profileImage": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=60",
+    "certifications": [
+      "Motherboard and Display"
+    ],
+    "createdAt": "2026-07-01T13:16:17.809Z"
+  },
+  {
+    "name": "Tushar",
+    "designation": "Owner of TheMobifixx",
+    "experience": 6,
+    "specialization": "iphone & android all mobile repair like display/ motherboard/ battery/ back glass/ iWatch / ipad / tablet, etc",
+    "repairsCompleted": 950,
+    "rating": 5.0,
+    "serviceAreas": [
+      "Gurugram Phase 3",
+      "DLF CyberCity",
+      "Sohna Road",
+      "Dwarka"
+    ],
+    "profileImage": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=60",
+    "certifications": [
+      "Certified Ethical Hacker (CEH)",
+      "Hard Drive Recovery Master"
+    ],
+    "createdAt": "2026-07-01T13:16:17.809Z"
+  },
+  {
+    "name": "Pooja Malhotra",
+    "designation": "Customer Care & On-site Diagnostics Coordinator",
+    "experience": 4,
+    "specialization": "OS Configurations, Bios setups, and Virus Purging",
+    "repairsCompleted": 610,
+    "rating": 4.8,
+    "serviceAreas": [
+      "Chanakyapuri",
+      "Green Park",
+      "Greater Kailash",
+      "Okhla"
+    ],
+    "profileImage": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&auto=format&fit=crop&q=60",
+    "certifications": [
+      "CompTIA A+ Professional",
+      "Microsoft Certified Systems Administrator"
+    ],
+    "createdAt": "2026-07-01T13:16:17.809Z"
+  },
+  {
+    "name": "Rohan Gupta",
+    "designation": "Refurbished Tech QC Lead",
+    "experience": 5,
+    "specialization": "Laptop Hardware Tuning & Performance Upgrades",
+    "repairsCompleted": 830,
+    "rating": 4.7,
+    "serviceAreas": [
+      "Karol Bagh",
+      "Pahar Ganj",
+      "Rohini",
+      "Pitampura"
+    ],
+    "profileImage": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=60",
+    "certifications": [
+      "Lenovo Service Associate",
+      "High Performance Tuning Cert"
+    ],
+    "createdAt": "2026-07-01T13:16:17.809Z"
+  },
+  {
+    "name": "Karan Johar",
+    "designation": "Doorstep Support Engineer",
+    "experience": 4,
+    "specialization": "Thermal pastes, RAM upgrades, Screen swaps",
+    "repairsCompleted": 590,
+    "rating": 4.8,
+    "serviceAreas": [
+      "Preet Vihar",
+      "Laxmi Nagar",
+      "Shahdara",
+      "Noida Sector 62"
+    ],
+    "profileImage": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&auto=format&fit=crop&q=60",
+    "certifications": [
+      "CompTIA IT Fundamentals",
+      "Premium Customer Relations Cert"
+    ],
+    "createdAt": "2026-07-01T13:16:17.809Z"
+  },
+  {
+    "name": "Meera Sen",
+    "designation": "Tablet Repair Specialist",
+    "experience": 6,
+    "specialization": "iPad LCD & Digitizer micro-fuses",
+    "repairsCompleted": 820,
+    "rating": 4.9,
+    "serviceAreas": [
+      "Faridabad",
+      "South Ext",
+      "Defense Colony",
+      "Nizamuddin"
+    ],
+    "profileImage": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&auto=format&fit=crop&q=60",
+    "certifications": [
+      "Apple Hardware Specialist",
+      "Micro-soldering Level III"
+    ],
+    "createdAt": "2026-07-01T13:16:17.809Z"
+  },
+  {
+    "name": "Aditya Roy",
+    "designation": "Corporate Hardware Architect",
+    "experience": 9,
+    "specialization": "Enterprise Server repairs & Bulk Client Laptops",
+    "repairsCompleted": 1560,
+    "rating": 4.9,
+    "serviceAreas": [
+      "Gurugram Golf Course Road",
+      "DLF Phase 1",
+      "Connaught Place",
+      "Okhla"
+    ],
+    "profileImage": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&auto=format&fit=crop&q=60",
+    "certifications": [
+      "Cisco Certified Network Associate (CCNA)",
+      "Intel Hardware Specialist"
+    ],
+    "createdAt": "2026-07-01T13:16:17.809Z"
+  },
+  {
+    "name": "Deepak Rawat",
+    "designation": "Junior Tech Assistant",
+    "experience": 3,
+    "specialization": "Keyboard replacements & general hardware troubleshooting",
+    "repairsCompleted": 420,
+    "rating": 4.6,
+    "serviceAreas": [
+      "Janakpuri",
+      "Tilak Nagar",
+      "Uttam Nagar",
+      "Dwarka"
+    ],
+    "profileImage": "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=400&auto=format&fit=crop&q=60",
+    "certifications": [
+      "State Technical Certificate",
+      "Hardware Diagnostics Associate"
+    ],
+    "createdAt": "2026-07-01T13:16:17.809Z"
+  }
+]

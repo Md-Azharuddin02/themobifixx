@@ -1,8 +1,3 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import * as Icons from 'lucide-react';
 
 interface ServiceIconProps {

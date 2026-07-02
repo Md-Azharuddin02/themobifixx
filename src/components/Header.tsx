@@ -1,12 +1,7 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, Phone, MessageSquare, Laptop, Smartphone, Cpu, Tablet, Hammer, Search, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { Menu, X, Phone, MessageSquare, Laptop, Smartphone, Cpu, Tablet, Hammer, Search, ArrowRight } from 'lucide-react';
 
 const SEARCH_DATABASE = [
   // Categories
@@ -39,6 +34,9 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
+  const [mobileSearchQuery, setMobileSearchQuery] = useState('');
+  const mobileSearchInputRef = useRef<HTMLInputElement>(null);
   const searchContainerRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -51,10 +49,19 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close mobile menu on route change
+  // Close mobile menu and search on route change
   useEffect(() => {
     setIsOpen(false);
+    setIsMobileSearchOpen(false);
+    setMobileSearchQuery('');
   }, [location]);
+
+  // Focus mobile search input when opened
+  useEffect(() => {
+    if (isMobileSearchOpen && mobileSearchInputRef.current) {
+      setTimeout(() => mobileSearchInputRef.current?.focus(), 120);
+    }
+  }, [isMobileSearchOpen]);
 
   // Click outside listener for search suggestions
   useEffect(() => {
@@ -70,6 +77,7 @@ export default function Header() {
   const navLinks = [
     { name: 'About Us', path: '/about' },
     { name: 'Services', path: '/services' },
+    { name: 'Before/After', path: '/comparison' },
     { name: 'Technicians', path: '/technicians' },
     { name: 'Testimonials', path: '/testimonials' },
     { name: 'Track Repair', path: '/tracker' },
@@ -79,6 +87,12 @@ export default function Header() {
   const isActive = (path: string) => {
     if (path === '/') {
       return location.pathname === '/';
+    }
+    if (path === '/contact') {
+      const searchParams = new URLSearchParams(location.search);
+      if (searchParams.get('tab') === 'booking') {
+        return false;
+      }
     }
     return location.pathname.startsWith(path);
   };
@@ -92,15 +106,35 @@ export default function Header() {
                item.keywords.some(kw => kw.toLowerCase().includes(query));
       }).slice(0, 5);
 
+  const mobileFilteredResults = mobileSearchQuery.trim() === ''
+    ? []
+    : SEARCH_DATABASE.filter(item => {
+        const query = mobileSearchQuery.toLowerCase();
+        return item.title.toLowerCase().includes(query) ||
+               item.category.toLowerCase().includes(query) ||
+               item.keywords.some(kw => kw.toLowerCase().includes(query));
+      }).slice(0, 6);
+
   return (
-    <header
+    <motion.header
       id="app-header"
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      animate={{ backgroundPosition: ['0% 50%', '200% 50%'] }}
+      transition={{ repeat: Infinity, duration: 12, ease: "linear" }}
+      style={{
+        backgroundImage: isScrolled
+          ? 'linear-gradient(90deg, rgba(255,255,255,0.75) 0%, rgba(240,246,255,0.75) 25%, rgba(244,243,255,0.75) 50%, rgba(240,246,255,0.75) 75%, rgba(255,255,255,0.75) 100%)'
+          : 'linear-gradient(90deg, rgba(255,255,255,0.95) 0%, rgba(243,244,246,0.95) 50%, rgba(255,255,255,0.95) 100%)',
+        backgroundSize: '200% 100%',
+      }}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b ${
         isScrolled
-          ? 'bg-white shadow-md border-b border-slate-200 py-1'
-          : 'bg-white/95 backdrop-blur-md py-2 border-b border-slate-100/50'
+          ? 'backdrop-blur-xl border-slate-200/35 shadow-[0_8px_30px_rgb(0,0,0,0.02)] py-1.5'
+          : 'backdrop-blur-lg py-2.5 border-slate-100/40'
       }`}
     >
+      {/* Top micro-glowing tech theme progress line */}
+      <div className="absolute top-0 inset-x-0 h-[2.5px] bg-gradient-to-r from-blue-600 via-indigo-500 to-[#a3e635] shadow-[0_1px_6px_rgba(15,76,255,0.25)]"></div>
+
       {/* Main Top Navbar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14">
@@ -109,7 +143,7 @@ export default function Header() {
             initial="rest"
             whileHover="hover"
             whileTap="tap"
-            className="flex items-center"
+            className="flex items-center min-w-[160px] sm:min-w-[220px] md:min-w-[240px] shrink-0 mr-4"
           >
             <Link to="/" className="flex items-center space-x-2 sm:space-x-3 text-[#0A1020]" id="logo-link">
               <motion.div 
@@ -142,10 +176,10 @@ export default function Header() {
               </motion.div>
               <div className="flex flex-col text-left">
                 <span className="font-black tracking-wider text-sm sm:text-base md:text-lg text-[#0A1020] leading-none">
-                  LAPYZONE
+                  TheMobifixx
                 </span>
                 <span className="text-[7.5px] font-bold text-[#0F4CFF] tracking-widest uppercase mt-0.5 leading-none">
-                  Delhi NCR Hub
+                  Best Repair Solutions
                 </span>
               </div>
             </Link>
@@ -153,122 +187,195 @@ export default function Header() {
 
           {/* Advanced Search Engine and CTA */}
           <div className="hidden md:flex items-center space-x-4 lg:space-x-6">
-            {/* Search Input Container */}
+            {/* Search Input Container - Retro Offset Grid Design */}
             <div ref={searchContainerRef} className="relative w-[210px] lg:w-[270px]">
-              <div className="relative">
-                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
-                <input
-                  type="text"
-                  placeholder="Search device or issue..."
-                  value={searchQuery}
-                  onChange={(e) => {
-                    setSearchQuery(e.target.value);
-                    setIsSearchFocused(true);
-                  }}
-                  onFocus={() => setIsSearchFocused(true)}
-                  className="w-full text-xs font-semibold pl-9 pr-7 py-2 bg-slate-50 border border-slate-200/80 rounded-full focus:outline-none focus:ring-2 focus:ring-[#0F4CFF]/10 focus:border-[#0F4CFF] focus:bg-white transition-all shadow-sm"
-                />
-                {searchQuery && (
-                  <button 
-                    onClick={() => setSearchQuery('')}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 font-bold"
-                  >
-                    ×
-                  </button>
-                )}
+              <div className="relative h-[36px] group">
+                {/* Retro offset shadow outline on the bottom-left */}
+                <div className="absolute -left-[2.5px] -bottom-[2.5px] inset-0 border-b-2 border-l-2 border-[#0D0D0D] rounded-full z-0 pointer-events-none transition-transform duration-200 group-hover:-translate-x-0.5 group-hover:translate-y-0.5"></div>
+
+                {/* Main Search Input Pill */}
+                <div className="absolute inset-0 bg-white border border-[#0D0D0D] rounded-full z-10 overflow-hidden flex items-center pr-8 pl-9.5">
+                  <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#0D0D0D]" />
+                  <input
+                    type="text"
+                    placeholder="..."
+                    value={searchQuery}
+                    onChange={(e) => {
+                      setSearchQuery(e.target.value);
+                      setIsSearchFocused(true);
+                    }}
+                    onFocus={() => setIsSearchFocused(true)}
+                    className="w-full text-xs font-black text-slate-800 bg-transparent focus:outline-none placeholder-slate-700 tracking-wider"
+                  />
+                  {searchQuery && (
+                    <button 
+                      onClick={() => setSearchQuery('')}
+                      className="absolute right-8 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 font-bold z-30"
+                    >
+                      ×
+                    </button>
+                  )}
+                </div>
+
+                {/* Right Side Tech Grid Motif overlay */}
+                <svg 
+                  className="absolute right-[-8px] top-[1px] w-[34px] h-[34px] pointer-events-none z-20 text-[#0D0D0D]" 
+                  viewBox="0 0 32 32"
+                >
+                  {/* Horizontal grid lines */}
+                  <line x1="0" y1="8" x2="32" y2="8" stroke="currentColor" strokeWidth="1" />
+                  <line x1="0" y1="16" x2="32" y2="16" stroke="currentColor" strokeWidth="1" />
+                  <line x1="0" y1="24" x2="32" y2="24" stroke="currentColor" strokeWidth="1" />
+                  {/* Vertical grid lines */}
+                  <line x1="8" y1="0" x2="8" y2="32" stroke="currentColor" strokeWidth="1" />
+                  <line x1="16" y1="0" x2="16" y2="32" stroke="currentColor" strokeWidth="1" />
+                  <line x1="24" y1="0" x2="24" y2="32" stroke="currentColor" strokeWidth="1" />
+                </svg>
               </div>
 
               {/* Suggestions Popup panel */}
               <AnimatePresence>
                 {isSearchFocused && searchQuery.trim() !== '' && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 8 }}
-                    className="absolute top-full left-0 mt-2 bg-white rounded-2xl shadow-xl border border-slate-100 p-3 z-50 w-[270px] lg:w-[320px]"
-                  >
-                    <div className="text-[9px] font-black uppercase tracking-wider text-slate-400 mb-2 px-1">
-                      Direct Diagnostics Matches
-                    </div>
+                  <div className="absolute top-full left-0 mt-3 z-50 w-[270px] lg:w-[320px]">
+                    {/* Retro offset shadow outline on the bottom-left of the dropdown */}
+                    <div className="absolute -left-[3px] -bottom-[3px] inset-0 border-b-2 border-l-2 border-[#0D0D0D] rounded-2xl bg-transparent pointer-events-none z-0"></div>
 
-                    {filteredResults.length === 0 ? (
-                      <div className="p-3 text-center space-y-1">
-                        <div className="text-slate-400 text-xs font-semibold">No direct repair matches</div>
-                        <p className="text-[10px] text-slate-500 leading-normal">
-                          Try searching for MacBook, HP, Dell, screen, or battery.
-                        </p>
+                    {/* Main Panel Content Card */}
+                    <motion.div
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 8 }}
+                      className="relative bg-white border-2 border-[#0D0D0D] rounded-2xl p-3 z-10 shadow-lg flex flex-col"
+                    >
+                      <div className="text-[9px] font-black uppercase tracking-wider text-slate-400 mb-2.5 px-1 border-b border-slate-100 pb-1.5">
+                        Direct Diagnostics Matches
                       </div>
-                    ) : (
-                      <div className="space-y-1">
-                        {filteredResults.map((result, idx) => (
-                          <button
-                            key={idx}
-                            onClick={() => {
-                              setIsSearchFocused(false);
-                              setSearchQuery('');
-                              navigate(result.targetUrl);
-                            }}
-                            className="w-full text-left p-2 hover:bg-slate-50 rounded-xl transition-all flex items-start gap-2 group cursor-pointer"
-                          >
-                            <div className="mt-0.5 p-1 bg-blue-50 text-[#0F4CFF] rounded-lg group-hover:bg-[#0F4CFF] group-hover:text-white transition-colors shrink-0">
-                              {result.type === 'category' ? <Laptop className="w-3 h-3" /> : <Cpu className="w-3 h-3" />}
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <div className="text-[11px] font-bold text-slate-800 truncate group-hover:text-[#0F4CFF] transition-colors">
-                                {result.title}
+
+                      {filteredResults.length === 0 ? (
+                        <div className="p-3 text-center space-y-1">
+                          <div className="text-slate-400 text-xs font-semibold">No direct repair matches</div>
+                          <p className="text-[10px] text-slate-500 leading-normal">
+                            Try searching for MacBook, HP, Dell, screen, or battery.
+                          </p>
+                        </div>
+                      ) : (
+                        <div className="space-y-1">
+                          {filteredResults.map((result, idx) => (
+                            <button
+                              key={idx}
+                              onClick={() => {
+                                setIsSearchFocused(false);
+                                setSearchQuery('');
+                                navigate(result.targetUrl);
+                              }}
+                              className="w-full text-left p-2 hover:bg-slate-50 rounded-xl transition-all flex items-start gap-2 group cursor-pointer"
+                            >
+                              <div className="mt-0.5 p-1 bg-slate-100 text-slate-800 rounded-lg group-hover:bg-[#0D0D0D] group-hover:text-white transition-colors shrink-0">
+                                {result.type === 'category' ? <Laptop className="w-3.5 h-3.5" /> : <Cpu className="w-3.5 h-3.5" />}
                               </div>
-                              <span className="text-[8px] font-mono text-slate-400 uppercase font-bold tracking-wider">
-                                {result.category} Repair Module
-                              </span>
-                            </div>
-                          </button>
-                        ))}
-                      </div>
-                    )}
+                              <div className="flex-1 min-w-0">
+                                <div className="text-[11px] font-bold text-slate-800 truncate group-hover:text-[#0F4CFF] transition-colors">
+                                  {result.title}
+                                </div>
+                                <span className="text-[8px] font-mono text-slate-400 uppercase font-bold tracking-wider">
+                                  {result.category} Repair Module
+                                </span>
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+                      )}
 
-                    <div className="mt-2.5 pt-2 border-t border-slate-100 text-center">
-                      <button 
-                        onClick={() => {
-                          setIsSearchFocused(false);
-                          navigate(`/contact?tab=booking&issue=${encodeURIComponent(searchQuery)}`);
-                          setSearchQuery('');
-                        }}
-                        className="text-[10px] font-black text-[#0F4CFF] uppercase tracking-wider hover:underline flex items-center justify-center gap-1 mx-auto"
-                      >
-                        <span>Book Repair with "{searchQuery}"</span>
-                        <ArrowRight className="w-3 h-3" />
-                      </button>
-                    </div>
-                  </motion.div>
+                      <div className="mt-3 pt-2.5 border-t border-slate-100 text-center">
+                        <button 
+                          onClick={() => {
+                            setIsSearchFocused(false);
+                            navigate(`/contact?tab=booking&issue=${encodeURIComponent(searchQuery)}`);
+                            setSearchQuery('');
+                          }}
+                          className="w-full py-2 bg-[#0D0D0D] hover:bg-black text-white text-[10px] font-black uppercase tracking-widest rounded-xl transition-all flex items-center justify-center gap-1.5 active:translate-y-[1px] cursor-pointer"
+                        >
+                          <span>Book Repair with "{searchQuery}"</span>
+                          <ArrowRight className="w-3.5 h-3.5 text-[#FFB800]" />
+                        </button>
+                      </div>
+                    </motion.div>
+                  </div>
                 )}
               </AnimatePresence>
             </div>
 
-            {/* CTA */}
-            <Link
-              to="/contact?tab=booking"
-              className="bg-[#0F4CFF] hover:bg-[#0A3DCC] text-white text-[11px] font-bold uppercase tracking-wider px-5 py-2.5 rounded-full shadow-lg shadow-blue-100 hover:scale-[1.02] transition-all"
-            >
-              Book Repair
-            </Link>
+            {/* CTA - Retro Offset Layered Design (Precise SVG Outline) */}
+            <div className="relative w-[164px] h-[42px] group cursor-pointer select-none ml-3">
+              {/* Precise SVG Outlines with safety padding margin to prevent hover clipping */}
+              <svg 
+                className="absolute -left-[4px] -top-[4px] w-[172px] h-[50px] pointer-events-none z-0" 
+                viewBox="-4 -4 172 50" 
+                fill="none"
+              >
+                {/* Top-left outer arch line */}
+                <path 
+                  d="M 125 1.5 L 21 1.5 A 19.5 19.5 0 0 0 1.5 21 A 19.5 19.5 0 0 0 3 26" 
+                  stroke="#0D0D0D" 
+                  strokeWidth="1.5" 
+                  strokeLinecap="round" 
+                  className="transition-transform duration-200 group-hover:-translate-x-1 group-hover:-translate-y-0.5"
+                />
+                {/* Bottom-right outer arch line */}
+                <path 
+                  d="M 25 40.5 L 143 40.5 A 19.5 19.5 0 0 0 162.5 21 A 19.5 19.5 0 0 0 161 15" 
+                  stroke="#0D0D0D" 
+                  strokeWidth="1.5" 
+                  strokeLinecap="round" 
+                  className="transition-transform duration-200 group-hover:translate-x-1 group-hover:translate-y-0.5"
+                />
+              </svg>
+
+              {/* Yellow backing pill */}
+              <div className="absolute left-[8px] top-[4px] w-[136px] h-[34px] bg-[#FFB800] rounded-full z-0 transition-transform duration-200 group-hover:-translate-x-1"></div>
+
+              {/* Main black button link */}
+              <Link
+                to="/contact?tab=booking"
+                className="absolute left-[18px] top-[4px] w-[136px] h-[34px] bg-[#0D0D0D] hover:bg-black text-white font-black text-[10px] tracking-widest uppercase rounded-full flex items-center justify-center transition-all duration-150 z-10 shadow-sm active:translate-y-[1px] active:translate-x-[1px]"
+              >
+                <span className="relative pb-0.5">
+                  Book Now
+                  <span className="absolute left-0 -bottom-0.5 w-full h-[1.5px] bg-[#FFB800]"></span>
+                </span>
+              </Link>
+            </div>
           </div>
 
-          {/* Mobile menu button */}
+          {/* Mobile top-bar buttons: Search | Call | Menu */}
           <div className="md:hidden flex items-center space-x-2">
+            {/* Mobile Search button */}
+            <button
+              onClick={() => { setIsMobileSearchOpen(!isMobileSearchOpen); setIsOpen(false); }}
+              className={`w-9 h-9 rounded-xl border-2 border-slate-900 flex items-center justify-center shadow-[2px_2px_0px_#0A1020] active:translate-y-[1px] active:translate-x-[1px] active:shadow-[0.5px_0.5px_0px_#0A1020] transition-all cursor-pointer ${
+                isMobileSearchOpen ? 'bg-[#FFB800] text-slate-900' : 'bg-white hover:bg-slate-50 text-slate-800'
+              }`}
+              aria-label="Open search"
+              id="mobile-search-toggle"
+            >
+              <Search className="w-4 h-4" />
+            </button>
+            {/* Call button */}
             <a
               href="tel:+919999999999"
-              className="p-2 text-slate-600 hover:text-[#0F4CFF] transition-colors"
-              aria-label="Call LapyZone"
+              className="w-9 h-9 rounded-xl border-2 border-slate-900 bg-white hover:bg-slate-50 flex items-center justify-center shadow-[2px_2px_0px_#0A1020] active:translate-y-[1px] active:translate-x-[1px] active:shadow-[0.5px_0.5px_0px_#0A1020] transition-all cursor-pointer"
+              aria-label="Call TheMobifixx"
             >
-              <Phone className="w-4 h-4" />
+              <Phone className="w-4 h-4 text-[#0F4CFF]" />
             </a>
+            {/* Hamburger */}
             <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="p-2 text-slate-600 hover:text-[#0F4CFF] focus:outline-none"
+              onClick={() => { setIsOpen(!isOpen); setIsMobileSearchOpen(false); }}
+              className="w-9 h-9 rounded-xl border-2 border-slate-900 bg-white hover:bg-slate-50 text-slate-800 flex items-center justify-center shadow-[2px_2px_0px_#0A1020] active:translate-y-[1px] active:translate-x-[1px] active:shadow-[0.5px_0.5px_0px_#0A1020] transition-all focus:outline-none cursor-pointer"
               aria-label="Toggle navigation menu"
               id="mobile-menu-toggle"
             >
-              {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {isOpen ? <X className="w-4 h-4 text-[#0F4CFF]" /> : <Menu className="w-4 h-4" />}
             </button>
           </div>
         </div>
@@ -276,69 +383,195 @@ export default function Header() {
 
       {/* Responsive Subnavbar (Desktop and Tablet only) */}
       <div className="hidden md:block border-t border-slate-100/80 bg-slate-50/70 backdrop-blur-md" id="app-subnavbar">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Desktop/Tablet Subnav (Horizontal list) */}
-          <nav className="flex items-center justify-center space-x-1 lg:space-x-3 py-1.5 text-xs font-bold uppercase tracking-wider" id="desktop-subnav">
-            {navLinks.map((link) => {
-              const active = isActive(link.path);
-              return (
-                <Link
-                  key={link.path}
-                  to={link.path}
-                  className={`px-3 py-1 rounded-full text-[10px] lg:text-[11px] font-black uppercase tracking-wider transition-all duration-200 whitespace-nowrap ${
-                    active
-                      ? 'bg-[#0F4CFF] text-white shadow-md shadow-blue-100/50'
-                      : 'text-slate-600 hover:text-[#0F4CFF] hover:bg-slate-100'
-                  }`}
-                >
-                  {link.name}
-                </Link>
-              );
-            })}
-          </nav>
+        <div className="max-w-7xl mx-auto">
+          {/* Tablet: horizontally scrollable, Desktop: centered */}
+          <div className="overflow-x-auto scrollbar-hide px-4 sm:px-6 lg:px-8">
+            <nav className="flex items-center lg:justify-center space-x-2.5 lg:space-x-4 py-3.5 text-xs font-bold uppercase tracking-wider min-w-max lg:min-w-0" id="desktop-subnav">
+              {navLinks.map((link) => {
+                const active = isActive(link.path);
+                return (
+                  <Link
+                    key={link.path}
+                    to={link.path}
+                    className={`px-4.5 py-2.5 rounded-xl text-[10px] lg:text-[11px] font-black uppercase tracking-wider whitespace-nowrap border-2 border-slate-900 flex items-center gap-1.5 transition-all duration-100 cursor-pointer shadow-[3px_3px_0px_#0A1020] hover:-translate-y-[2px] hover:-translate-x-[2px] hover:shadow-[5px_5px_0px_#0A1020] active:translate-y-[1.5px] active:translate-x-[1.5px] active:shadow-[1px_1px_0px_#0A1020] ${
+                      active
+                        ? 'bg-[#0F4CFF] text-white border-slate-900'
+                        : 'text-slate-800 bg-white hover:bg-slate-50'
+                    }`}
+                  >
+                    {active && (
+                      <span className="w-1.5 h-1.5 bg-[#a3e635] rounded-full animate-pulse shadow-[0_0_6px_#a3e635] shrink-0" />
+                    )}
+                    <span>{link.name}</span>
+                  </Link>
+                );
+              })}
+            </nav>
+          </div>
         </div>
       </div>
 
-      {/* Mobile Menu Dropdown drawer */}
-      {isOpen && (
-        <div className="md:hidden bg-white border-t border-slate-100 px-4 pt-2 pb-6 space-y-3" id="mobile-nav-menu">
-          {navLinks.map((link) => (
-            <Link
-              key={link.path}
-              to={link.path}
-              className={`block px-3 py-2.5 rounded-md text-sm font-bold uppercase tracking-wider ${
-                isActive(link.path)
-                  ? 'bg-slate-50 text-[#0F4CFF]'
-                  : 'text-slate-700 hover:bg-slate-50 hover:text-[#0F4CFF]'
-              }`}
-            >
-              {link.name}
-            </Link>
-          ))}
-          <div className="pt-4 border-t border-slate-100 flex flex-col space-y-3 px-3">
-            <motion.a
-              href="https://wa.me/919999999999?text=Hi%20LapyZone"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center space-x-2 bg-[#00C48C] hover:bg-[#009E70] text-white py-2.5 rounded-full font-bold text-xs uppercase tracking-widest shadow-md cursor-pointer group transition-colors duration-300"
-              whileHover={{ 
-                scale: 1.03, 
-              }}
-              whileTap={{ scale: 0.97 }}
-              transition={{ type: "spring", stiffness: 400, damping: 15 }}
-            >
-              <MessageSquare className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
-              <span>WhatsApp Support</span>
-            </motion.a>
-            <Link
-              to="/contact?tab=booking"
-              className="bg-[#0F4CFF] hover:bg-[#0A3DCC] text-white text-center py-2.5 rounded-full font-bold text-xs uppercase tracking-widest shadow-lg shadow-blue-100"
-            >
-              Book Doorstep Repair
-            </Link>
-          </div>
-        </div>
-      )}
-    </header>
+      {/* ── MOBILE SEARCH OVERLAY ──────────────────────────── */}
+      <AnimatePresence>
+        {isMobileSearchOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.22, ease: 'easeOut' }}
+            className="md:hidden border-t-2 border-b-2 border-slate-900 overflow-hidden"
+            style={{
+              backgroundImage: 'radial-gradient(circle, #CBD5E1 1px, transparent 1px)',
+              backgroundSize: '20px 20px',
+              backgroundColor: '#F8FAFC',
+            }}
+            id="mobile-search-panel"
+          >
+            <div className="px-4 py-5 space-y-4">
+              {/* Search input */}
+              <div className="relative">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
+                <input
+                  ref={mobileSearchInputRef}
+                  type="text"
+                  placeholder="Search MacBook, iPhone, screen, battery..."
+                  value={mobileSearchQuery}
+                  onChange={(e) => setMobileSearchQuery(e.target.value)}
+                  className="w-full pl-12 pr-10 py-3.5 border-2 border-slate-900 rounded-xl bg-white text-sm font-medium shadow-[3px_3px_0px_#0A1020] focus:outline-none focus:shadow-[4px_4px_0px_#FFB800] transition-all"
+                />
+                {mobileSearchQuery && (
+                  <button
+                    onClick={() => setMobileSearchQuery('')}
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 w-6 h-6 rounded-lg border-2 border-slate-900 bg-slate-100 flex items-center justify-center text-slate-500 font-black text-sm cursor-pointer"
+                  >
+                    ×
+                  </button>
+                )}
+              </div>
+
+              {/* Results */}
+              {mobileSearchQuery.trim() !== '' && (
+                <div className="bg-white border-2 border-slate-900 rounded-2xl overflow-hidden shadow-[4px_4px_0px_#0A1020]">
+                  <div className="text-[9px] font-black uppercase tracking-wider text-slate-400 px-4 py-2.5 border-b-2 border-slate-900 bg-[#F8FAFC]">
+                    Diagnostic Matches
+                  </div>
+                  {mobileFilteredResults.length === 0 ? (
+                    <div className="p-5 text-center">
+                      <p className="text-xs font-bold text-slate-500">No matches — try MacBook, HP, Dell, screen, or battery.</p>
+                    </div>
+                  ) : (
+                    <div className="divide-y-2 divide-slate-900">
+                      {mobileFilteredResults.map((result, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => {
+                            setIsMobileSearchOpen(false);
+                            setMobileSearchQuery('');
+                            navigate(result.targetUrl);
+                          }}
+                          className="w-full text-left px-4 py-3 flex items-center gap-3 hover:bg-slate-50 active:bg-slate-100 transition-colors cursor-pointer group"
+                        >
+                          <div className="w-8 h-8 border-2 border-slate-900 bg-white rounded-xl flex items-center justify-center shrink-0 shadow-[1px_1px_0px_#0A1020] group-hover:bg-[#0F4CFF] group-hover:text-white transition-colors">
+                            {result.type === 'category' ? <Laptop className="w-3.5 h-3.5" /> : <Cpu className="w-3.5 h-3.5" />}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="text-xs font-black text-slate-800 truncate group-hover:text-[#0F4CFF] transition-colors">{result.title}</div>
+                            <span className="text-[9px] font-mono text-slate-400 uppercase font-bold tracking-wider">{result.category} Repair Module</span>
+                          </div>
+                          <ArrowRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-[#0F4CFF] shrink-0 transition-colors" />
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                  {/* Book with query CTA */}
+                  <div className="p-3 border-t-2 border-slate-900 bg-[#F8FAFC]">
+                    <button
+                      onClick={() => {
+                        setIsMobileSearchOpen(false);
+                        setMobileSearchQuery('');
+                        navigate(`/contact?tab=booking&issue=${encodeURIComponent(mobileSearchQuery)}`);
+                      }}
+                      className="w-full py-3 bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest rounded-xl border-2 border-slate-900 shadow-[2px_2px_0px_#FFB800] hover:shadow-[3px_3px_0px_#FFB800] active:translate-y-[1px] active:translate-x-[1px] transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                    >
+                      <span>Book Repair · "{mobileSearchQuery}"</span>
+                      <ArrowRight className="w-3.5 h-3.5 text-[#FFB800]" />
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Default hint when query is empty */}
+              {mobileSearchQuery.trim() === '' && (
+                <div className="flex flex-wrap gap-2">
+                  {['MacBook Repair', 'iPhone Screen', 'SSD Upgrade', 'Water Damage'].map((hint) => (
+                    <button
+                      key={hint}
+                      onClick={() => setMobileSearchQuery(hint)}
+                      className="text-[10px] font-black uppercase tracking-wider px-3 py-1.5 border-2 border-slate-900 rounded-xl bg-white text-slate-700 shadow-[1px_1px_0px_#0A1020] hover:bg-[#FFB800] hover:text-slate-900 active:translate-y-[0.5px] transition-all cursor-pointer"
+                    >
+                      {hint}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ── MOBILE MENU DROPDOWN ───────────────────────────── */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div 
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.2, ease: "easeInOut" }}
+            className="md:hidden bg-slate-50 border-t-2 border-b-2 border-slate-900 px-4 py-6 space-y-4 overflow-hidden" 
+            id="mobile-nav-menu"
+          >
+            <div className="grid grid-cols-2 gap-3.5">
+              {navLinks.map((link) => {
+                const active = isActive(link.path);
+                return (
+                  <Link
+                    key={link.path}
+                    to={link.path}
+                    className={`px-3 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-wider border-2 border-slate-900 flex items-center justify-center gap-1.5 transition-all duration-100 cursor-pointer shadow-[2.5px_2.5px_0px_#0A1020] active:translate-y-[1px] active:translate-x-[1px] active:shadow-[0.5px_0.5px_0px_#0A1020] ${
+                      active
+                        ? 'bg-[#0F4CFF] text-white border-slate-900'
+                        : 'text-slate-800 bg-white hover:bg-slate-50'
+                    }`}
+                  >
+                    {active && (
+                      <span className="w-1.5 h-1.5 bg-[#a3e635] rounded-full animate-pulse shadow-[0_0_6px_#a3e635] shrink-0" />
+                    )}
+                    <span>{link.name}</span>
+                  </Link>
+                );
+              })}
+            </div>
+            <div className="pt-4 border-t-2 border-slate-900 flex flex-col space-y-3">
+              <motion.a
+                href="https://wa.me/919999999999?text=Hi%20TheMobifixx"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center space-x-2 bg-[#00C48C] text-white border-2 border-slate-900 py-2.5 rounded-xl font-black text-xs uppercase tracking-widest shadow-[3px_3px_0px_#0A1020] active:translate-y-[1.5px] active:translate-x-[1.5px] active:shadow-[1px_1px_0px_#0A1020] cursor-pointer group transition-all duration-100"
+                whileTap={{ scale: 0.98 }}
+              >
+                <MessageSquare className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
+                <span>WhatsApp Support</span>
+              </motion.a>
+              <Link
+                to="/contact?tab=booking"
+                className="block w-full text-center bg-[#FFB800] text-slate-950 border-2 border-slate-900 py-2.5 rounded-xl font-black text-xs uppercase tracking-widest shadow-[3px_3px_0px_#0A1020] active:translate-y-[1.5px] active:translate-x-[1.5px] active:shadow-[1px_1px_0px_#0A1020] transition-all duration-100"
+              >
+                Book Doorstep Repair
+              </Link>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.header>
   );
 }

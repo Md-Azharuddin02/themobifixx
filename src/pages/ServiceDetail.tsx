@@ -1,8 +1,3 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ShieldCheck, CheckCircle2, ArrowLeft, Loader2, Phone, Calendar, Heart, AlertCircle } from 'lucide-react';
@@ -81,7 +76,7 @@ export default function ServiceDetail() {
   ];
 
   return (
-    <div className="pt-24 pb-12 bg-slate-50 min-h-screen">
+    <div className="pt-20 md:pt-32 pb-12 bg-slate-50 min-h-screen">
       {/* Detail Hero Section */}
       <section className="bg-slate-900 text-white py-16" id="service-detail-hero">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -142,7 +137,7 @@ export default function ServiceDetail() {
             <div className="bg-white border border-slate-200/60 rounded-2xl p-6 md:p-8 space-y-6">
               <h3 className="font-bold text-slate-900 text-xl">Service Overview</h3>
               <p className="text-sm text-slate-600 leading-relaxed">
-                LapyZone provides professional, chip-level logic board and diagnostic repairs for all premium gadgets. Our Nehru Place lab houses specialized infrared soldering stations and digital oscilloscopes to troubleshoot and correct micro short circuits.
+                TheMobifixx provides professional, chip-level logic board and diagnostic repairs for all premium gadgets. Our Nehru Place lab houses specialized infrared soldering stations and digital oscilloscopes to troubleshoot and correct micro short circuits.
               </p>
 
               {/* Deliverables lists */}
@@ -181,7 +176,7 @@ export default function ServiceDetail() {
                 <ShieldCheck className="w-8 h-8" />
               </div>
               <div className="space-y-1 text-center sm:text-left">
-                <h4 className="font-bold text-white text-base">The LapyZone Guarantee</h4>
+                <h4 className="font-bold text-white text-base">The TheMobifixx Guarantee</h4>
                 <p className="text-xs leading-relaxed text-slate-400">
                   Every replacement panel, battery block, memory chip, and motherboard micro-soldering job is backed by our stamped 90-day warranty card, protecting you from future performance regression.
                 </p>

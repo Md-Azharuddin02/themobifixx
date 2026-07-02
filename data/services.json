@@ -1,0 +1,242 @@
+[
+  {
+    "title": "Laptop Repair",
+    "slug": "laptop-repair",
+    "description": "Comprehensive diagnostics and hardware/software repair services for all laptop brands including Dell, HP, Lenovo, and Asus.",
+    "icon": "Laptop",
+    "featuredImage": "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=800&auto=format&fit=crop&q=60",
+    "seoTitle": "Best Laptop Repair Services in Delhi NCR | Doorstep Laptop Repair",
+    "seoDescription": "Get premium, certified laptop repair services in Delhi, Noida, and Gurugram. Fast diagnostics, chip-level repairs, and genuine spare parts with warranty.",
+    "highlights": [
+      "Motherboard chip-level repairs",
+      "Overheating issues & fan repair",
+      "Hinge & body replacement",
+      "No-power & charging port fix"
+    ],
+    "pricing": "Starts from ₹499"
+  },
+  {
+    "title": "MacBook Repair",
+    "slug": "macbook-repair",
+    "description": "Expert MacBook repair by certified technicians. Specialist in logical board repair, battery, screen, and keyboard replacements.",
+    "icon": "Apple",
+    "featuredImage": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&auto=format&fit=crop&q=60",
+    "seoTitle": "Premium MacBook Repair Delhi NCR | Certified Apple Repair Experts",
+    "seoDescription": "Professional Apple MacBook Air and MacBook Pro repairs in Delhi, Gurugram & Noida. Liquid damage recovery, screen replacement, and logical board diagnostics.",
+    "highlights": [
+      "Logic Board micro-soldering",
+      "Retina display screen replacement",
+      "Trackpad and keyboard repair",
+      "macOS corruption troubleshooting"
+    ],
+    "pricing": "Starts from ₹999"
+  },
+  {
+    "title": "Mobile Repair",
+    "slug": "mobile-repair",
+    "description": "Premium smartphone repairs for iPhones, Samsung, OnePlus, and other premium brands with genuine components.",
+    "icon": "Smartphone",
+    "featuredImage": "https://images.unsplash.com/photo-1581090464762-647bf575c322?w=800&auto=format&fit=crop&q=60",
+    "seoTitle": "Professional Mobile & iPhone Repair Near Me | Delhi NCR",
+    "seoDescription": "Quick, same-day mobile phone repair services in Delhi NCR. Specializing in iPhone screen repair, battery swaps, and water damage restorations.",
+    "highlights": [
+      "Glass & display screen replacement",
+      "Battery degradation replacement",
+      "Charging port & speaker repair",
+      "Water and liquid ingress treatment"
+    ],
+    "pricing": "Starts from ₹299"
+  },
+  {
+    "title": "Tablet Repair",
+    "slug": "tablet-repair",
+    "description": "Repairs for iPad, Samsung Galaxy Tab, and other tablets. Touch screen replacements, battery issues, and charging faults fixed.",
+    "icon": "Tablet",
+    "featuredImage": "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=800&auto=format&fit=crop&q=60",
+    "seoTitle": "iPad & Tablet Repair Services Delhi NCR | LapyZone",
+    "seoDescription": "Affordable iPad and Android tablet repairs in Delhi NCR. Screen replacement, battery repair, and charging port fixes with 90 days warranty.",
+    "highlights": [
+      "iPad Digitizer & LCD swaps",
+      "Charging IC diagnostics",
+      "Battery degradation fixes",
+      "Power/Volume button repairs"
+    ],
+    "pricing": "Starts from ₹599"
+  },
+  {
+    "title": "SSD Upgrade",
+    "slug": "ssd-upgrade",
+    "description": "Boost your system speed up to 10x with a premium NVMe or SATA solid-state drive upgrade. Fast cloning and OS transfer included.",
+    "icon": "Cpu",
+    "featuredImage": "https://images.unsplash.com/photo-1591488320449-011701bb6704?w=800&auto=format&fit=crop&q=60",
+    "seoTitle": "Superfast SSD Upgrade Services for Laptops & PCs Delhi NCR",
+    "seoDescription": "Speed up your slow laptop with LapyZone SSD upgrade. High-speed NVMe & SATA SSDs with standard manufacturer warranties. Data cloning included.",
+    "highlights": [
+      "NVMe/SATA premium SSD drives",
+      "Full OS & file data migration",
+      "Immediate 10x boot speed boost",
+      "Thermal paste re-application"
+    ],
+    "pricing": "Starts from ₹1,899"
+  },
+  {
+    "title": "RAM Upgrade",
+    "slug": "ram-upgrade",
+    "description": "Eliminate system lag and handle heavy multitasking by upgrading your DDR3, DDR4, or DDR5 system RAM with certified modules.",
+    "icon": "Database",
+    "featuredImage": "https://images.unsplash.com/photo-1562976540-1502c2145186?w=800&auto=format&fit=crop&q=60",
+    "seoTitle": "Laptop & Desktop RAM Upgrade | Delhi Noida Gurugram",
+    "seoDescription": "Increase performance and gaming capacity. High-quality DDR4/DDR5 dual-channel upgrades with warranty and on-site testing.",
+    "highlights": [
+      "Original Samsung, Kingston & Crucial RAM",
+      "Dual-channel memory tuning",
+      "Gaming and editing lag elimination",
+      "Compatible module diagnostics"
+    ],
+    "pricing": "Starts from ₹999"
+  },
+  {
+    "title": "Battery Replacement",
+    "slug": "battery-replacement",
+    "description": "Replace swelling or fast-draining batteries with 100% original OEM equivalents. Secure recycling of old batteries included.",
+    "icon": "BatteryCharging",
+    "featuredImage": "https://images.unsplash.com/photo-1624996379697-f01d168b1a52?w=800&auto=format&fit=crop&q=60",
+    "seoTitle": "Genuine Laptop & Mobile Battery Replacement Delhi NCR",
+    "seoDescription": "Get authentic replacement batteries for Dell, HP, Lenovo, MacBook, and iPhones in Delhi NCR. Premium grade-A cells with 1-year replacement warranty.",
+    "highlights": [
+      "OEM certified high-capacity cells",
+      "Up to 12 months comprehensive warranty",
+      "Safe disposal of hazardous old battery",
+      "Power-cycle efficiency calibrations"
+    ],
+    "pricing": "Starts from ₹1,200"
+  },
+  {
+    "title": "Screen Replacement",
+    "slug": "screen-replacement",
+    "description": "Flickering, broken, or vertical lined screens replaced with premium IPS panels. Anti-glare and high refresh rate options available.",
+    "icon": "Tv",
+    "featuredImage": "https://images.unsplash.com/photo-1547082299-de196ea013d6?w=800&auto=format&fit=crop&q=60",
+    "seoTitle": "Laptop Screen Replacement Delhi NCR | Same-day Display Fix",
+    "seoDescription": "Broken laptop screen? Get a same-day replacement with original displays. HD, FHD, and 4K IPS panels available for all laptop brands.",
+    "highlights": [
+      "Original A+ Grade displays",
+      "FHD, UHD, & IPS screen upgrades",
+      "Dead pixel and color accuracy test",
+      "Anti-glare display panel option"
+    ],
+    "pricing": "Starts from ₹2,200"
+  },
+  {
+    "title": "Keyboard Repair",
+    "slug": "keyboard-repair",
+    "description": "Fix sticky, missing, or malfunctioning keys. Complete keyboard assembly replacements for chiclet and mechanical layouts.",
+    "icon": "Keyboard",
+    "featuredImage": "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=800&auto=format&fit=crop&q=60",
+    "seoTitle": "Laptop Keyboard Replacement and Repair | Delhi NCR",
+    "seoDescription": "Resolve missing keys, liquid spills, and non-working keyboard assemblies. Backlit and standard laptop keyboard replacement with warranty.",
+    "highlights": [
+      "Complete keyboard plate swap",
+      "Backlight module integration",
+      "Individual key component repair",
+      "Spill damage residue cleaning"
+    ],
+    "pricing": "Starts from ₹750"
+  },
+  {
+    "title": "Motherboard Repair",
+    "slug": "motherboard-repair",
+    "description": "Advanced chip-level micro-soldering. Repair logic board shorts, BIOS issues, IC failures, and liquid damage corroded tracks.",
+    "icon": "ShieldAlert",
+    "featuredImage": "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&auto=format&fit=crop&q=60",
+    "seoTitle": "Chip-level Motherboard Repair Experts Delhi | LapyZone",
+    "seoDescription": "Advanced motherboard repairs for MacBooks and standard laptops. Fixing no-power, charging shorts, and BIOS loops using high-precision microscopes.",
+    "highlights": [
+      "SMD and BGA chip reballing",
+      "Short-circuit trace diagnostics",
+      "BIOS firmware chip reprogramming",
+      "DC power-jack micro soldering"
+    ],
+    "pricing": "Starts from ₹1,500"
+  },
+  {
+    "title": "Data Recovery",
+    "slug": "data-recovery",
+    "description": "Retrieve critical lost documents, photos, and corporate data from physically crashed HDDs, faulty SSDs, or corrupted USB drives.",
+    "icon": "HardDrive",
+    "featuredImage": "https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=800&auto=format&fit=crop&q=60",
+    "seoTitle": "Professional Hard Drive & SSD Data Recovery Delhi NCR",
+    "seoDescription": "Accidental deletion or hard drive crash? Get complete data recovery. Secure cleanroom recovery for corrupt SSDs, external disks, and corporate servers.",
+    "highlights": [
+      "Logical and physical file recovery",
+      "Crashed HDD platters treatment",
+      "Dead SSD memory controller extraction",
+      "100% data confidentiality assurance"
+    ],
+    "pricing": "Starts from ₹1,999"
+  },
+  {
+    "title": "Deep Cleaning",
+    "slug": "deep-cleaning",
+    "description": "Restore optimal cooling and prevent thermal throttling. Includes internal dust removal, fan lubrication, and premium thermal paste swap.",
+    "icon": "Sparkles",
+    "featuredImage": "https://images.unsplash.com/photo-1540959733332-eab4deceeaf7?w=800&auto=format&fit=crop&q=60",
+    "seoTitle": "Laptop Deep Cleaning and Thermal Paste Service Delhi NCR",
+    "seoDescription": "Prevent hardware deterioration and thermal lag. Full laptop disassembly cleaning, fan cooling servicing, and Artic MX-4 thermal paste renewal.",
+    "highlights": [
+      "Artic MX-4 premium thermal paste",
+      "Cooling fan dust-free lubrication",
+      "Heatsink airflow optimizations",
+      "Internal board corrosion cleaning"
+    ],
+    "pricing": "Starts from ₹399"
+  },
+  {
+    "title": "Software Installation",
+    "slug": "software-installation",
+    "description": "OS clean installs (Windows 11/10/macOS), corporate suite setups, utility tools configurations, and activation diagnostics.",
+    "icon": "FolderOpen",
+    "featuredImage": "https://images.unsplash.com/photo-1600132806370-bf17e65e942f?w=800&auto=format&fit=crop&q=60",
+    "seoTitle": "Windows & macOS Clean Installation Services Delhi NCR",
+    "seoDescription": "Certified software installs. Genuine OS setup, driver troubleshooting, Microsoft Office activations, and creative suites installation.",
+    "highlights": [
+      "Genuine Windows/macOS installations",
+      "Official system driver patches",
+      "Microsoft Office & Adobe suite support",
+      "Slow system speed optimization"
+    ],
+    "pricing": "Starts from ₹499"
+  },
+  {
+    "title": "Virus Removal",
+    "slug": "virus-removal",
+    "description": "Scan, identify, and securely purge malware, ransomware, adware, and trojan infections. Adware blockers and licensed antivirus setups.",
+    "icon": "ShieldCheck",
+    "featuredImage": "https://images.unsplash.com/photo-1601597111158-2fceff270190?w=800&auto=format&fit=crop&q=60",
+    "seoTitle": "Malware & Virus Removal Experts for Laptops Delhi NCR",
+    "seoDescription": "Secure virus cleaning, adware blocks, and ransomware audits. Clean your system and secure your financial login passwords from hackers.",
+    "highlights": [
+      "Complete malware and trojan purge",
+      "Malicious registry script cleanup",
+      "Certified premium Antivirus setups",
+      "Browser hijackers restoration"
+    ],
+    "pricing": "Starts from ₹499"
+  },
+  {
+    "title": "Doorstep Repair",
+    "slug": "doorstep-repair",
+    "description": "Schedule on-site repair at your home or office in Delhi, Noida, or Gurugram. Free pickup and safe drop-off for advanced repairs.",
+    "icon": "Truck",
+    "featuredImage": "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&auto=format&fit=crop&q=60",
+    "seoTitle": "On-site Laptop & Mobile Doorstep Repair Delhi NCR | LapyZone",
+    "seoDescription": "Get certified technician doorstep repairs in 90 minutes. Professional service at your home or corporate office with zero hassle.",
+    "highlights": [
+      "90-minute rapid doorstep arrival",
+      "Transparent direct-front repairs",
+      "Free pickup & delivery for complex issues",
+      "Safe, sanitised transit packages"
+    ],
+    "pricing": "Free Service Visit (Repairs billed extra)"
+  }
+]
