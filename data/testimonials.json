@@ -1,14 +1,5 @@
 [
   {
-    "customerName": "dada",
-    "rating": 5,
-    "review": "nice service with good behavior of technician.",
-    "deviceType": "iphone 16",
-    "image": "https://api.dicebear.com/7.x/initials/svg?seed=dada&backgroundColor=0f4cff,00c48c,ff7a00,3b82f6",
-    "id": "test_qfyeg27l8",
-    "createdAt": "2026-07-01T21:14:08.309Z"
-  },
-  {
     "customerName": "Vikramaditya Sharma",
     "rating": 5,
     "review": "Amazing experience! My MacBook Pro logic board was declared dead by Apple Service Center, quoting ₹48,000 for replacement. Rajesh from LapyZone repaired the short circuit on the board for just ₹6,500. It works beautifully now. Highly recommended!",
