@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import logoImg from '../../assets/logo.jpeg';
 import { Phone, Mail, MapPin, Clock, Shield, Award, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -110,9 +111,12 @@ export default function Footer() {
           
           {/* TheMobifixx Info */}
           <div className="space-y-5">
-            <Link to="/" className="inline-flex items-center space-x-2.5 text-xl font-extrabold text-slate-950 tracking-tight">
-              <span className="w-6 h-6 bg-[#FFB800] border border-slate-900 rounded-lg flex items-center justify-center text-xs text-slate-900 font-black shadow-[1.5px_1.5px_0px_#0A1020]">T</span>
-              <span>TheMobifixx</span>
+            <Link to="/" className="inline-flex items-center text-slate-950">
+              <img 
+                src={logoImg} 
+                alt="TheMobifixx Logo" 
+                className="h-11 sm:h-14 md:h-16 w-auto object-contain"
+              />
             </Link>
             <p className="text-sm text-slate-600 leading-relaxed font-bold">
               Premium device repair & refurbished technology service partner serving Delhi NCR. Experience chip-level precision with same-day transparent service.
