@@ -308,7 +308,7 @@ export default function RepairTracker() {
                     </div>
                     <div>
                       <span className="text-xs text-slate-400 block mb-1">Assigned Laboratory</span>
-                      <span className="text-sm font-bold text-slate-200 block">Nehru Place G-12 Head Laboratory</span>
+                      <span className="text-sm font-bold text-slate-200 block">Nehru Place G-12 Main service centre</span>
                       <span className="text-[10px] text-slate-500 block">Central Delhi Micro-Soldering Station</span>
                     </div>
                   </div>
@@ -316,14 +316,14 @@ export default function RepairTracker() {
                   <div className="pt-6 border-t border-white/10 relative z-10 space-y-3">
                     <span className="text-[10px] font-black text-slate-400 block uppercase tracking-widest mb-1">Need Live Assistance?</span>
                     <a
-                      href="tel:+919999999999"
+                      href="tel:+919310112994"
                       className="w-full bg-[#0F4CFF] text-white text-xs font-black uppercase tracking-wider py-3 rounded-xl border-2 border-[#0F4CFF] shadow-[2px_2px_0px_#FFB800] hover:shadow-[3px_3px_0px_#FFB800] hover:-translate-y-[1px] hover:-translate-x-[1px] active:translate-y-[1px] active:translate-x-[1px] transition-all flex items-center justify-center gap-2"
                     >
                       <PhoneCall className="w-3.5 h-3.5" />
                       <span>Call Tech Helpline</span>
                     </a>
                     <a
-                      href={`https://wa.me/919999999999?text=Hi%20TheMobifixx,%20I'm%20tracking%20my%20repair%20ID%20${repairRequest.id}%20and%20need%20an%20update.`}
+                      href={`https://wa.me/919310112994?text=Hi%20TheMobifixx,%20I'm%20tracking%20my%20repair%20ID%20${repairRequest.id}%20and%20need%20an%20update.`}
                       target="_blank" rel="noopener noreferrer"
                       className="w-full bg-[#00C48C] text-white text-xs font-black uppercase tracking-wider py-3 rounded-xl border-2 border-[#00C48C] shadow-[2px_2px_0px_#0A1020] hover:shadow-[3px_3px_0px_#0A1020] hover:-translate-y-[1px] hover:-translate-x-[1px] active:translate-y-[1px] active:translate-x-[1px] transition-all flex items-center justify-center gap-2"
                     >
@@ -345,7 +345,7 @@ export default function RepairTracker() {
               When you submit a doorstep repair booking or drop off your device at one of our laboratory hubs, a unique tracking file is generated in our system (formatted as <span className="font-mono text-slate-800 font-black">LAPY-XXXXX</span>).
             </p>
             <p className="text-xs text-slate-500 leading-relaxed">
-              This ID is instantly sent to your verified mobile number via SMS and email confirmation. If you lost your ID, please call our direct hotline at <a href="tel:+919999999999" className="text-[#0F4CFF] hover:underline font-black">+91 99999 99999</a>.
+              This ID is instantly sent to your verified mobile number via SMS and email confirmation. If you lost your ID, please call our direct hotline at <a href="tel:+919310112994" className="text-[#0F4CFF] hover:underline font-black">+91 9310112994</a>.
             </p>
           </div>
         )}

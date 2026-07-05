@@ -15,6 +15,10 @@ import Contact from './pages/Contact';
 import ComparisonPage from './pages/ComparisonPage';
 import { PrivacyPolicy, TermsAndConditions } from './pages/Legal';
 import SEOManager from './components/SEOManager';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import UserDashboard from './pages/UserDashboard';
+import AdminDashboard from './pages/AdminDashboard';
 
 // Scroll Restoration Utility
 function ScrollToTop() {
@@ -76,7 +80,7 @@ function FloatingCTAs() {
 
       {/* Call Hotline - Retro Neobrutalist */}
       <motion.a
-        href="tel:+919999999999"
+        href="tel:+919310112994"
         className="w-12 h-12 bg-slate-950 text-white border-2 border-slate-900 rounded-full flex items-center justify-center shadow-[3px_3px_0px_#FFB800] hover:shadow-[4px_4px_0px_#FFB800] relative group cursor-pointer transition-all duration-200"
         aria-label="Call TheMobifixx Support"
         whileHover={{ scale: 1.08, y: -2, x: -2 }}
@@ -85,13 +89,13 @@ function FloatingCTAs() {
       >
         <Phone className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
         <span className="absolute right-14 bg-white border-2 border-slate-900 text-slate-900 text-[10px] font-black tracking-wider uppercase px-3 py-1.5 rounded-xl shadow-[2px_2px_0px_#0A1020] opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap hidden sm:inline-block pointer-events-none">
-          Call +91 99999 99999
+          Call +91 9310112994
         </span>
       </motion.a>
 
       {/* WhatsApp Chat Support - Retro Neobrutalist */}
       <motion.a
-        href="https://wa.me/919999999999?text=Hi%20TheMobifixx,%20I%20have%20a%20device%20repair%20inquiry."
+        href="https://wa.me/919310112994?text=Hi%20TheMobifixx,%20I%20have%20a%20device%20repair%20inquiry."
         target="_blank"
         rel="noopener noreferrer"
         className="w-12 h-12 bg-[#00C48C] text-white border-2 border-slate-900 rounded-full flex items-center justify-center shadow-[3px_3px_0px_#0A1020] hover:shadow-[4px_4px_0px_#0A1020] relative group cursor-pointer transition-all duration-200 animate-bounce-slow"
@@ -132,6 +136,10 @@ export default function App() {
             <Route path="/comparison" element={<ComparisonPage />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/dashboard" element={<UserDashboard />} />
+            <Route path="/admin" element={<AdminDashboard />} />
             
             {/* Fallback Catch-all Redirect */}
             <Route path="*" element={<Home />} />

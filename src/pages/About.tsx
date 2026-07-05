@@ -154,11 +154,7 @@ export default function About() {
               <div className="flex flex-wrap gap-3 pt-3 border-t-2 border-slate-900">
                 <div className="flex items-center gap-2 border-2 border-slate-900 bg-white px-3 py-1.5 rounded-xl shadow-[2px_2px_0px_#0A1020] text-xs font-black text-slate-800">
                   <MapPin className="w-4 h-4 text-[#0F4CFF]" />
-                  <span>Nehru Place Master Lab</span>
-                </div>
-                <div className="flex items-center gap-2 border-2 border-slate-900 bg-white px-3 py-1.5 rounded-xl shadow-[2px_2px_0px_#0A1020] text-xs font-black text-slate-800">
-                  <Sparkles className="w-4 h-4 text-[#00C48C]" />
-                  <span>GST-Compliant Invoicing</span>
+                  <span>Nehru Place Main Service Centre</span>
                 </div>
               </div>
             </div>

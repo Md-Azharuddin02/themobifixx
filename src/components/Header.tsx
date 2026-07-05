@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { Menu, X, Phone, MessageSquare, Laptop, Smartphone, Cpu, Tablet, Hammer, Search, ArrowRight } from 'lucide-react';
+import { Menu, X, Phone, MessageSquare, Laptop, Smartphone, Cpu, Tablet, Hammer, Search, ArrowRight, User } from 'lucide-react';
+import { getAuthUser, clearAuth } from '../utils/auth';
 
 const SEARCH_DATABASE = [
   // Categories
@@ -38,8 +39,27 @@ export default function Header() {
   const [mobileSearchQuery, setMobileSearchQuery] = useState('');
   const mobileSearchInputRef = useRef<HTMLInputElement>(null);
   const searchContainerRef = useRef<HTMLDivElement>(null);
+  const profileContainerRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
+
+  const [user, setUser] = useState<any>(null);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+
+  useEffect(() => {
+    setUser(getAuthUser());
+  }, []);
+
+  // Click outside listener for profile dropdown
+  useEffect(() => {
+    const handleProfileClickOutside = (e: MouseEvent) => {
+      if (profileContainerRef.current && !profileContainerRef.current.contains(e.target as Node)) {
+        setIsProfileOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleProfileClickOutside);
+    return () => document.removeEventListener('mousedown', handleProfileClickOutside);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -89,10 +109,7 @@ export default function Header() {
       return location.pathname === '/';
     }
     if (path === '/contact') {
-      const searchParams = new URLSearchParams(location.search);
-      if (searchParams.get('tab') === 'booking') {
-        return false;
-      }
+      return location.pathname === '/contact' && !location.search;
     }
     return location.pathname.startsWith(path);
   };
@@ -305,6 +322,77 @@ export default function Header() {
               </AnimatePresence>
             </div>
 
+            {/* Desktop Auth Profile Dropdown or Sign In */}
+            <div ref={profileContainerRef} className="relative ml-2">
+              {user ? (
+                <>
+                  <button
+                    onClick={() => setIsProfileOpen(!isProfileOpen)}
+                    className="w-9 h-9 rounded-xl border-2 border-slate-900 bg-[#FFB800] text-slate-950 font-black flex items-center justify-center shadow-[2px_2px_0px_#0A1020] hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-[0.5px_0.5px_0px_#0A1020] transition-all cursor-pointer text-xs uppercase"
+                    aria-label="Toggle user profile"
+                  >
+                    {user.name.charAt(0)}
+                  </button>
+
+                  <AnimatePresence>
+                    {isProfileOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute right-0 mt-3 w-56 bg-white border-2 border-slate-900 rounded-xl p-4 shadow-[4px_4px_0px_#0A1020] z-50 space-y-3"
+                      >
+                        <div className="border-b border-slate-100 pb-2">
+                          <p className="text-xs font-black text-slate-900 truncate">{user.name}</p>
+                          <p className="text-[10px] font-bold text-slate-400 truncate">{user.email}</p>
+                        </div>
+                        <div className="space-y-1">
+                          {(user.dashboardAccess && user.role !== 'admin') && (
+                            <Link
+                              to="/dashboard"
+                              onClick={() => setIsProfileOpen(false)}
+                              className="block text-[10px] font-black uppercase text-slate-700 hover:text-[#0F4CFF] py-1"
+                            >
+                              User Dashboard
+                            </Link>
+                          )}
+                          {user.role === 'admin' && (
+                            <Link
+                              to="/admin"
+                              onClick={() => setIsProfileOpen(false)}
+                              className="block text-[10px] font-black uppercase text-[#FF7A00] hover:text-[#0F4CFF] py-1"
+                            >
+                              Admin Suite
+                            </Link>
+                          )}
+                        </div>
+                        <button
+                          onClick={() => {
+                            clearAuth();
+                            setUser(null);
+                            setIsProfileOpen(false);
+                            navigate('/');
+                            window.location.reload();
+                          }}
+                          className="w-full text-center text-[10px] font-black uppercase text-white bg-slate-900 border-2 border-slate-900 py-1.5 rounded-lg shadow-[2px_2px_0px_#0D0D0D] hover:-translate-y-0.5 active:translate-y-0.5 transition-all cursor-pointer"
+                        >
+                          Log Out
+                        </button>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </>
+              ) : (
+                <Link
+                  to="/login"
+                  className="inline-flex items-center justify-center px-4 py-2 border-2 border-slate-900 bg-white text-slate-950 font-black text-[10px] uppercase tracking-wider rounded-xl shadow-[2.5px_2.5px_0px_#0A1020] hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px] transition-all"
+                >
+                  Sign In
+                </Link>
+              )}
+            </div>
+
             {/* CTA - Retro Offset Layered Design (Precise SVG Outline) */}
             <div className="relative w-[164px] h-[42px] group cursor-pointer select-none ml-3">
               {/* Precise SVG Outlines with safety padding margin to prevent hover clipping */}
@@ -362,7 +450,7 @@ export default function Header() {
             </button>
             {/* Call button */}
             <a
-              href="tel:+919999999999"
+              href="tel:+919310112994"
               className="w-9 h-9 rounded-xl border-2 border-slate-900 bg-white hover:bg-slate-50 flex items-center justify-center shadow-[2px_2px_0px_#0A1020] active:translate-y-[1px] active:translate-x-[1px] active:shadow-[0.5px_0.5px_0px_#0A1020] transition-all cursor-pointer"
               aria-label="Call TheMobifixx"
             >
@@ -551,9 +639,75 @@ export default function Header() {
                 );
               })}
             </div>
+            {/* Mobile Auth Panel */}
+            <div className="pt-3.5 mt-1 border-t border-slate-200">
+              {user ? (
+                <div className="bg-white border-2 border-slate-900 rounded-xl p-3.5 space-y-3 shadow-[2.5px_2.5px_0px_#0A1020]">
+                  <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
+                    <div className="w-8 h-8 rounded-lg border-2 border-slate-900 bg-[#FFB800] text-slate-950 font-black flex items-center justify-center text-xs uppercase shadow-[1px_1px_0px]">
+                      {user.name.charAt(0)}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-xs font-black text-slate-900 truncate">{user.name}</p>
+                      <p className="text-[9px] font-bold text-slate-400 truncate">{user.email}</p>
+                    </div>
+                  </div>
+                  <div className="space-y-1.5">
+                    {(user.dashboardAccess && user.role !== 'admin') && (
+                      <Link
+                        to="/dashboard"
+                        onClick={() => setIsOpen(false)}
+                        className="block text-center text-[10px] font-black uppercase text-slate-800 border-2 border-slate-900 bg-slate-50 py-2 rounded-lg"
+                      >
+                        Dashboard
+                      </Link>
+                    )}
+                    {user.role === 'admin' && (
+                      <Link
+                        to="/admin"
+                        onClick={() => setIsOpen(false)}
+                        className="block text-center text-[10px] font-black uppercase text-slate-850 border-2 border-slate-900 bg-[#FFB800] py-2 rounded-lg"
+                      >
+                        Admin Suite
+                      </Link>
+                    )}
+                  </div>
+                  <button
+                    onClick={() => {
+                      clearAuth();
+                      setUser(null);
+                      setIsOpen(false);
+                      navigate('/');
+                      window.location.reload();
+                    }}
+                    className="w-full text-center text-[10px] font-black uppercase text-white bg-slate-900 border-2 border-slate-900 py-2 rounded-lg cursor-pointer"
+                  >
+                    Log Out
+                  </button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 gap-2.5">
+                  <Link
+                    to="/login"
+                    onClick={() => setIsOpen(false)}
+                    className="text-center text-[10px] font-black uppercase text-slate-900 border-2 border-slate-900 bg-white py-2.5 rounded-xl shadow-[2px_2px_0px_#0A1020]"
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    to="/signup"
+                    onClick={() => setIsOpen(false)}
+                    className="text-center text-[10px] font-black uppercase text-slate-950 border-2 border-slate-900 bg-[#FFB800] py-2.5 rounded-xl shadow-[2px_2px_0px_#0A1020]"
+                  >
+                    Register
+                  </Link>
+                </div>
+              )}
+            </div>
+
             <div className="pt-4 border-t-2 border-slate-900 flex flex-col space-y-3">
               <motion.a
-                href="https://wa.me/919999999999?text=Hi%20TheMobifixx"
+                href="https://wa.me/919310112994?text=Hi%20TheMobifixx"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center space-x-2 bg-[#00C48C] text-white border-2 border-slate-900 py-2.5 rounded-xl font-black text-xs uppercase tracking-widest shadow-[3px_3px_0px_#0A1020] active:translate-y-[1.5px] active:translate-x-[1.5px] active:shadow-[1px_1px_0px_#0A1020] cursor-pointer group transition-all duration-100"

@@ -55,7 +55,7 @@ export function PrivacyPolicy() {
 
           <h2 className="font-bold text-slate-900 text-lg">6. Contacting Our Data Officer</h2>
           <p>
-            If you have any questions about our privacy methods, please email our security officer at: <a href="mailto:privacy@themobifixx.in" className="text-[#0F4CFF] hover:underline font-bold">privacy@themobifixx.in</a> or call +91 99999 99999.
+            If you have any questions about our privacy methods, please email our security officer at: <a href="mailto:privacy@themobifixx.in" className="text-[#0F4CFF] hover:underline font-bold">privacy@themobifixx.in</a> or call <a href="tel:+919310112994" className="text-[#0F4CFF] hover:underline font-bold">+91 9310112994</a>.
           </p>
         </div>
       </div>

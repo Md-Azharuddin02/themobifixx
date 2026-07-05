@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { Phone, ArrowRight, Star, ArrowUpRight, MapPin, Clock } from 'lucide-react';
+import { Phone, ArrowRight, Star, ArrowUpRight, MapPin, Clock, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { ServiceCategory, Technician, Testimonial } from '../types';
 import ServiceIcon from '../components/ServiceIcon';
 import ReviewStars from '../components/ReviewStars';
@@ -10,37 +10,64 @@ import DeviceComparison from '../components/DeviceComparison';
 
 const BRAND_LOGOS: Record<string, React.ReactNode> = {
   Apple: (
-    <svg className="w-8 h-8 fill-slate-900 shrink-0" viewBox="0 0 170 170" aria-hidden="true">
-      <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.39.13-9.13-1.85-14.23-5.96-3.29-2.7-7.23-7.44-11.83-14.23-9.87-14.52-16.14-30.82-18.82-48.87-1.46-9.76-.94-18.73 1.56-26.9 2.5-8.17 6.64-14.72 12.42-19.65 5.78-4.93 12.35-7.44 19.7-7.55 4.39 0 9.03 1.21 13.91 3.63 4.88 2.42 8.1 3.63 9.68 3.63 1.37 0 4.67-1.21 9.9-3.63 5.23-2.42 9.87-3.57 13.91-3.46 14.34.8 25.17 6.13 32.48 16.01-11.71 7.12-17.44 16.89-17.2 29.31.24 9.9 3.86 18.23 10.87 24.99 7.01 6.76 15.35 10.36 25.02 10.8-2.52 7.29-6.02 14.6-10.51 21.94zM118.96 37.16c0-7.39 2.62-14.16 7.86-20.3 5.24-6.14 11.66-9.9 19.26-11.28 1.48 8.01-1.21 15.52-8.07 22.52-6.86 7-14.07 10.32-21.6 9.96.2-.3.39-.6.55-.9z" />
-    </svg>
+    <img 
+      src="https://logo.clearbit.com/apple.com" 
+      alt="Apple logo" 
+      className="h-8 w-auto object-contain select-none transition-all duration-300 group-hover:scale-105 shrink-0"
+      onError={(e) => {
+        e.currentTarget.src = "https://cdn.jsdelivr.net/npm/simple-icons@13.0.0/icons/apple.svg";
+      }}
+    />
   ),
   Dell: (
-    <svg className="w-9 h-9 fill-slate-900 shrink-0" viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-3.5-5.5h2.2c1.8 0 2.8-1 2.8-2.5s-1-2.5-2.8-2.5H8.5v5zm1.5-3.8h.7c.8 0 1.3.4 1.3 1.3s-.5 1.3-1.3 1.3H10v-2.6z" />
-      <path d="M6.5 8.5h1.5v7H6.5zm7.3 1.5h1.5v5.5h-1.5zm3.2 0h1.5v5.5h-1.5z" />
-    </svg>
+    <img 
+      src="https://logo.clearbit.com/dell.com" 
+      alt="Dell logo" 
+      className="h-7 w-auto object-contain select-none transition-all duration-300 group-hover:scale-105 shrink-0"
+      onError={(e) => {
+        e.currentTarget.src = "https://cdn.jsdelivr.net/npm/simple-icons@13.0.0/icons/dell.svg";
+      }}
+    />
   ),
   HP: (
-    <svg className="w-10 h-10 fill-slate-900 shrink-0" viewBox="0 0 24 24" aria-hidden="true">
-      <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="2" />
-      <path d="M9.5 7v10M14.5 7v10M9.5 12h5" stroke="currentColor" strokeWidth="2" />
-    </svg>
+    <img 
+      src="https://logo.clearbit.com/hp.com" 
+      alt="HP logo" 
+      className="h-8 w-auto object-contain select-none transition-all duration-300 group-hover:scale-105 shrink-0"
+      onError={(e) => {
+        e.currentTarget.src = "https://cdn.jsdelivr.net/npm/simple-icons@13.0.0/icons/hp.svg";
+      }}
+    />
   ),
   Lenovo: (
-    <div className="bg-slate-900 text-white font-black px-3 py-1 text-[11px] uppercase tracking-widest rounded-md border-2 border-slate-900">
-      Lenovo
-    </div>
+    <img 
+      src="https://logo.clearbit.com/lenovo.com" 
+      alt="Lenovo logo" 
+      className="h-6 w-auto object-contain select-none transition-all duration-300 group-hover:scale-105 shrink-0"
+      onError={(e) => {
+        e.currentTarget.src = "https://cdn.jsdelivr.net/npm/simple-icons@13.0.0/icons/lenovo.svg";
+      }}
+    />
   ),
   Samsung: (
-    <div className="border-2 border-slate-900 rounded-full px-3 py-1 bg-white text-slate-900 font-extrabold text-[10px] tracking-wider uppercase">
-      Samsung
-    </div>
+    <img 
+      src="https://logo.clearbit.com/samsung.com" 
+      alt="Samsung logo" 
+      className="h-4.5 w-auto object-contain select-none transition-all duration-300 group-hover:scale-105 shrink-0"
+      onError={(e) => {
+        e.currentTarget.src = "https://cdn.jsdelivr.net/npm/simple-icons@13.0.0/icons/samsung.svg";
+      }}
+    />
   ),
   OnePlus: (
-    <div className="flex items-center gap-1 bg-[#F5001C] text-white border-2 border-slate-900 rounded-lg px-2.5 py-1 font-black text-xs shadow-[1.5px_1.5px_0px_#0A1020]">
-      <span>1</span>
-      <span className="text-[10px] font-black">+</span>
-    </div>
+    <img 
+      src="https://logo.clearbit.com/oneplus.com" 
+      alt="OnePlus logo" 
+      className="h-6 w-auto object-contain select-none transition-all duration-300 group-hover:scale-105 shrink-0"
+      onError={(e) => {
+        e.currentTarget.src = "https://cdn.jsdelivr.net/npm/simple-icons@13.0.0/icons/oneplus.svg";
+      }}
+    />
   )
 };
 
@@ -174,19 +201,59 @@ export default function Home() {
   const [selectedTech, setSelectedTech] = useState<Technician | null>(null);
   const [isHoursDropdownOpen, setIsHoursDropdownOpen] = useState(false);
 
-  const heroSlides = [
-    'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=1600&auto=format&fit=crop&q=80',
-    'https://images.unsplash.com/photo-1597733336794-12d05021d510?w=1600&auto=format&fit=crop&q=80',
-    'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=1600&auto=format&fit=crop&q=80'
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
+  const collageImages = [
+    {
+      src: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783000531/WhatsApp_Image_2026-07-01_at_1.56.06_PM_pjm3ys.jpg",
+      title: "MacBook & iMac Repairs",
+      desc: "Authorized diagnostic procedures & chip-level micro-soldering."
+    },
+    {
+      src: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783000531/WhatsApp_Image_2026-06-30_at_8.23.29_PM_bcwdde.jpg",
+      title: "Smartphone Panels",
+      desc: "100% genuine glass screens & digitizers."
+    },
+    {
+      src: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783000532/WhatsApp_Image_2026-07-01_at_1.56.08_PM_mhnaxr.jpg",
+      title: "iPads & Tablets",
+      desc: "ESD-safe laboratory workbench diagnostics."
+    },
+    {
+      src: "https://images.unsplash.com/photo-1597733336794-12d05021d510?w=1600&auto=format&fit=crop&q=80",
+      title: "Logic Board Soldering",
+      desc: "BGA reballing & micro-soldering restoration."
+    },
+    {
+      src: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=1600&auto=format&fit=crop&q=80",
+      title: "Precision Testing",
+      desc: "Multimeter calibration & voltage checkups."
+    }
   ];
-  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const openLightbox = (idx: number) => setLightboxIndex(idx);
+  const closeLightbox = () => setLightboxIndex(null);
+  const nextLightbox = () => {
+    if (lightboxIndex !== null) {
+      setLightboxIndex((lightboxIndex + 1) % collageImages.length);
+    }
+  };
+  const prevLightbox = () => {
+    if (lightboxIndex !== null) {
+      setLightboxIndex((lightboxIndex - 1 + collageImages.length) % collageImages.length);
+    }
+  };
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
-    }, 5000);
-    return () => clearInterval(timer);
-  }, []);
+    if (lightboxIndex === null) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowRight') nextLightbox();
+      if (e.key === 'ArrowLeft') prevLightbox();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [lightboxIndex]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -196,9 +263,13 @@ export default function Home() {
           fetch('/api/technicians').then((r) => r.json()),
           fetch('/api/testimonials').then((r) => r.json()),
         ]);
-        setServices(srvRes.slice(0, 6)); // Display first 6 on homepage
-        setTechnicians(techRes); // Display all expert technicians in the interactive slider
-        setTestimonials(testRes.slice(0, 4)); // Display first 4 reviews
+        const servicesData = Array.isArray(srvRes) ? srvRes : [];
+        const techData = Array.isArray(techRes) ? techRes : [];
+        const testData = Array.isArray(testRes) ? testRes : [];
+
+        setServices(servicesData.slice(0, 6)); // Display first 6 on homepage
+        setTechnicians(techData); // Display all expert technicians in the interactive slider
+        setTestimonials(testData.slice(0, 4)); // Display first 4 reviews
       } catch (err) {
         console.error('Error loading homepage data:', err);
       } finally {
@@ -256,7 +327,7 @@ export default function Home() {
   const faqs = [
     {
       q: "How does the doorstep pickup and delivery repair work?",
-      a: "Simply select 'Pickup Required' during booking or call +91 99999 99999. Our certified transit agent will arrive at your location within 90 minutes. They will fill a hardware check form, issue an official transit receipt, and transport your device to our cleanroom lab safely. Once diagnosed, we quote; upon approval, we repair and deliver back!"
+      a: "Simply select 'Pickup Required' during booking or call <a href=\"tel:+919310112994\" className=\"text-[#0F4CFF] hover:underline font-bold\">+91 9310112994</a>. Our certified transit agent will arrive at your location within 90 minutes. They will fill a hardware check form, issue an official transit receipt, and transport your device to our cleanroom lab safely. Once diagnosed, we quote; upon approval, we repair and deliver back!"
     },
     {
       q: "Do you charge anything for diagnostics or service visits?",
@@ -285,48 +356,139 @@ export default function Home() {
   return (
     <div className="pt-20 md:pt-32 pb-12 overflow-x-hidden">
       {/* SECTION 1: HERO SECTION */}
-      <section className="relative bg-[#022c22] py-8 sm:py-12 lg:py-16 overflow-hidden border-b-2 border-slate-900" id="hero-section">
-        {/* Mosaic Interactive Grid in Background */}
-        <div 
-          className="absolute inset-0 gap-[1.5px] opacity-75 select-none z-0"
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(16, minmax(0, 1fr))',
-            gridTemplateRows: 'repeat(8, minmax(0, 1fr))'
-          }}
-        >
-          {Array.from({ length: 128 }).map((_, idx) => (
+      <section className="relative bg-white py-6 sm:py-8 lg:py-10 overflow-hidden border-b-2 border-slate-900" id="hero-section">
+        
+        {/* Neobrutalist Image Collage Gallery */}
+        <div className="max-w-full mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 auto-rows-[240px] sm:auto-rows-[300px] md:auto-rows-[380px]">
+            
+            {/* Collage Card 1: Cloud Image 1 (Apple Logo/MacBook/Large display) */}
             <motion.div 
-              key={idx} 
-              className={`w-full h-full ${getBlockColor(idx)}`}
-              whileHover={{
-                scale: 1.25,
-                backgroundColor: '#bef264',
-                boxShadow: '0 0 12px rgba(163, 230, 53, 0.8)',
-                zIndex: 20,
-              }}
-              transition={{ type: 'spring', stiffness: 400, damping: 18 }}
-            />
-          ))}
-        </div>
-
-        {/* Slideshow Card Container - Centered with margins on all sides */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="relative w-full h-[280px] sm:h-[380px] lg:h-[500px] rounded-[32px] border-4 border-slate-900 overflow-hidden shadow-[8px_8px_0px_#0A1020] bg-slate-950">
-            {/* Background Slideshow Fades - Clearly Visible inside the console card */}
-            {heroSlides.map((slide, idx) => (
-              <motion.div
-                key={slide}
-                initial={{ opacity: 0, scale: 1.04 }}
-                animate={{ 
-                  opacity: currentSlide === idx ? 1.0 : 0,
-                  scale: currentSlide === idx ? 1.0 : 1.04
-                }}
-                transition={{ duration: 1.5, ease: "easeInOut" }}
-                className="absolute inset-0 bg-cover bg-center"
-                style={{ backgroundImage: `url(${slide})` }}
+              onClick={() => openLightbox(0)}
+              className="sm:col-span-2 sm:row-span-2 relative group overflow-hidden rounded-[32px] border-4 border-slate-900 bg-[#0A1020] shadow-[6px_6px_0px_#0A1020] hover:shadow-[10px_10px_0px_#0A1020] hover:-translate-x-1.5 hover:-translate-y-1.5 transition-all duration-300 cursor-pointer"
+              whileHover={{ y: -6 }}
+            >
+              <img 
+                src="https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783000531/WhatsApp_Image_2026-07-01_at_1.56.06_PM_pjm3ys.jpg"
+                alt="Premium MacBook Diagnostics"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
-            ))}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent flex flex-col justify-end p-6 text-left opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <h4 className="text-white font-black text-sm uppercase tracking-wider">MacBook & iMac Repairs</h4>
+                <p className="text-slate-300 text-[10px] font-bold">Authorized diagnostic procedures & chip-level micro-soldering.</p>
+              </div>
+            </motion.div>
+
+            {/* Collage Card 2: Cloud Image 2 (Smartphone Repairs/Precision tool) */}
+            <motion.div 
+              onClick={() => openLightbox(1)}
+              className="sm:col-span-1 sm:row-span-1 relative group overflow-hidden rounded-[32px] border-4 border-slate-900 bg-[#0A1020] shadow-[6px_6px_0px_#0A1020] hover:shadow-[10px_10px_0px_#0A1020] hover:-translate-x-1.5 hover:-translate-y-1.5 transition-all duration-300 cursor-pointer"
+              whileHover={{ y: -6 }}
+            >
+              <img 
+                src="https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783000531/WhatsApp_Image_2026-06-30_at_8.23.29_PM_bcwdde.jpg"
+                alt="Precision Smartphone Screen Fix"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent flex flex-col justify-end p-4 text-left opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <h4 className="text-white font-black text-xs uppercase tracking-wider">Smartphone Panels</h4>
+                <p className="text-slate-300 text-[9px] font-bold">100% genuine glass screens & digitizers.</p>
+              </div>
+            </motion.div>
+
+            {/* Collage Card 3: Cloud Image 3 (iPads & Tablets / Circuit view) */}
+            <motion.div 
+              onClick={() => openLightbox(2)}
+              className="sm:col-span-1 sm:row-span-1 relative group overflow-hidden rounded-[32px] border-4 border-slate-900 bg-[#0A1020] shadow-[6px_6px_0px_#0A1020] hover:shadow-[10px_10px_0px_#0A1020] hover:-translate-x-1.5 hover:-translate-y-1.5 transition-all duration-300 cursor-pointer"
+              whileHover={{ y: -6 }}
+            >
+              <img 
+                src="https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783000532/WhatsApp_Image_2026-07-01_at_1.56.08_PM_mhnaxr.jpg"
+                alt="Tablet & iPad Motherboard Repairs"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent flex flex-col justify-end p-4 text-left opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <h4 className="text-white font-black text-xs uppercase tracking-wider">iPads & Tablets</h4>
+                <p className="text-slate-300 text-[9px] font-bold">ESD-safe laboratory workbench diagnostics.</p>
+              </div>
+            </motion.div>
+
+            {/* Collage Card 4: Unsplash Micro-Soldering */}
+            <motion.div 
+              onClick={() => openLightbox(3)}
+              className="sm:col-span-1 sm:row-span-1 relative group overflow-hidden rounded-[32px] border-4 border-slate-900 bg-[#0A1020] shadow-[6px_6px_0px_#0A1020] hover:shadow-[10px_10px_0px_#0A1020] hover:-translate-x-1.5 hover:-translate-y-1.5 transition-all duration-300 cursor-pointer"
+              whileHover={{ y: -6 }}
+            >
+              <img 
+                src="https://images.unsplash.com/photo-1597733336794-12d05021d510?w=800&auto=format&fit=crop&q=80"
+                alt="Chip-Level Logic Board Solder"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent flex flex-col justify-end p-4 text-left opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <h4 className="text-white font-black text-xs uppercase tracking-wider">Logic Board Soldering</h4>
+                <p className="text-slate-300 text-[9px] font-bold">BGA reballing & micro-soldering restoration.</p>
+              </div>
+            </motion.div>
+
+            {/* Collage Card 5: Unsplash Multimeter Precision */}
+            <motion.div 
+              onClick={() => openLightbox(4)}
+              className="sm:col-span-1 sm:row-span-1 relative group overflow-hidden rounded-[32px] border-4 border-slate-900 bg-[#0A1020] shadow-[6px_6px_0px_#0A1020] hover:shadow-[10px_10px_0px_#0A1020] hover:-translate-x-1.5 hover:-translate-y-1.5 transition-all duration-300 cursor-pointer"
+              whileHover={{ y: -6 }}
+            >
+              <img 
+                src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=800&auto=format&fit=crop&q=80"
+                alt="Precision Laboratory Multimeter Diagnostics"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent flex flex-col justify-end p-4 text-left opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <h4 className="text-white font-black text-xs uppercase tracking-wider">Precision Testing</h4>
+                <p className="text-slate-300 text-[9px] font-bold">Multimeter calibration & voltage checkups.</p>
+              </div>
+            </motion.div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 9: CTA BANNER */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12" id="cta-banner">
+        <div className="bg-[#0A1020] text-white border-4 border-slate-900 rounded-[32px] p-8 md:p-16 text-center space-y-6 relative overflow-hidden shadow-[8px_8px_0px_#FFB800]">
+          {/* Accent light glow effect inside container */}
+          <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-blue-500/20 rounded-full blur-[100px] pointer-events-none"></div>
+          <div className="absolute -top-40 -right-40 w-96 h-96 bg-emerald-500/10 rounded-full blur-[100px] pointer-events-none"></div>
+
+          <div className="relative z-10 space-y-6">
+            <div className="inline-flex items-center space-x-2 bg-[#FFB800] border-2 border-slate-900 text-slate-900 px-3.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest shadow-[2px_2px_0px_#0A1020]">
+              <span>Get Started</span>
+            </div>
+            <h3 className="text-2xl sm:text-4xl font-black tracking-tight max-w-3xl mx-auto leading-tight">
+              Ready to restore your device to original performance?
+            </h3>
+            <p className="text-slate-400 max-w-2xl mx-auto text-sm leading-relaxed font-bold">
+              Book a secure, doorstep pickup across Delhi NCR or schedule an appointment to visit our central lab. Our certified engineers will diagnose your device with full transparency.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-5 pt-4">
+              
+              {/* Doorstep Pickup Button */}
+              <Link
+                to="/contact?tab=booking"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#FFB800] text-slate-900 border-2 border-slate-900 font-black text-xs tracking-widest uppercase py-3.5 px-8 rounded-xl shadow-[3px_3px_0px_#0D0D0D] hover:shadow-[4px_4px_0px_#0D0D0D] hover:-translate-x-[1px] hover:-translate-y-[1px] active:translate-x-[1.5px] active:translate-y-[1.5px] active:shadow-[1.5px_1.5px_0px_#0D0D0D] transition-all cursor-pointer text-center"
+              >
+                <span>Book Doorstep Pickup</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+
+              {/* Call Hotline Button */}
+              <a
+                href="tel:+919310112994"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white text-slate-900 border-2 border-slate-900 font-black text-xs tracking-widest uppercase py-3.5 px-8 rounded-xl shadow-[3px_3px_0px_#0D0D0D] hover:shadow-[4px_4px_0px_#0D0D0D] hover:-translate-x-[1px] hover:-translate-y-[1px] active:translate-x-[1.5px] active:translate-y-[1.5px] active:shadow-[1.5px_1.5px_0px_#0D0D0D] transition-all cursor-pointer text-center"
+              >
+                <Phone className="w-4 h-4 text-[#0F4CFF]" />
+                <span>Call +91 9310112994</span>
+              </a>
+
+            </div>
           </div>
         </div>
       </section>
@@ -704,8 +866,8 @@ export default function Home() {
                     <div className="h-10 flex items-center justify-center">
                       {BRAND_LOGOS[b.name] || <span className="font-bold text-xs">{b.name}</span>}
                     </div>
-                    <span className="text-[8px] text-slate-400 font-black uppercase tracking-widest mt-2">
-                      OEM Specifications
+                    <span className="text-[10px] text-slate-800 font-black uppercase tracking-wider mt-2.5">
+                      {b.name}
                     </span>
                   </div>
                 ))}
@@ -720,8 +882,8 @@ export default function Home() {
                     <div className="h-10 flex items-center justify-center">
                       {BRAND_LOGOS[b.name] || <span className="font-bold text-xs">{b.name}</span>}
                     </div>
-                    <span className="text-[8px] text-slate-400 font-black uppercase tracking-widest mt-2">
-                      OEM Specifications
+                    <span className="text-[10px] text-slate-800 font-black uppercase tracking-wider mt-2.5">
+                      {b.name}
                     </span>
                   </div>
                 ))}
@@ -817,7 +979,7 @@ export default function Home() {
               <div className="relative z-10 bg-white border-2 border-slate-900 rounded-[28px] p-6 sm:p-8 space-y-6">
                 <div className="space-y-4">
                   <div className="inline-flex items-center space-x-2 bg-slate-50 border-2 border-slate-900 text-slate-800 px-3.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">
-                    <span>Our Master Lab</span>
+                    <span>Our Main Service Centre</span>
                   </div>
                   <h3 className="text-2xl sm:text-3xl font-black text-[#0A1020] tracking-tight leading-tight">
                     Visit Us in Nehru Place Market
@@ -897,7 +1059,7 @@ export default function Home() {
                     </div>
                     <div>
                       <h4 className="font-black text-[#0A1020] text-sm">Contact Hotline</h4>
-                      <p className="text-xs text-slate-500 mt-0.5">Call: +91 99999 99999</p>
+                      <p className="text-xs text-slate-500 mt-0.5">Call: +91 9310112994</p>
                     </div>
                   </div>
                 </div>
@@ -947,7 +1109,7 @@ export default function Home() {
       </section>
 
       {/* SECTION 8: FAQ */}
-      <section className="py-20 bg-slate-50/50 border-b-2 border-slate-900" id="faq-section">
+      <section className="py-20 bg-slate-50/50" id="faq-section">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16 space-y-4">
             <div className="inline-flex items-center space-x-2 bg-slate-50 border-2 border-slate-900 text-slate-800 px-3.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">
@@ -986,9 +1148,10 @@ export default function Home() {
                       transition={{ duration: 0.25, ease: 'easeInOut' }}
                       className="overflow-hidden"
                     >
-                      <div className="p-5 bg-slate-50 border-t-2 border-slate-900 text-xs sm:text-sm text-slate-500 leading-relaxed font-bold">
-                        {faq.a}
-                      </div>
+                      <div 
+                        className="p-5 bg-slate-50 border-t-2 border-slate-900 text-xs sm:text-sm text-slate-500 leading-relaxed font-bold"
+                        dangerouslySetInnerHTML={{ __html: faq.a }}
+                      />
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -998,47 +1161,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* SECTION 9: CTA BANNER */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12" id="cta-banner">
-        <div className="bg-[#0A1020] text-white border-4 border-slate-900 rounded-[32px] p-8 md:p-16 text-center space-y-6 relative overflow-hidden shadow-[8px_8px_0px_#FFB800]">
-          {/* Accent light glow effect inside container */}
-          <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-blue-500/20 rounded-full blur-[100px] pointer-events-none"></div>
-          <div className="absolute -top-40 -right-40 w-96 h-96 bg-emerald-500/10 rounded-full blur-[100px] pointer-events-none"></div>
 
-          <div className="relative z-10 space-y-6">
-            <div className="inline-flex items-center space-x-2 bg-[#FFB800] border-2 border-slate-900 text-slate-900 px-3.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest shadow-[2px_2px_0px_#0A1020]">
-              <span>Get Started</span>
-            </div>
-            <h3 className="text-2xl sm:text-4xl font-black tracking-tight max-w-3xl mx-auto leading-tight">
-              Ready to restore your device to original performance?
-            </h3>
-            <p className="text-slate-400 max-w-2xl mx-auto text-sm leading-relaxed font-bold">
-              Book a secure, doorstep pickup across Delhi NCR or schedule an appointment to visit our central lab. Our certified engineers will diagnose your device with full transparency.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-5 pt-4">
-              
-              {/* Doorstep Pickup Button */}
-              <Link
-                to="/contact?tab=booking"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#FFB800] text-slate-900 border-2 border-slate-900 font-black text-xs tracking-widest uppercase py-3.5 px-8 rounded-xl shadow-[3px_3px_0px_#0D0D0D] hover:shadow-[4px_4px_0px_#0D0D0D] hover:-translate-x-[1px] hover:-translate-y-[1px] active:translate-x-[1.5px] active:translate-y-[1.5px] active:shadow-[1.5px_1.5px_0px_#0D0D0D] transition-all cursor-pointer text-center"
-              >
-                <span>Book Doorstep Pickup</span>
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-
-              {/* Call Hotline Button */}
-              <a
-                href="tel:+919999999999"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white text-slate-900 border-2 border-slate-900 font-black text-xs tracking-widest uppercase py-3.5 px-8 rounded-xl shadow-[3px_3px_0px_#0D0D0D] hover:shadow-[4px_4px_0px_#0D0D0D] hover:-translate-x-[1px] hover:-translate-y-[1px] active:translate-x-[1.5px] active:translate-y-[1.5px] active:shadow-[1.5px_1.5px_0px_#0D0D0D] transition-all cursor-pointer text-center"
-              >
-                <Phone className="w-4 h-4 text-[#0F4CFF]" />
-                <span>Call +91 99999 99999</span>
-              </a>
-
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Technician Details Modal */}
       {selectedTech && (
@@ -1149,6 +1272,74 @@ export default function Home() {
           </div>
         </div>
       )}
+
+      {/* Lightbox Modal */}
+      <AnimatePresence>
+        {lightboxIndex !== null && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-4 md:p-10 select-none"
+            onClick={closeLightbox}
+          >
+            {/* Close button - Neobrutalist style */}
+            <button 
+              onClick={(e) => { e.stopPropagation(); closeLightbox(); }}
+              className="absolute top-6 right-6 w-11 h-11 bg-[#FFB800] border-2 border-slate-900 rounded-xl flex items-center justify-center shadow-[3px_3px_0px_#0A1020] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1.5px_1.5px_0px_#0A1020] hover:-translate-x-[1px] hover:-translate-y-[1px] hover:shadow-[4.5px_4.5px_0px_#0A1020] transition-all duration-150 cursor-pointer text-slate-900 z-50"
+            >
+              <X className="w-5 h-5 stroke-[2.5]" />
+            </button>
+
+            {/* Left navigation arrow */}
+            <button 
+              onClick={(e) => { e.stopPropagation(); prevLightbox(); }}
+              className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 w-11 h-11 bg-white border-2 border-slate-900 rounded-xl flex items-center justify-center shadow-[3px_3px_0px_#0A1020] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1.5px_1.5px_0px_#0A1020] hover:-translate-x-[1px] hover:-translate-y-[1px] hover:shadow-[4.5px_4.5px_0px_#0A1020] transition-all duration-150 cursor-pointer text-slate-900 z-50"
+            >
+              <ChevronLeft className="w-5 h-5 stroke-[2.5]" />
+            </button>
+
+            {/* Lightbox content container */}
+            <motion.div 
+              initial={{ scale: 0.95, y: 15 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 15 }}
+              transition={{ type: "spring", damping: 25, stiffness: 220 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative max-w-5xl w-full flex flex-col items-center bg-white border-4 border-slate-900 rounded-[24px] overflow-hidden shadow-[8px_8px_0px_#0A1020] max-h-[85vh]"
+            >
+              <div className="w-full flex-1 overflow-hidden bg-slate-950 flex items-center justify-center min-h-[260px] md:min-h-[420px] max-h-[65vh]">
+                <img 
+                  src={collageImages[lightboxIndex].src} 
+                  alt={collageImages[lightboxIndex].title}
+                  className="max-w-full max-h-[65vh] object-contain"
+                />
+              </div>
+
+              {/* Caption details footer */}
+              <div className="w-full bg-white border-t-4 border-slate-900 p-5 md:p-6 text-left space-y-1">
+                <span className="text-[10px] font-black text-[#0F4CFF] uppercase tracking-widest block">
+                  Image {lightboxIndex + 1} of {collageImages.length}
+                </span>
+                <h3 className="text-lg font-black text-slate-900 uppercase tracking-tight">
+                  {collageImages[lightboxIndex].title}
+                </h3>
+                <p className="text-xs text-slate-500 font-bold leading-relaxed">
+                  {collageImages[lightboxIndex].desc}
+                </p>
+              </div>
+            </motion.div>
+
+            {/* Right navigation arrow */}
+            <button 
+              onClick={(e) => { e.stopPropagation(); nextLightbox(); }}
+              className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 w-11 h-11 bg-white border-2 border-slate-900 rounded-xl flex items-center justify-center shadow-[3px_3px_0px_#0A1020] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1.5px_1.5px_0px_#0A1020] hover:-translate-x-[1px] hover:-translate-y-[1px] hover:shadow-[4.5px_4.5px_0px_#0A1020] transition-all duration-150 cursor-pointer text-slate-900 z-50"
+            >
+              <ChevronRight className="w-5 h-5 stroke-[2.5]" />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

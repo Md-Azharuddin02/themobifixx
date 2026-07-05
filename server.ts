@@ -1,12 +1,12 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
+import dotenv from 'dotenv';
+dotenv.config();
 
 import express, { Request, Response, NextFunction } from 'express';
 import path from 'path';
+import crypto from 'crypto';
 import { createServer as createViteServer } from 'vite';
 import { Storage } from './server/storage';
+import { User } from './src/types';
 
 async function bootstrap() {
   const app = express();
@@ -16,53 +16,192 @@ async function bootstrap() {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
-  // API Endpoints
-  app.get('/api/services', (req: Request, res: Response) => {
+  const toUserResponse = (user: any): User => ({
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+    dashboardAccess: user.dashboardAccess,
+    createdAt: user.createdAt
+  });
+
+  const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ error: 'Unauthorized. Please sign in.' });
+    }
+    const token = authHeader.split(' ')[1];
+    const sessions = await Storage.getSessions();
+    const userId = sessions[token];
+    if (!userId) {
+      return res.status(401).json({ error: 'Session expired. Please sign in again.' });
+    }
+    const user = await Storage.getUserById(userId);
+    if (!user) {
+      return res.status(401).json({ error: 'User profile not found.' });
+    }
+    (req as any).user = user;
+    next();
+  };
+
+  const requireAdmin = async (req: Request, res: Response, next: NextFunction) => {
+    await requireAuth(req, res, () => {
+      const user = (req as any).user;
+      if (user.role !== 'admin') {
+        return res.status(403).json({ error: 'Forbidden. Admin access required.' });
+      }
+      next();
+    });
+  };
+
+  // Auth APIs
+  app.post('/api/auth/signup', async (req: Request, res: Response) => {
     try {
-      const services = Storage.getServices();
+      const { name, email, password } = req.body;
+      if (!name || !email || !password) {
+        return res.status(400).json({ error: 'All registration fields are required' });
+      }
+      
+      const existing = await Storage.getUserByEmail(email);
+      if (existing) {
+        return res.status(400).json({ error: 'An account with this email already exists' });
+      }
+
+      const salt = crypto.randomBytes(16).toString('hex');
+      const passwordHash = Storage.hashPassword(password, salt);
+
+      const userRecord = await Storage.addUser({
+        name,
+        email,
+        passwordHash,
+        salt,
+        role: 'user',
+        dashboardAccess: false // Requires admin approval
+      });
+
+      const sessionToken = crypto.randomBytes(32).toString('hex');
+      await Storage.addSession(sessionToken, userRecord.id);
+
+      res.status(201).json({
+        success: true,
+        token: sessionToken,
+        user: toUserResponse(userRecord)
+      });
+    } catch (error) {
+      console.error('Signup error:', error);
+      res.status(500).json({ error: 'Registration failed. Try again.' });
+    }
+  });
+
+  app.post('/api/auth/login', async (req: Request, res: Response) => {
+    try {
+      const { email, password } = req.body;
+      if (!email || !password) {
+        return res.status(400).json({ error: 'Email and password are required' });
+      }
+
+      const userRecord = await Storage.getUserByEmail(email);
+      if (!userRecord) {
+        return res.status(400).json({ error: 'Invalid email or password' });
+      }
+
+      const computedHash = Storage.hashPassword(password, userRecord.salt);
+      if (computedHash !== userRecord.passwordHash) {
+        return res.status(400).json({ error: 'Invalid email or password' });
+      }
+
+      const sessionToken = crypto.randomBytes(32).toString('hex');
+      await Storage.addSession(sessionToken, userRecord.id);
+
+      res.json({
+        success: true,
+        token: sessionToken,
+        user: toUserResponse(userRecord)
+      });
+    } catch (error) {
+      console.error('Login error:', error);
+      res.status(500).json({ error: 'Login failed. Try again.' });
+    }
+  });
+
+  app.post('/api/auth/logout', async (req: Request, res: Response) => {
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      const token = authHeader.split(' ')[1];
+      await Storage.deleteSession(token);
+    }
+    res.json({ success: true, message: 'Logged out successfully' });
+  });
+
+  app.get('/api/auth/me', async (req: Request, res: Response) => {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ error: 'Not authenticated' });
+    }
+    const token = authHeader.split(' ')[1];
+    const sessions = await Storage.getSessions();
+    const userId = sessions[token];
+    if (!userId) {
+      return res.status(401).json({ error: 'Session expired' });
+    }
+    const userRecord = await Storage.getUserById(userId);
+    if (!userRecord) {
+      return res.status(401).json({ error: 'User not found' });
+    }
+    res.json(toUserResponse(userRecord));
+  });
+
+  // Services
+  app.get('/api/services', async (req: Request, res: Response) => {
+    try {
+      const services = await Storage.getServices();
       res.json(services);
     } catch (error) {
       res.status(500).json({ error: 'Failed to retrieve services' });
     }
   });
 
-  app.get('/api/technicians', (req: Request, res: Response) => {
+  // Technicians
+  app.get('/api/technicians', async (req: Request, res: Response) => {
     try {
-      const technicians = Storage.getTechnicians();
+      const technicians = await Storage.getTechnicians();
       res.json(technicians);
     } catch (error) {
       res.status(500).json({ error: 'Failed to retrieve technicians' });
     }
   });
 
-  app.get('/api/testimonials', (req: Request, res: Response) => {
+  // Testimonials
+  app.get('/api/testimonials', async (req: Request, res: Response) => {
     try {
-      const testimonials = Storage.getTestimonials();
+      const testimonials = await Storage.getTestimonials();
       res.json(testimonials);
     } catch (error) {
       res.status(500).json({ error: 'Failed to retrieve testimonials' });
     }
   });
 
-  app.post('/api/testimonials', (req: Request, res: Response) => {
+  app.post('/api/testimonials', requireAuth, async (req: Request, res: Response) => {
     try {
-      const { customerName, rating, review, deviceType } = req.body;
-      if (!customerName || !rating || !review || !deviceType) {
-        return res.status(400).json({ error: 'Name, rating, review, and device type are required' });
+      const authUser = (req as any).user;
+      const { rating, review, deviceType } = req.body;
+      if (!rating || !review || !deviceType) {
+        return res.status(400).json({ error: 'Rating, review, and device type are required' });
       }
       const numRating = Number(rating);
       if (isNaN(numRating) || numRating < 1 || numRating > 5) {
         return res.status(400).json({ error: 'Rating must be a number between 1 and 5' });
       }
       
-      const defaultImage = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(customerName)}&backgroundColor=0f4cff,00c48c,ff7a00,3b82f6`;
+      const defaultImage = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(authUser.name)}&backgroundColor=0f4cff,00c48c,ff7a00,3b82f6`;
       
-      const record = Storage.addTestimonial({
-        customerName,
+      const record = await Storage.addTestimonial({
+        customerName: authUser.name,
         rating: numRating,
         review,
         deviceType,
-        image: defaultImage
+        image: defaultImage,
+        userId: authUser.id
       });
       res.status(201).json({ success: true, data: record });
     } catch (error) {
@@ -71,26 +210,38 @@ async function bootstrap() {
     }
   });
 
-  app.post('/api/inquiries', (req: Request, res: Response) => {
+  // Inquiries
+  app.post('/api/inquiries', async (req: Request, res: Response) => {
     try {
       const { name, phone, email, message } = req.body;
       if (!name || !phone || !message) {
         return res.status(400).json({ error: 'Name, phone, and message are required' });
       }
-      const record = Storage.addInquiry({ name, phone, email: email || '', message });
+      const record = await Storage.addInquiry({ name, phone, email: email || '', message });
       res.status(201).json({ success: true, data: record });
     } catch (error) {
       res.status(500).json({ error: 'Failed to submit inquiry' });
     }
   });
 
-  app.post('/api/repair-requests', (req: Request, res: Response) => {
+  // Repair bookings
+  app.post('/api/repair-requests', async (req: Request, res: Response) => {
     try {
       const { customerName, phone, email, deviceType, brand, model, issueDescription, pickupRequired, pickupAddress, preferredDate } = req.body;
       if (!customerName || !phone || !deviceType || !brand || !model || !issueDescription) {
         return res.status(400).json({ error: 'Required fields are missing' });
       }
-      const record = Storage.addRepairRequest({
+
+      // Check if user is logged in
+      let userId: string | undefined;
+      const authHeader = req.headers.authorization;
+      if (authHeader && authHeader.startsWith('Bearer ')) {
+        const token = authHeader.split(' ')[1];
+        const sessions = await Storage.getSessions();
+        userId = sessions[token] || undefined;
+      }
+
+      const record = await Storage.addRepairRequest({
         customerName,
         phone,
         email: email || '',
@@ -100,7 +251,8 @@ async function bootstrap() {
         issueDescription,
         pickupRequired: Boolean(pickupRequired),
         pickupAddress: pickupAddress || '',
-        preferredDate: preferredDate || new Date().toISOString().split('T')[0]
+        preferredDate: preferredDate || new Date().toISOString().split('T')[0],
+        userId
       });
       res.status(201).json({ success: true, data: record });
     } catch (error) {
@@ -108,10 +260,10 @@ async function bootstrap() {
     }
   });
 
-  app.get('/api/repair-requests/:id', (req: Request, res: Response) => {
+  app.get('/api/repair-requests/:id', async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
-      const requests = Storage.getRepairRequests();
+      const requests = await Storage.getRepairRequests();
       const match = requests.find(r => r.id && r.id.toLowerCase() === id.toLowerCase());
       if (!match) {
         return res.status(404).json({ error: 'Repair Request ID not found. Please double-check your ID.' });
@@ -120,6 +272,193 @@ async function bootstrap() {
     } catch (error) {
       console.error('Error fetching repair request:', error);
       res.status(500).json({ error: 'Failed to fetch repair status' });
+    }
+  });
+
+  // User Dashboard Repair Orders
+  app.get('/api/user/repair-requests', requireAuth, async (req: Request, res: Response) => {
+    try {
+      const authUser = (req as any).user;
+      const allRequests = await Storage.getRepairRequests();
+      const userRequests = allRequests.filter(r => r.userId === authUser.id);
+      res.json(userRequests);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to retrieve repair requests' });
+    }
+  });
+
+  // Admin Panel Actions
+  app.get('/api/admin/users', requireAdmin, async (req: Request, res: Response) => {
+    try {
+      const usersList = await Storage.getUsers();
+      const users = usersList.map(toUserResponse);
+      res.json(users);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to retrieve users list' });
+    }
+  });
+
+  app.put('/api/admin/users/:id/access', requireAdmin, async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const { dashboardAccess } = req.body;
+      if (dashboardAccess === undefined) {
+        return res.status(400).json({ error: 'dashboardAccess value is required' });
+      }
+      const success = await Storage.updateUserAccess(id, Boolean(dashboardAccess));
+      if (!success) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+      res.json({ success: true, message: 'User access updated successfully' });
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to update user access' });
+    }
+  });
+
+  app.delete('/api/admin/users/:id', requireAdmin, async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const success = await Storage.deleteUser(id);
+      if (!success) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+      res.json({ success: true, message: 'User deleted successfully' });
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to delete user' });
+    }
+  });
+
+  app.delete('/api/admin/testimonials/:id', requireAdmin, async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const success = await Storage.deleteTestimonial(id);
+      if (!success) {
+        return res.status(404).json({ error: 'Testimonial not found' });
+      }
+      res.json({ success: true, message: 'Testimonial deleted successfully' });
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to delete testimonial' });
+    }
+  });
+
+  app.put('/api/admin/repair-requests/:id/status', requireAdmin, async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const { status } = req.body;
+      if (!status) {
+        return res.status(400).json({ error: 'Status value is required' });
+      }
+      const success = await Storage.updateRepairRequestStatus(id, status);
+      if (!success) {
+        return res.status(404).json({ error: 'Repair request not found' });
+      }
+      res.json({ success: true, message: 'Repair request status updated' });
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to update status' });
+    }
+  });
+
+  app.get('/api/admin/repair-requests', requireAdmin, async (req: Request, res: Response) => {
+    try {
+      const requests = await Storage.getRepairRequests();
+      res.json(requests);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to retrieve repair requests' });
+    }
+  });
+
+  app.delete('/api/admin/repair-requests/:id', requireAdmin, async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const success = await Storage.deleteRepairRequest(id);
+      if (!success) {
+        return res.status(404).json({ error: 'Repair request not found' });
+      }
+      res.json({ success: true, message: 'Repair request deleted successfully' });
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to delete repair request' });
+    }
+  });
+
+  app.get('/api/admin/inquiries', requireAdmin, async (req: Request, res: Response) => {
+    try {
+      const inquiries = await Storage.getInquiries();
+      res.json(inquiries);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to retrieve inquiries' });
+    }
+  });
+
+  app.delete('/api/admin/inquiries/:id', requireAdmin, async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const success = await Storage.deleteInquiry(id);
+      if (!success) {
+        return res.status(404).json({ error: 'Inquiry not found' });
+      }
+      res.json({ success: true, message: 'Inquiry deleted successfully' });
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to delete inquiry' });
+    }
+  });
+
+  app.post('/api/admin/technicians', requireAdmin, async (req: Request, res: Response) => {
+    try {
+      const { name, designation, experience, specialization, repairsCompleted, rating, serviceAreas, profileImage, certifications } = req.body;
+      if (!name || !designation || !specialization) {
+        return res.status(400).json({ error: 'Required fields are missing' });
+      }
+      const record = await Storage.addTechnician({
+        name,
+        designation,
+        experience: Number(experience) || 0,
+        specialization,
+        repairsCompleted: Number(repairsCompleted) || 0,
+        rating: Number(rating) || 5.0,
+        serviceAreas: Array.isArray(serviceAreas) ? serviceAreas : [],
+        profileImage: profileImage || 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=400',
+        certifications: Array.isArray(certifications) ? certifications : []
+      });
+      res.status(201).json({ success: true, data: record });
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to add technician' });
+    }
+  });
+
+  app.put('/api/admin/technicians/:id', requireAdmin, async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const { name, designation, experience, specialization, repairsCompleted, rating, serviceAreas, profileImage, certifications } = req.body;
+      const success = await Storage.updateTechnician(id, {
+        name,
+        designation,
+        experience: Number(experience) || 0,
+        specialization,
+        repairsCompleted: Number(repairsCompleted) || 0,
+        rating: Number(rating) || 5.0,
+        serviceAreas: Array.isArray(serviceAreas) ? serviceAreas : [],
+        profileImage: profileImage || 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=400',
+        certifications: Array.isArray(certifications) ? certifications : []
+      });
+      if (!success) {
+        return res.status(404).json({ error: 'Technician not found' });
+      }
+      res.json({ success: true, message: 'Technician updated successfully' });
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to update technician' });
+    }
+  });
+
+  app.delete('/api/admin/technicians/:id', requireAdmin, async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const success = await Storage.deleteTechnician(id);
+      if (!success) {
+        return res.status(404).json({ error: 'Technician not found' });
+      }
+      res.json({ success: true, message: 'Technician deleted successfully' });
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to delete technician' });
     }
   });
 
@@ -148,10 +487,31 @@ async function bootstrap() {
     res.status(500).json({ error: 'Internal server error occurred' });
   });
 
+  // Initialize Database
+  await Storage.init();
+
   // Start listening
-  app.listen(PORT, '0.0.0.0', () => {
+  const server = app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server listening at http://localhost:${PORT}`);
   });
+
+
+
+  // Graceful shutdown handlers
+  const shutdown = async () => {
+    console.log('Shutting down server gracefully...');
+    server.close(async () => {
+      await Storage.close();
+      process.exit(0);
+    });
+    // Force exit if shutdown takes too long
+    setTimeout(() => {
+      console.warn('Forcing exit after timeout.');
+      process.exit(1);
+    }, 2000);
+  };
+  process.on('SIGTERM', shutdown);
+  process.on('SIGINT', shutdown);
 }
 
 bootstrap().catch((err) => {

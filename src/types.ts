@@ -22,6 +22,7 @@ export interface RepairRequest {
   preferredDate: string;
   status: 'pending' | 'accepted' | 'in_repair' | 'completed' | 'cancelled';
   createdAt: string;
+  userId?: string; // Associated registered user
 }
 
 export interface Technician {
@@ -46,6 +47,7 @@ export interface Testimonial {
   image: string;
   deviceType: string;
   createdAt: string;
+  userId?: string; // Associated registered user
 }
 
 export interface ServiceCategory {
@@ -60,3 +62,13 @@ export interface ServiceCategory {
   highlights?: string[];
   pricing?: string;
 }
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: 'admin' | 'user';
+  dashboardAccess: boolean;
+  createdAt: string;
+}
+

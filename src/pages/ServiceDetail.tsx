@@ -5,6 +5,13 @@ import { ServiceCategory } from '../types';
 import ServiceIcon from '../components/ServiceIcon';
 import { RepairBookingForm } from '../components/LeadForms';
 
+// Shared dotgrid background style
+const dotgridStyle = {
+  backgroundImage: `radial-gradient(circle, #CBD5E1 1px, transparent 1px)`,
+  backgroundSize: '22px 22px',
+  backgroundColor: '#F8FAFC',
+};
+
 export default function ServiceDetail() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
@@ -76,40 +83,40 @@ export default function ServiceDetail() {
   ];
 
   return (
-    <div className="pt-20 md:pt-32 pb-12 bg-slate-50 min-h-screen">
+    <div className="pt-20 md:pt-32 pb-12 bg-[#F8FAFC] min-h-screen">
       {/* Detail Hero Section */}
-      <section className="bg-slate-900 text-white py-16" id="service-detail-hero">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section
+        className="relative py-16 sm:py-20 border-b-2 border-slate-900 overflow-hidden"
+        style={dotgridStyle}
+        id="service-detail-hero"
+      >
+        <div className="absolute inset-0 bg-[#F8FAFC]/70 pointer-events-none" />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="space-y-4 max-w-3xl">
             <Link
               to="/services"
-              className="inline-flex items-center space-x-1.5 text-xs font-bold text-slate-400 hover:text-white transition-colors uppercase tracking-wider mb-4"
+              className="inline-flex items-center gap-1.5 text-xs font-black text-slate-700 hover:text-slate-900 transition-colors uppercase tracking-wider mb-2 border-2 border-slate-900 bg-white px-3 py-1.5 rounded-xl shadow-[2px_2px_0px_#0A1020] hover:-translate-y-[1px] hover:-translate-x-[1px] hover:shadow-[3px_3px_0px_#0A1020] active:translate-y-[1px] active:translate-x-[1px] active:shadow-[0.5px_0.5px_0px_#0A1020]"
             >
               <ArrowLeft className="w-4 h-4" />
               <span>Back to Services Catalog</span>
             </Link>
 
-            <div className="inline-flex items-center space-x-2 bg-[#0F4CFF]/20 border border-[#0F4CFF]/30 text-[#0F4CFF] px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider">
-              <ServiceIcon name={service.icon} className="w-3.5 h-3.5" />
-              <span>ISO 9001:2015 Approved Lab Method</span>
-            </div>
-
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-slate-900 leading-tight">
               {service.title} Services in Delhi NCR
             </h1>
             
-            <p className="text-slate-400 text-sm sm:text-base leading-relaxed max-w-2xl font-medium">
+            <p className="text-slate-600 text-sm sm:text-base leading-relaxed max-w-2xl font-medium">
               {service.seoDescription}
             </p>
 
-            <div className="pt-4 flex flex-wrap gap-4 text-xs font-mono text-slate-400">
-              <div className="flex items-center gap-1.5 bg-slate-800 px-3 py-1.5 rounded-lg">
+            <div className="pt-2 flex flex-wrap gap-4 text-xs font-mono text-slate-700">
+              <div className="flex items-center gap-1.5 bg-white border-2 border-slate-900 px-3 py-1.5 rounded-xl shadow-[2px_2px_0px_#0A1020]">
                 <ShieldCheck className="w-4 h-4 text-[#00C48C]" />
-                <span>90-Day Standard Warranty</span>
+                <span className="font-bold">90-Day Standard Warranty</span>
               </div>
-              <div className="flex items-center gap-1.5 bg-slate-800 px-3 py-1.5 rounded-lg">
+              <div className="flex items-center gap-1.5 bg-white border-2 border-slate-900 px-3 py-1.5 rounded-xl shadow-[2px_2px_0px_#0A1020]">
                 <CheckCircle2 className="w-4 h-4 text-[#00C48C]" />
-                <span>Original OEM Components</span>
+                <span className="font-bold">Original OEM Components</span>
               </div>
             </div>
           </div>
@@ -124,7 +131,7 @@ export default function ServiceDetail() {
           <div className="lg:col-span-7 space-y-12">
             
             {/* Image banner */}
-            <div className="rounded-2xl overflow-hidden border border-slate-200 shadow-sm aspect-video">
+            <div className="rounded-2xl overflow-hidden border-2 border-slate-900 shadow-[5px_5px_0px_#0A1020] aspect-video">
               <img
                 src={service.featuredImage}
                 alt={service.title}
@@ -134,15 +141,15 @@ export default function ServiceDetail() {
             </div>
 
             {/* In-depth service insights */}
-            <div className="bg-white border border-slate-200/60 rounded-2xl p-6 md:p-8 space-y-6">
-              <h3 className="font-bold text-slate-900 text-xl">Service Overview</h3>
+            <div className="bg-white border-2 border-slate-900 rounded-2xl p-6 md:p-8 space-y-6 shadow-[5px_5px_0px_#0A1020]">
+              <h3 className="font-black text-slate-900 text-xl">Service Overview</h3>
               <p className="text-sm text-slate-600 leading-relaxed">
                 TheMobifixx provides professional, chip-level logic board and diagnostic repairs for all premium gadgets. Our Nehru Place lab houses specialized infrared soldering stations and digital oscilloscopes to troubleshoot and correct micro short circuits.
               </p>
 
               {/* Deliverables lists */}
               {service.highlights && service.highlights.length > 0 && (
-                <div className="space-y-4 pt-4 border-t border-slate-100">
+                <div className="space-y-4 pt-4 border-t-2 border-slate-900">
                   <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest">Included Deliverables & Benchmarks</h4>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {service.highlights.map((h, i) => (
@@ -158,12 +165,12 @@ export default function ServiceDetail() {
 
             {/* The Diagnostic Procedure flow */}
             <div className="space-y-6">
-              <h3 className="font-bold text-slate-900 text-xl">Our Lab Diagnostic Workflow</h3>
+              <h3 className="font-black text-slate-900 text-xl">Our Diagnostic Workflow</h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                 {workflows.map((w, i) => (
-                  <div key={i} className="bg-white border border-slate-200/50 rounded-xl p-5 space-y-3">
-                    <span className="text-3xl font-black text-[#0F4CFF]/15 block">{w.step}</span>
-                    <h4 className="font-bold text-slate-900 text-xs leading-snug">{w.title}</h4>
+                  <div key={i} className="bg-white border-2 border-slate-900 rounded-2xl p-5 space-y-3 shadow-[4px_4px_0px_#0A1020]">
+                    <span className="text-3xl font-black text-[#0F4CFF]/20 block">{w.step}</span>
+                    <h4 className="font-black text-slate-900 text-xs leading-snug">{w.title}</h4>
                     <p className="text-[11px] text-slate-500 leading-relaxed">{w.desc}</p>
                   </div>
                 ))}
@@ -171,13 +178,13 @@ export default function ServiceDetail() {
             </div>
 
             {/* Quality Certifications details */}
-            <div className="bg-slate-900 text-slate-400 rounded-2xl p-6 md:p-8 flex flex-col sm:flex-row items-center gap-6">
-              <div className="w-16 h-16 bg-[#00C48C]/10 rounded-xl flex items-center justify-center text-[#00C48C] shrink-0">
+            <div className="bg-white border-2 border-slate-900 rounded-2xl p-6 md:p-8 flex flex-col sm:flex-row items-center gap-6 shadow-[5px_5px_0px_#0A1020]">
+              <div className="w-16 h-16 border-2 border-slate-900 bg-[#00C48C] rounded-2xl flex items-center justify-center text-white shrink-0 shadow-[2px_2px_0px_#0A1020]">
                 <ShieldCheck className="w-8 h-8" />
               </div>
               <div className="space-y-1 text-center sm:text-left">
-                <h4 className="font-bold text-white text-base">The TheMobifixx Guarantee</h4>
-                <p className="text-xs leading-relaxed text-slate-400">
+                <h4 className="font-black text-slate-900 text-base">The TheMobifixx Guarantee</h4>
+                <p className="text-xs leading-relaxed text-slate-505">
                   Every replacement panel, battery block, memory chip, and motherboard micro-soldering job is backed by our stamped 90-day warranty card, protecting you from future performance regression.
                 </p>
               </div>
@@ -191,16 +198,16 @@ export default function ServiceDetail() {
             <RepairBookingForm initialDeviceType={currentDeviceType} />
 
             {/* Quick Contact Box */}
-            <div className="bg-white border border-slate-200/60 rounded-2xl p-6 space-y-4 text-center">
-              <h4 className="font-bold text-slate-900 text-sm">Prefer a Direct Conversation?</h4>
+            <div className="bg-white border-2 border-slate-900 rounded-2xl p-6 space-y-4 text-center shadow-[4px_4px_0px_#0A1020]">
+              <h4 className="font-black text-slate-900 text-sm">Prefer a Direct Conversation?</h4>
               <p className="text-xs text-slate-500">Call our diagnostic center directly to get immediate pricing estimates and technician scheduling coordinates.</p>
               <div className="pt-2">
                 <a
-                  href="tel:+919999999999"
-                  className="inline-flex items-center justify-center space-x-2 bg-slate-900 hover:bg-slate-800 text-white font-black text-xs uppercase tracking-wider px-6 py-3 rounded-xl w-full"
+                  href="tel:+919310112994"
+                  className="w-full flex items-center justify-center gap-2 bg-[#0F4CFF] text-white font-black text-xs uppercase tracking-widest py-3.5 rounded-xl border-2 border-slate-900 shadow-[3px_3px_0px_#0A1020] hover:shadow-[4px_4px_0px_#0A1020] hover:-translate-y-[2px] hover:-translate-x-[2px] active:translate-y-[1.5px] active:translate-x-[1.5px] active:shadow-[0.5px_0.5px_0px_#0A1020] transition-all cursor-pointer"
                 >
-                  <Phone className="w-4 h-4 text-[#00C48C]" />
-                  <span>Call +91 99999 99999</span>
+                  <Phone className="w-4 h-4" />
+                  <span>Call +91 9310112994</span>
                 </a>
               </div>
             </div>

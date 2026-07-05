@@ -1,44 +1,18 @@
 [
   {
-    "id": "LAPY-89241",
-    "customerName": "Rahul Sharma",
-    "phone": "9876543210",
-    "email": "rahul@gmail.com",
+    "customerName": "hamza",
+    "phone": "9867543568",
+    "email": "hamza@gmail.com",
     "deviceType": "macbook",
-    "brand": "Apple",
-    "model": "MacBook Pro 16\" M1 Pro",
-    "issueDescription": "Accidentally spilled green tea on keyboard, display flickers and keys sticky.",
+    "brand": "apple",
+    "model": "m1",
+    "issueDescription": "its screen is not working.. ",
     "pickupRequired": true,
-    "preferredDate": "2026-06-23",
+    "pickupAddress": "g12, shaheen bagh, abul fazal enclave part 2. ",
+    "preferredDate": "2026-07-02",
+    "userId": "usr_0r0j1jowz",
+    "id": "LAPY-97351",
     "status": "in_repair",
-    "createdAt": "2026-06-23T08:30:00.000Z"
-  },
-  {
-    "id": "LAPY-73105",
-    "customerName": "Sneha Gupta",
-    "phone": "9988776655",
-    "email": "sneha@yahoo.com",
-    "deviceType": "laptop",
-    "brand": "Dell",
-    "model": "XPS 15 9510",
-    "issueDescription": "Battery swelling up, touchpad pushed upwards, overheating under moderate loads.",
-    "pickupRequired": false,
-    "preferredDate": "2026-06-24",
-    "status": "accepted",
-    "createdAt": "2026-06-24T01:15:00.000Z"
-  },
-  {
-    "id": "LAPY-12045",
-    "customerName": "Amit Verma",
-    "phone": "9123456789",
-    "email": "amit.verma@outlook.com",
-    "deviceType": "mobile",
-    "brand": "Apple",
-    "model": "iPhone 13 Pro",
-    "issueDescription": "Front glass screen completely shattered, multi-touch unresponsive in bottom left.",
-    "pickupRequired": true,
-    "preferredDate": "2026-06-22",
-    "status": "completed",
-    "createdAt": "2026-06-22T10:00:00.000Z"
+    "createdAt": "2026-07-02T15:30:47.947Z"
   }
 ]

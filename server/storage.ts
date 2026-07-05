@@ -1,11 +1,22 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import fs from 'fs';
 import path from 'path';
-import { Inquiry, RepairRequest, Technician, Testimonial, ServiceCategory } from '../src/types';
+import crypto from 'crypto';
+import dotenv from 'dotenv';
+dotenv.config();
+
+import { Pool } from 'pg';
+import { Inquiry, RepairRequest, Technician, Testimonial, ServiceCategory, User } from '../src/types';
+
+const DATABASE_URL = process.env.DATABASE_URL;
+let pgPool: Pool | null = null;
+
+if (DATABASE_URL) {
+  console.log('Detected DATABASE_URL. Initializing PostgreSQL pool...');
+  pgPool = new Pool({
+    connectionString: DATABASE_URL,
+    ssl: DATABASE_URL.includes('neon') ? { rejectUnauthorized: false } : false
+  });
+}
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 
@@ -19,6 +30,8 @@ const REPAIR_REQUESTS_PATH = path.join(DATA_DIR, 'repair_requests.json');
 const TECHNICIANS_PATH = path.join(DATA_DIR, 'technicians.json');
 const TESTIMONIALS_PATH = path.join(DATA_DIR, 'testimonials.json');
 const SERVICES_PATH = path.join(DATA_DIR, 'services.json');
+const USERS_PATH = path.join(DATA_DIR, 'users.json');
+const SESSIONS_PATH = path.join(DATA_DIR, 'sessions.json');
 
 // Initialize helper
 function readJsonFile<T>(filePath: string, defaultValue: T): T {
@@ -464,67 +477,351 @@ const SEED_REPAIR_REQUESTS: RepairRequest[] = [
 
 // DB Operations Layer
 
+export interface UserDbRecord {
+  id: string;
+  name: string;
+  email: string;
+  passwordHash: string;
+  salt: string;
+  role: 'admin' | 'user';
+  dashboardAccess: boolean;
+  createdAt: string;
+}
+
+// SQL Mapping Helpers
+const mapUser = (row: any): UserDbRecord => ({
+  id: row.id,
+  name: row.name,
+  email: row.email,
+  passwordHash: row.password_hash,
+  salt: row.salt,
+  role: row.role as 'admin' | 'user',
+  dashboardAccess: Boolean(row.dashboard_access),
+  createdAt: row.created_at
+});
+
+const mapRepairRequest = (row: any): RepairRequest => ({
+  id: row.id,
+  customerName: row.customer_name,
+  phone: row.phone,
+  email: row.email,
+  deviceType: row.device_type,
+  brand: row.brand,
+  model: row.model,
+  issueDescription: row.issue_description,
+  pickupRequired: Boolean(row.pickup_required),
+  pickupAddress: row.pickup_address,
+  preferredDate: row.preferred_date,
+  status: row.status,
+  createdAt: row.created_at,
+  userId: row.user_id || undefined
+});
+
+const mapTechnician = (row: any): Technician => {
+  let serviceAreas: string[] = [];
+  let certifications: string[] = [];
+  try {
+    serviceAreas = typeof row.service_areas === 'string' ? JSON.parse(row.service_areas) : (Array.isArray(row.service_areas) ? row.service_areas : []);
+  } catch (e) {}
+  try {
+    certifications = typeof row.certifications === 'string' ? JSON.parse(row.certifications) : (Array.isArray(row.certifications) ? row.certifications : []);
+  } catch (e) {}
+
+  return {
+    id: row.id,
+    name: row.name,
+    designation: row.designation,
+    experience: Number(row.experience),
+    specialization: row.specialization,
+    repairsCompleted: Number(row.repairs_completed),
+    rating: Number(row.rating),
+    serviceAreas,
+    profileImage: row.profile_image,
+    certifications,
+    createdAt: row.created_at
+  };
+};
+
+const mapTestimonial = (row: any): Testimonial => ({
+  id: row.id,
+  customerName: row.customer_name,
+  rating: Number(row.rating),
+  review: row.review,
+  deviceType: row.device_type,
+  image: row.image,
+  userId: row.user_id || undefined,
+  createdAt: row.created_at
+});
+
+const mapInquiry = (row: any): Inquiry => ({
+  id: row.id,
+  name: row.name,
+  phone: row.phone,
+  email: row.email,
+  message: row.message,
+  status: row.status || 'pending',
+  createdAt: row.created_at
+});
+
+const mapService = (row: any): ServiceCategory => {
+  let highlights: string[] = [];
+  try {
+    highlights = typeof row.highlights === 'string' ? JSON.parse(row.highlights) : (Array.isArray(row.highlights) ? row.highlights : []);
+  } catch (e) {}
+
+  return {
+    id: row.id,
+    title: row.title,
+    slug: row.slug,
+    description: row.description,
+    icon: row.icon,
+    featuredImage: row.featured_image,
+    seoTitle: row.seo_title,
+    seoDescription: row.seo_description,
+    highlights,
+    pricing: row.pricing
+  };
+};
+
+// DB Operations Layer
+
 export const Storage = {
-  getInquiries(): Inquiry[] {
-    return readJsonFile<Inquiry[]>(INQUIRIES_PATH, []);
+  async init(): Promise<void> {
+    if (DATABASE_URL && pgPool) {
+      try {
+        console.log('Connecting to PostgreSQL database...');
+        const client = await pgPool.connect();
+        console.log('Successfully connected to PostgreSQL database.');
+        client.release();
+        
+        await this.runMigrations();
+        await this.seedPg();
+      } catch (err) {
+        console.error('Failed to connect to PostgreSQL. Falling back to local JSON database.', err);
+        pgPool = null;
+        this.seed();
+      }
+    } else {
+      console.log('No DATABASE_URL provided. Running in LOCAL FILE MODE.');
+      this.seed();
+    }
   },
 
-  addInquiry(inquiry: Omit<Inquiry, 'id' | 'createdAt' | 'status'>): Inquiry {
-    const list = this.getInquiries();
-    const newInquiry: Inquiry = {
-      ...inquiry,
-      id: `inq_${Math.random().toString(36).substr(2, 9)}`,
-      status: 'pending',
-      createdAt: new Date().toISOString()
-    };
-    list.push(newInquiry);
-    writeJsonFile(INQUIRIES_PATH, list);
-    return newInquiry;
+  async close(): Promise<void> {
+    if (pgPool) {
+      try {
+        console.log('Closing PostgreSQL connection pool...');
+        await pgPool.end();
+        console.log('PostgreSQL connection closed.');
+      } catch (err) {
+        console.error('Error closing PostgreSQL connection:', err);
+      }
+    }
   },
 
-  getRepairRequests(): RepairRequest[] {
-    return readJsonFile<RepairRequest[]>(REPAIR_REQUESTS_PATH, []);
+  async runMigrations(): Promise<void> {
+    if (!pgPool) return;
+    try {
+      console.log('Running database migrations...');
+      
+      // Users Table
+      await pgPool.query(`
+        CREATE TABLE IF NOT EXISTS users (
+          id VARCHAR(255) PRIMARY KEY,
+          name VARCHAR(255) NOT NULL,
+          email VARCHAR(255) UNIQUE NOT NULL,
+          password_hash VARCHAR(255) NOT NULL,
+          salt VARCHAR(255) NOT NULL,
+          role VARCHAR(50) DEFAULT 'user',
+          dashboard_access BOOLEAN DEFAULT FALSE,
+          created_at VARCHAR(100) NOT NULL
+        )
+      `);
+
+      // Services Table
+      await pgPool.query(`
+        CREATE TABLE IF NOT EXISTS services (
+          id VARCHAR(255) PRIMARY KEY,
+          title VARCHAR(255) NOT NULL,
+          slug VARCHAR(255) UNIQUE NOT NULL,
+          description TEXT NOT NULL,
+          icon VARCHAR(100) NOT NULL,
+          featured_image VARCHAR(512) NOT NULL,
+          seo_title VARCHAR(255) NOT NULL,
+          seo_description TEXT NOT NULL,
+          highlights TEXT NOT NULL,
+          pricing VARCHAR(100) NOT NULL,
+          created_at VARCHAR(100) NOT NULL
+        )
+      `);
+
+      // Technicians Table
+      await pgPool.query(`
+        CREATE TABLE IF NOT EXISTS technicians (
+          id VARCHAR(255) PRIMARY KEY,
+          name VARCHAR(255) NOT NULL,
+          designation VARCHAR(255) NOT NULL,
+          experience INTEGER NOT NULL,
+          specialization VARCHAR(255) NOT NULL,
+          repairs_completed INTEGER NOT NULL,
+          rating DECIMAL(3,2) NOT NULL,
+          service_areas TEXT NOT NULL,
+          profile_image VARCHAR(512) NOT NULL,
+          certifications TEXT NOT NULL,
+          created_at VARCHAR(100) NOT NULL
+        )
+      `);
+
+      // Testimonials Table
+      await pgPool.query(`
+        CREATE TABLE IF NOT EXISTS testimonials (
+          id VARCHAR(255) PRIMARY KEY,
+          customer_name VARCHAR(255) NOT NULL,
+          rating INTEGER NOT NULL,
+          review TEXT NOT NULL,
+          device_type VARCHAR(100) NOT NULL,
+          image VARCHAR(512) NOT NULL,
+          user_id VARCHAR(255),
+          created_at VARCHAR(100) NOT NULL
+        )
+      `);
+
+      // Inquiries Table
+      await pgPool.query(`
+        CREATE TABLE IF NOT EXISTS inquiries (
+          id VARCHAR(255) PRIMARY KEY,
+          name VARCHAR(255) NOT NULL,
+          phone VARCHAR(100) NOT NULL,
+          email VARCHAR(255) NOT NULL,
+          message TEXT NOT NULL,
+          status VARCHAR(50) DEFAULT 'pending',
+          created_at VARCHAR(100) NOT NULL
+        )
+      `);
+
+      // Repair Requests Table
+      await pgPool.query(`
+        CREATE TABLE IF NOT EXISTS repair_requests (
+          id VARCHAR(255) PRIMARY KEY,
+          customer_name VARCHAR(255) NOT NULL,
+          phone VARCHAR(100) NOT NULL,
+          email VARCHAR(255) NOT NULL,
+          device_type VARCHAR(100) NOT NULL,
+          brand VARCHAR(100) NOT NULL,
+          model VARCHAR(100) NOT NULL,
+          issue_description TEXT NOT NULL,
+          pickup_required BOOLEAN DEFAULT FALSE,
+          pickup_address TEXT NOT NULL,
+          preferred_date VARCHAR(100) NOT NULL,
+          status VARCHAR(100) DEFAULT 'pending',
+          user_id VARCHAR(255),
+          created_at VARCHAR(100) NOT NULL
+        )
+      `);
+
+      // Sessions Table
+      await pgPool.query(`
+        CREATE TABLE IF NOT EXISTS sessions (
+          token VARCHAR(255) PRIMARY KEY,
+          user_id VARCHAR(255) NOT NULL,
+          created_at VARCHAR(100) NOT NULL
+        )
+      `);
+
+      console.log('Database migrations completed successfully.');
+    } catch (err) {
+      console.error('Error running migrations:', err);
+      throw err;
+    }
   },
 
-  addRepairRequest(request: Omit<RepairRequest, 'id' | 'createdAt' | 'status'>): RepairRequest {
-    const list = this.getRepairRequests();
-    const newReq: RepairRequest = {
-      ...request,
-      id: `LAPY-${Math.floor(10000 + Math.random() * 90000)}`,
-      status: 'pending',
-      createdAt: new Date().toISOString()
-    };
-    list.push(newReq);
-    writeJsonFile(REPAIR_REQUESTS_PATH, list);
-    return newReq;
+  async seedPg(): Promise<void> {
+    if (!pgPool) return;
+    try {
+      // Seed Services
+      const servicesCheck = await pgPool.query('SELECT COUNT(*) FROM services');
+      const servicesCount = parseInt(servicesCheck.rows[0].count, 10);
+      if (servicesCount === 0) {
+        console.log('Seeding PostgreSQL "services" table...');
+        for (const s of SEED_SERVICES) {
+          await pgPool.query(
+            `INSERT INTO services (id, title, slug, description, icon, featured_image, seo_title, seo_description, highlights, pricing, created_at)
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
+            [
+              s.id || crypto.randomUUID(),
+              s.title,
+              s.slug,
+              s.description,
+              s.icon,
+              s.featuredImage,
+              s.seoTitle,
+              s.seoDescription,
+              JSON.stringify(s.highlights),
+              s.pricing,
+              new Date().toISOString()
+            ]
+          );
+        }
+      }
+
+      // Seed Technicians
+      const techsCheck = await pgPool.query('SELECT COUNT(*) FROM technicians');
+      const techsCount = parseInt(techsCheck.rows[0].count, 10);
+      if (techsCount === 0) {
+        console.log('Seeding PostgreSQL "technicians" table...');
+        const seededTechs = SEED_TECHNICIANS.map((t, idx) => ({
+          ...t,
+          id: t.id || `tech_seed_${idx + 1}`
+        }));
+        for (const t of seededTechs) {
+          await pgPool.query(
+            `INSERT INTO technicians (id, name, designation, experience, specialization, repairs_completed, rating, service_areas, profile_image, certifications, created_at)
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
+            [
+              t.id,
+              t.name,
+              t.designation,
+              t.experience,
+              t.specialization,
+              t.repairsCompleted,
+              t.rating,
+              JSON.stringify(t.serviceAreas),
+              t.profileImage,
+              JSON.stringify(t.certifications),
+              new Date().toISOString()
+            ]
+          );
+        }
+      }
+
+      // Seed Testimonials
+      const testimonialsCheck = await pgPool.query('SELECT COUNT(*) FROM testimonials');
+      const testimonialsCount = parseInt(testimonialsCheck.rows[0].count, 10);
+      if (testimonialsCount === 0) {
+        console.log('Seeding PostgreSQL "testimonials" table...');
+        for (const t of SEED_TESTIMONIALS) {
+          await pgPool.query(
+            `INSERT INTO testimonials (id, customer_name, rating, review, device_type, image, user_id, created_at)
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+            [
+              t.id || crypto.randomUUID(),
+              t.customerName,
+              t.rating,
+              t.review,
+              t.deviceType,
+              t.image,
+              t.userId || null,
+              new Date().toISOString()
+            ]
+          );
+        }
+      }
+    } catch (err) {
+      console.error('Error seeding PostgreSQL database:', err);
+    }
   },
 
-  getTechnicians(): Technician[] {
-    return readJsonFile<Technician[]>(TECHNICIANS_PATH, SEED_TECHNICIANS);
-  },
-
-  getTestimonials(): Testimonial[] {
-    return readJsonFile<Testimonial[]>(TESTIMONIALS_PATH, SEED_TESTIMONIALS);
-  },
-
-  addTestimonial(testimonial: Omit<Testimonial, 'id' | 'createdAt'>): Testimonial {
-    const list = this.getTestimonials();
-    const newTestimonial: Testimonial = {
-      ...testimonial,
-      id: `test_${Math.random().toString(36).substr(2, 9)}`,
-      createdAt: new Date().toISOString()
-    };
-    list.unshift(newTestimonial);
-    writeJsonFile(TESTIMONIALS_PATH, list);
-    return newTestimonial;
-  },
-
-  getServices(): ServiceCategory[] {
-    return readJsonFile<ServiceCategory[]>(SERVICES_PATH, SEED_SERVICES);
-  },
-
-  // Seed standard files to disk if they are empty
-  seed() {
+  seed(): void {
     if (!fs.existsSync(SERVICES_PATH)) {
       writeJsonFile(SERVICES_PATH, SEED_SERVICES);
     }
@@ -540,9 +837,392 @@ export const Storage = {
     if (!fs.existsSync(REPAIR_REQUESTS_PATH) || readJsonFile<any[]>(REPAIR_REQUESTS_PATH, []).length === 0) {
       writeJsonFile(REPAIR_REQUESTS_PATH, SEED_REPAIR_REQUESTS);
     }
-    console.log("Database seeded successfully via JSON files.");
+    if (!fs.existsSync(USERS_PATH)) {
+      writeJsonFile(USERS_PATH, []);
+    }
+    if (!fs.existsSync(SESSIONS_PATH)) {
+      writeJsonFile(SESSIONS_PATH, {});
+    }
+    console.log("Database connected successfully. Local file-based schema loaded.");
+  },
+
+  async getSessions(): Promise<Record<string, string>> {
+    if (pgPool) {
+      const res = await pgPool.query('SELECT * FROM sessions');
+      const map: Record<string, string> = {};
+      res.rows.forEach(row => {
+        map[row.token] = row.user_id;
+      });
+      return map;
+    }
+    return readJsonFile<Record<string, string>>(SESSIONS_PATH, {});
+  },
+
+  async addSession(token: string, userId: string): Promise<void> {
+    if (pgPool) {
+      await pgPool.query(
+        `INSERT INTO sessions (token, user_id, created_at)
+         VALUES ($1, $2, $3)
+         ON CONFLICT (token) DO UPDATE SET user_id = $2`,
+        [token, userId, new Date().toISOString()]
+      );
+      return;
+    }
+    const sessions = readJsonFile<Record<string, string>>(SESSIONS_PATH, {});
+    sessions[token] = userId;
+    writeJsonFile(SESSIONS_PATH, sessions);
+  },
+
+  async deleteSession(token: string): Promise<void> {
+    if (pgPool) {
+      await pgPool.query('DELETE FROM sessions WHERE token = $1', [token]);
+      return;
+    }
+    const sessions = readJsonFile<Record<string, string>>(SESSIONS_PATH, {});
+    if (sessions[token]) {
+      delete sessions[token];
+      writeJsonFile(SESSIONS_PATH, sessions);
+    }
+  },
+
+  async getInquiries(): Promise<Inquiry[]> {
+    if (pgPool) {
+      const res = await pgPool.query('SELECT * FROM inquiries ORDER BY created_at DESC');
+      return res.rows.map(mapInquiry);
+    }
+    return readJsonFile<Inquiry[]>(INQUIRIES_PATH, []);
+  },
+
+  async addInquiry(inquiry: Omit<Inquiry, 'id' | 'createdAt' | 'status'>): Promise<Inquiry> {
+    const newInquiry: Inquiry = {
+      ...inquiry,
+      id: `inq_${Math.random().toString(36).substr(2, 9)}`,
+      status: 'pending',
+      createdAt: new Date().toISOString()
+    };
+    if (pgPool) {
+      await pgPool.query(
+        `INSERT INTO inquiries (id, name, phone, email, message, status, created_at)
+         VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+        [newInquiry.id, newInquiry.name, newInquiry.phone, newInquiry.email, newInquiry.message, newInquiry.status, newInquiry.createdAt]
+      );
+      return newInquiry;
+    }
+    const list = readJsonFile<Inquiry[]>(INQUIRIES_PATH, []);
+    list.push(newInquiry);
+    writeJsonFile(INQUIRIES_PATH, list);
+    return newInquiry;
+  },
+
+  async deleteInquiry(id: string): Promise<boolean> {
+    if (pgPool) {
+      const res = await pgPool.query('DELETE FROM inquiries WHERE id = $1', [id]);
+      return (res.rowCount ?? 0) > 0;
+    }
+    const list = readJsonFile<Inquiry[]>(INQUIRIES_PATH, []);
+    const filtered = list.filter(inq => inq.id !== id);
+    if (filtered.length === list.length) return false;
+    writeJsonFile(INQUIRIES_PATH, filtered);
+    return true;
+  },
+
+  async getRepairRequests(): Promise<RepairRequest[]> {
+    if (pgPool) {
+      const res = await pgPool.query('SELECT * FROM repair_requests ORDER BY created_at DESC');
+      return res.rows.map(mapRepairRequest);
+    }
+    return readJsonFile<RepairRequest[]>(REPAIR_REQUESTS_PATH, []);
+  },
+
+  async addRepairRequest(request: Omit<RepairRequest, 'id' | 'createdAt' | 'status'>): Promise<RepairRequest> {
+    const newReq: RepairRequest = {
+      ...request,
+      id: `LAPY-${Math.floor(10000 + Math.random() * 90000)}`,
+      status: 'pending',
+      createdAt: new Date().toISOString()
+    };
+    if (pgPool) {
+      await pgPool.query(
+        `INSERT INTO repair_requests (id, customer_name, phone, email, device_type, brand, model, issue_description, pickup_required, pickup_address, preferred_date, status, user_id, created_at)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)`,
+        [
+          newReq.id,
+          newReq.customerName,
+          newReq.phone,
+          newReq.email,
+          newReq.deviceType,
+          newReq.brand,
+          newReq.model,
+          newReq.issueDescription,
+          newReq.pickupRequired,
+          newReq.pickupAddress || '',
+          newReq.preferredDate,
+          newReq.status,
+          newReq.userId || null,
+          newReq.createdAt
+        ]
+      );
+      return newReq;
+    }
+    const list = readJsonFile<RepairRequest[]>(REPAIR_REQUESTS_PATH, []);
+    list.push(newReq);
+    writeJsonFile(REPAIR_REQUESTS_PATH, list);
+    return newReq;
+  },
+
+  async updateRepairRequestStatus(id: string, status: RepairRequest['status']): Promise<boolean> {
+    if (pgPool) {
+      const res = await pgPool.query('UPDATE repair_requests SET status = $1 WHERE id = $2', [status, id]);
+      return (res.rowCount ?? 0) > 0;
+    }
+    const list = readJsonFile<RepairRequest[]>(REPAIR_REQUESTS_PATH, []);
+    const idx = list.findIndex(r => r.id === id);
+    if (idx === -1) return false;
+    list[idx].status = status;
+    writeJsonFile(REPAIR_REQUESTS_PATH, list);
+    return true;
+  },
+
+  async deleteRepairRequest(id: string): Promise<boolean> {
+    if (pgPool) {
+      const res = await pgPool.query('DELETE FROM repair_requests WHERE id = $1', [id]);
+      return (res.rowCount ?? 0) > 0;
+    }
+    const list = readJsonFile<RepairRequest[]>(REPAIR_REQUESTS_PATH, []);
+    const filtered = list.filter(r => r.id !== id);
+    if (filtered.length === list.length) return false;
+    writeJsonFile(REPAIR_REQUESTS_PATH, filtered);
+    return true;
+  },
+
+  async getTechnicians(): Promise<Technician[]> {
+    if (pgPool) {
+      const res = await pgPool.query('SELECT * FROM technicians ORDER BY created_at DESC');
+      return res.rows.map(mapTechnician);
+    }
+    const list = readJsonFile<Technician[]>(TECHNICIANS_PATH, SEED_TECHNICIANS);
+    let modified = false;
+    const listWithIds = list.map((t) => {
+      if (!t.id) {
+        modified = true;
+        return {
+          ...t,
+          id: `tech_${Math.random().toString(36).substr(2, 9)}`
+        };
+      }
+      return t;
+    });
+    if (modified) {
+      writeJsonFile(TECHNICIANS_PATH, listWithIds);
+    }
+    return listWithIds;
+  },
+
+  async addTechnician(tech: Omit<Technician, 'id' | 'createdAt'>): Promise<Technician> {
+    const newTech: Technician = {
+      ...tech,
+      id: `tech_${Math.random().toString(36).substr(2, 9)}`,
+      createdAt: new Date().toISOString()
+    };
+    if (pgPool) {
+      await pgPool.query(
+        `INSERT INTO technicians (id, name, designation, experience, specialization, repairs_completed, rating, service_areas, profile_image, certifications, created_at)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
+        [
+          newTech.id,
+          newTech.name,
+          newTech.designation,
+          newTech.experience,
+          newTech.specialization,
+          newTech.repairsCompleted,
+          newTech.rating,
+          JSON.stringify(newTech.serviceAreas),
+          newTech.profileImage,
+          JSON.stringify(newTech.certifications),
+          newTech.createdAt
+        ]
+      );
+      return newTech;
+    }
+    const list = await this.getTechnicians();
+    list.push(newTech);
+    writeJsonFile(TECHNICIANS_PATH, list);
+    return newTech;
+  },
+
+  async updateTechnician(id: string, tech: Omit<Technician, 'id' | 'createdAt'>): Promise<boolean> {
+    if (pgPool) {
+      const res = await pgPool.query(
+        `UPDATE technicians
+         SET name=$1, designation=$2, experience=$3, specialization=$4, repairs_completed=$5, rating=$6, service_areas=$7, profile_image=$8, certifications=$9
+         WHERE id=$10`,
+        [
+          tech.name,
+          tech.designation,
+          tech.experience,
+          tech.specialization,
+          tech.repairsCompleted,
+          tech.rating,
+          JSON.stringify(tech.serviceAreas),
+          tech.profileImage,
+          JSON.stringify(tech.certifications),
+          id
+        ]
+      );
+      return (res.rowCount ?? 0) > 0;
+    }
+    const list = await this.getTechnicians();
+    const idx = list.findIndex(t => t.id === id);
+    if (idx === -1) return false;
+    list[idx] = { ...tech, id, createdAt: list[idx].createdAt };
+    writeJsonFile(TECHNICIANS_PATH, list);
+    return true;
+  },
+
+  async deleteTechnician(id: string): Promise<boolean> {
+    if (pgPool) {
+      const res = await pgPool.query('DELETE FROM technicians WHERE id = $1', [id]);
+      return (res.rowCount ?? 0) > 0;
+    }
+    const list = await this.getTechnicians();
+    const filtered = list.filter(t => t.id !== id);
+    if (filtered.length === list.length) return false;
+    writeJsonFile(TECHNICIANS_PATH, filtered);
+    return true;
+  },
+
+  async getTestimonials(): Promise<Testimonial[]> {
+    if (pgPool) {
+      const res = await pgPool.query('SELECT * FROM testimonials ORDER BY created_at DESC');
+      return res.rows.map(mapTestimonial);
+    }
+    return readJsonFile<Testimonial[]>(TESTIMONIALS_PATH, SEED_TESTIMONIALS);
+  },
+
+  async addTestimonial(testimonial: Omit<Testimonial, 'id' | 'createdAt'>): Promise<Testimonial> {
+    const newTestimonial: Testimonial = {
+      ...testimonial,
+      id: `test_${Math.random().toString(36).substr(2, 9)}`,
+      createdAt: new Date().toISOString()
+    };
+    if (pgPool) {
+      await pgPool.query(
+        `INSERT INTO testimonials (id, customer_name, rating, review, device_type, image, user_id, created_at)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+        [
+          newTestimonial.id,
+          newTestimonial.customerName,
+          newTestimonial.rating,
+          newTestimonial.review,
+          newTestimonial.deviceType,
+          newTestimonial.image,
+          newTestimonial.userId || null,
+          newTestimonial.createdAt
+        ]
+      );
+      return newTestimonial;
+    }
+    const list = readJsonFile<Testimonial[]>(TESTIMONIALS_PATH, SEED_TESTIMONIALS);
+    list.unshift(newTestimonial);
+    writeJsonFile(TESTIMONIALS_PATH, list);
+    return newTestimonial;
+  },
+
+  async deleteTestimonial(id: string): Promise<boolean> {
+    if (pgPool) {
+      const res = await pgPool.query('DELETE FROM testimonials WHERE id = $1', [id]);
+      return (res.rowCount ?? 0) > 0;
+    }
+    const list = readJsonFile<Testimonial[]>(TESTIMONIALS_PATH, SEED_TESTIMONIALS);
+    const filtered = list.filter(t => t.id !== id);
+    if (filtered.length === list.length) return false;
+    writeJsonFile(TESTIMONIALS_PATH, filtered);
+    return true;
+  },
+
+  async getServices(): Promise<ServiceCategory[]> {
+    if (pgPool) {
+      const res = await pgPool.query('SELECT * FROM services ORDER BY title ASC');
+      return res.rows.map(mapService);
+    }
+    return readJsonFile<ServiceCategory[]>(SERVICES_PATH, SEED_SERVICES);
+  },
+
+  async getUsers(): Promise<UserDbRecord[]> {
+    if (pgPool) {
+      const res = await pgPool.query('SELECT * FROM users ORDER BY created_at DESC');
+      return res.rows.map(mapUser);
+    }
+    return readJsonFile<UserDbRecord[]>(USERS_PATH, []);
+  },
+
+  async getUserByEmail(email: string): Promise<UserDbRecord | undefined> {
+    if (pgPool) {
+      const res = await pgPool.query('SELECT * FROM users WHERE LOWER(email) = LOWER($1)', [email]);
+      return res.rows.length > 0 ? mapUser(res.rows[0]) : undefined;
+    }
+    const users = await this.getUsers();
+    return users.find(u => u.email.toLowerCase() === email.toLowerCase());
+  },
+
+  async getUserById(id: string): Promise<UserDbRecord | undefined> {
+    if (pgPool) {
+      const res = await pgPool.query('SELECT * FROM users WHERE id = $1', [id]);
+      return res.rows.length > 0 ? mapUser(res.rows[0]) : undefined;
+    }
+    const users = await this.getUsers();
+    return users.find(u => u.id === id);
+  },
+
+  async addUser(user: Omit<UserDbRecord, 'id' | 'createdAt'>): Promise<UserDbRecord> {
+    const list = await this.getUsers();
+    const isFirstUser = list.length === 0;
+    const newUser: UserDbRecord = {
+      ...user,
+      role: isFirstUser ? 'admin' : user.role,
+      dashboardAccess: isFirstUser ? true : user.dashboardAccess,
+      id: `usr_${Math.random().toString(36).substr(2, 9)}`,
+      createdAt: new Date().toISOString()
+    };
+    if (pgPool) {
+      await pgPool.query(
+        `INSERT INTO users (id, name, email, password_hash, salt, role, dashboard_access, created_at)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+        [newUser.id, newUser.name, newUser.email, newUser.passwordHash, newUser.salt, newUser.role, newUser.dashboardAccess, newUser.createdAt]
+      );
+      return newUser;
+    }
+    list.push(newUser);
+    writeJsonFile(USERS_PATH, list);
+    return newUser;
+  },
+
+  async updateUserAccess(id: string, access: boolean): Promise<boolean> {
+    if (pgPool) {
+      const res = await pgPool.query('UPDATE users SET dashboard_access = $1 WHERE id = $2', [access, id]);
+      return (res.rowCount ?? 0) > 0;
+    }
+    const list = await this.getUsers();
+    const idx = list.findIndex(u => u.id === id);
+    if (idx === -1) return false;
+    list[idx].dashboardAccess = access;
+    writeJsonFile(USERS_PATH, list);
+    return true;
+  },
+
+  async deleteUser(id: string): Promise<boolean> {
+    if (pgPool) {
+      const res = await pgPool.query('DELETE FROM users WHERE id = $1', [id]);
+      return (res.rowCount ?? 0) > 0;
+    }
+    const list = await this.getUsers();
+    const filtered = list.filter(u => u.id !== id);
+    if (filtered.length === list.length) return false;
+    writeJsonFile(USERS_PATH, filtered);
+    return true;
+  },
+
+  hashPassword(password: string, salt: string): string {
+    return crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex');
   }
 };
-
-// Auto-run seed
-Storage.seed();

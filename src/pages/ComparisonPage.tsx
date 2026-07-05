@@ -118,11 +118,11 @@ export default function ComparisonPage() {
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <a
-                href="tel:+919999999999"
+                href="tel:+919310112994"
                 className="w-full sm:w-auto text-center bg-white text-slate-900 font-black text-xs uppercase tracking-wider px-8 py-3.5 rounded-xl border-2 border-slate-900 shadow-[4px_4px_0px_#0A1020] hover:shadow-[5px_5px_0px_#0A1020] hover:-translate-y-[2px] hover:-translate-x-[2px] active:translate-y-[1.5px] active:translate-x-[1.5px] active:shadow-[0.5px_0.5px_0px_#0A1020] transition-all flex items-center justify-center gap-2"
               >
                 <Phone className="w-4 h-4 text-[#0F4CFF]" />
-                <span>Call +91 99999 99999</span>
+                <span>Call +91 9310112994</span>
               </a>
             </div>
           </div>

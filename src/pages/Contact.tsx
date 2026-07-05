@@ -16,7 +16,6 @@ export default function Contact() {
   const selectedTech = searchParams.get('tech') || '';
 
   const [activeTab, setActiveTab] = useState<'booking' | 'inquiry'>(activeTabParam);
-  const [mapTab, setMapTab] = useState<'nehru' | 'gurugram' | 'radar'>('nehru');
 
   useEffect(() => {
     if (searchParams.get('tab') === 'inquiry') {
@@ -33,17 +32,11 @@ export default function Contact() {
 
   const branches = [
     {
-      city: 'New Delhi (Master Lab)',
+      city: 'New Delhi (Main Service Centre)',
       address: 'G-12, Ground Floor, Nehru Place, New Delhi, Delhi 110019',
       landmark: 'Opposite Metro Station Exit 2',
-      phone: '+91 99999 99999',
-    },
-    {
-      city: 'Gurugram (Corporate Hub)',
-      address: 'Block-D, DLF CyberCity, Phase III, Gurugram, Haryana 122002',
-      landmark: 'Near DLF Cyber Hub Entrance',
-      phone: '+91 99999 99999',
-    },
+      phone: '+91 9310112994',
+    }
   ];
 
   return (
@@ -88,11 +81,11 @@ export default function Contact() {
                   <div>
                     <span className="text-slate-400 text-[10px] block uppercase font-black tracking-widest mb-0.5">Direct Hotline (Call)</span>
                     <a
-                      href="tel:+919999999999"
+                      href="tel:+919310112994"
                       className="inline-flex items-center gap-2 bg-white text-slate-900 border-2 border-slate-900 font-black text-sm px-4 py-2 rounded-xl shadow-[2px_2px_0px_#0A1020] hover:shadow-[3px_3px_0px_#0A1020] hover:-translate-y-[1px] hover:-translate-x-[1px] active:translate-y-[1px] active:translate-x-[1px] active:shadow-[0.5px_0.5px_0px_#0A1020] transition-all"
                     >
                       <Phone className="w-4 h-4 text-[#0F4CFF]" />
-                      +91 99999 99999
+                      +91 9310112994
                     </a>
                   </div>
                 </li>
@@ -103,7 +96,7 @@ export default function Contact() {
                   <div>
                     <span className="text-slate-400 text-[10px] block uppercase font-black tracking-widest mb-0.5">WhatsApp Support Desk</span>
                     <motion.a
-                      href="https://wa.me/919999999999?text=Hi%20TheMobifixx,%20I%20need%20to%20consult%20regarding%20repair."
+                      href="https://wa.me/919310112994?text=Hi%20TheMobifixx,%20I%20need%20to%20consult%20regarding%20repair."
                       target="_blank" rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 bg-[#00C48C] text-white border-2 border-slate-900 font-black text-sm px-4 py-2 rounded-xl shadow-[2px_2px_0px_#0A1020] hover:shadow-[3px_3px_0px_#0A1020] hover:-translate-y-[1px] hover:-translate-x-[1px] active:translate-y-[1px] active:translate-x-[1px] active:shadow-[0.5px_0.5px_0px_#0A1020] transition-all cursor-pointer"
                       whileHover={{ scale: 1.02 }}
@@ -130,7 +123,7 @@ export default function Contact() {
 
             {/* Branch listings */}
             <div className="space-y-3">
-              <h3 className="font-black text-slate-900 text-lg">Our Laboratory Addresses</h3>
+              <h3 className="font-black text-slate-900 text-lg">Our Service Centre Addresses</h3>
               <div className="space-y-3">
                 {branches.map((b, idx) => (
                   <div key={idx} className="bg-white border-2 border-slate-900 rounded-xl p-5 shadow-[3px_3px_0px_#0A1020] hover:-translate-y-[1px] hover:-translate-x-[1px] hover:shadow-[4px_4px_0px_#0A1020] transition-all space-y-2">
@@ -149,59 +142,15 @@ export default function Contact() {
 
             {/* Map panel */}
             <div className="bg-white border-2 border-slate-900 rounded-2xl p-5 space-y-4 shadow-[4px_4px_0px_#0A1020]" id="interactive-map-panel">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1">
-                <h4 className="font-black text-slate-900 text-xs uppercase tracking-wider">TheMobifixx Delhi NCR Locations & Radar</h4>
-                {/* Map tab switchers */}
-                <div className="flex border-2 border-slate-900 rounded-xl overflow-hidden shadow-[1px_1px_0px_#0A1020] self-start">
-                  {(['nehru', 'gurugram', 'radar'] as const).map((tab) => (
-                    <button
-                      key={tab}
-                      onClick={() => setMapTab(tab)}
-                      className={`px-2.5 py-1.5 text-[9px] font-black uppercase tracking-wider transition-all cursor-pointer border-r-2 border-slate-900 last:border-r-0 ${mapTab === tab ? 'bg-[#0F4CFF] text-white' : 'bg-white text-slate-600 hover:bg-slate-50'}`}
-                    >
-                      {tab === 'nehru' ? 'Nehru' : tab === 'gurugram' ? 'Gurugram' : 'Radar'}
-                    </button>
-                  ))}
-                </div>
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-1">
+                <h4 className="font-black text-slate-900 text-xs uppercase tracking-wider">TheMobifixx Delhi Locations</h4>
               </div>
 
               {/* Map viewport */}
               <div className="relative rounded-xl overflow-hidden border-2 border-slate-900 shadow-[2px_2px_0px_#0A1020] h-[280px]">
-                {mapTab === 'nehru' && (
-                  <iframe title="TheMobifixx Nehru Place Master Lab Location Map"
-                    src="https://maps.google.com/maps?q=G-12,%20Nehru%20Place,%20New%20Delhi,%20Delhi%20110019&t=&z=16&ie=UTF8&iwloc=&output=embed"
-                    className="w-full h-full border-0 absolute inset-0" loading="lazy" allowFullScreen />
-                )}
-                {mapTab === 'gurugram' && (
-                  <iframe title="TheMobifixx Gurugram Corporate Hub Location Map"
-                    src="https://maps.google.com/maps?q=DLF%20CyberHub,%20Gurugram,%20Haryana%20122002&t=&z=16&ie=UTF8&iwloc=&output=embed"
-                    className="w-full h-full border-0 absolute inset-0" loading="lazy" allowFullScreen />
-                )}
-                {mapTab === 'radar' && (
-                  <div className="w-full h-full bg-[#0A1020] text-slate-400 p-6 flex flex-col justify-between font-mono relative">
-                    <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#0F4CFF_1px,transparent_1px)] [background-size:16px_16px]" />
-                    <div className="flex justify-between items-center text-[10px] text-[#00C48C] font-black pb-2 border-b border-white/5 relative z-10">
-                      <span>SERVICING_RADIAL: 45KM RADIAL</span>
-                      <span className="animate-pulse">● RADAR ACTIVE</span>
-                    </div>
-                    <div className="space-y-2 py-4 relative z-10 text-left">
-                      <div className="flex items-center gap-2 text-xs text-white">
-                        <span className="w-2 h-2 rounded-full bg-[#00C48C] animate-ping shrink-0" />
-                        <span className="font-black">Nehru Place Master Lab (HQ & Hardware Dispatch)</span>
-                      </div>
-                      <p className="text-[10px] text-slate-400 pl-4 leading-normal font-sans">Direct counter drop-ins, diagnostic testing bench, micro-soldering labs, and certified screen calibrations.</p>
-                      <div className="flex items-center gap-2 text-xs text-white pt-2">
-                        <span className="w-2 h-2 rounded-full bg-[#0F4CFF] shrink-0" />
-                        <span className="font-black">DLF CyberCity Support Point (Corporate & Enterprise)</span>
-                      </div>
-                      <p className="text-[10px] text-slate-400 pl-4 leading-normal font-sans">Express enterprise transit coordination, custom billing clearance, and corporate fleet audits.</p>
-                    </div>
-                    <div className="pt-2 border-t border-white/5 text-[9px] text-slate-500 flex justify-between items-center relative z-10">
-                      <span>SECURE INTRANET SYNC</span>
-                      <span className="text-[#0F4CFF] font-black">90-MIN NCR TRANSIT</span>
-                    </div>
-                  </div>
-                )}
+                <iframe title="TheMobifixx Nehru Place Master Lab Location Map"
+                  src="https://maps.google.com/maps?q=G-12,%20Nehru%20Place,%20New%20Delhi,%20Delhi%20110019&t=&z=16&ie=UTF8&iwloc=&output=embed"
+                  className="w-full h-full border-0 absolute inset-0" loading="lazy" allowFullScreen />
               </div>
 
               <div className="flex items-center justify-between text-[11px] text-slate-500 px-1 pt-1">

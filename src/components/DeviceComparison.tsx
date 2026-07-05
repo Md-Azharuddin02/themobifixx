@@ -39,7 +39,7 @@ const COMPARISON_DATA: ComparisonItem[] = [
     afterImg: macbookAfter,
     stats: {
       brandModel: 'Apple MacBook Pro 16" (2021)',
-      technicianName: 'Rajesh Kumar',
+      technicianName: 'Nikhil Chandel',
       technicianRole: 'Lead Chip-Level Specialist',
       timeTaken: '2 Hours (In Nehru Place Master Lab)',
       costSaved: '₹41,500 Saved (vs full motherboard swap)'
@@ -56,7 +56,7 @@ const COMPARISON_DATA: ComparisonItem[] = [
     afterImg: iphoneAfter,
     stats: {
       brandModel: 'Apple iPhone 14 Pro Max',
-      technicianName: 'Amit Sharma',
+      technicianName: 'Soiab Malik',
       technicianRole: 'Mobile Display Expert',
       timeTaken: '30 Minutes (Done at Customer Doorstep)',
       costSaved: '₹14,000 Saved (vs authorized center)'
@@ -73,8 +73,8 @@ const COMPARISON_DATA: ComparisonItem[] = [
     afterImg: laptopAfter,
     stats: {
       brandModel: 'Dell Inspiron 15 Gaming Series',
-      technicianName: 'Sandeep Verma',
-      technicianRole: 'Senior Hardware Engineer',
+      technicianName: 'Prince Singh',
+      technicianRole: 'Hardware Engineer',
       timeTaken: '45 Minutes (Done at Customer Doorstep)',
       costSaved: 'Prevents expensive CPU/GPU heat failure'
     }

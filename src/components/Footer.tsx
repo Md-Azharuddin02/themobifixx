@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Phone, Mail, MapPin, Clock, Shield, Award, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
@@ -118,8 +118,7 @@ export default function Footer() {
               Premium device repair & refurbished technology service partner serving Delhi NCR. Experience chip-level precision with same-day transparent service.
             </p>
             <div className="text-xs text-slate-500 leading-relaxed font-semibold">
-              Corporate Office: G-12, Nehru Place, New Delhi, Delhi 110019 <br/>
-              Branch: Phase-III, DLF CyberCity, Gurugram, Haryana 122002
+              Main Service Centre: G-12, Nehru Place, New Delhi, Delhi 110019 <br/>
             </div>
           </div>
 
@@ -162,13 +161,13 @@ export default function Footer() {
                   <Phone className="w-4 h-4" />
                 </div>
                 <div className="flex-1 min-w-0 relative">
-                  <FooterAnchorLink href="tel:+919999999999">+91 99999 99999</FooterAnchorLink>
+                  <FooterAnchorLink href="tel:+919310112994">+91 9310112994</FooterAnchorLink>
                   <div className="mt-1">
                     <button
                       onClick={() => setIsFooterHoursOpen(!isFooterHoursOpen)}
                       className="flex items-center gap-1 font-black text-slate-700 hover:text-[#0F4CFF] text-[11px] focus:outline-none cursor-pointer group/fhours"
                     >
-                      <span>Mon-Sun: 9:00 AM - 9:00 PM</span>
+                      <span>Mon-Sun: 9:00 AM - 9:00 PM (24/7)</span>
                       <motion.span 
                         animate={{ rotate: isFooterHoursOpen ? 180 : 0 }}
                         transition={{ duration: 0.2 }}
@@ -228,7 +227,7 @@ export default function Footer() {
                   <Mail className="w-4 h-4" />
                 </div>
                 <div className="flex flex-col items-start mt-0.5">
-                  <FooterAnchorLink href="mailto:support@themobifixx.in">support@themobifixx.in</FooterAnchorLink>
+                  <FooterAnchorLink href="mailto:themobifixx@gmail.com">themobifixx@gmail.com</FooterAnchorLink>
                 </div>
               </li>
 
@@ -248,7 +247,6 @@ export default function Footer() {
           </div>
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
             <FooterLink to="/testimonials">Client Reviews</FooterLink>
-            <FooterLink to="/comparison">Before/After Comparison</FooterLink>
             <FooterLink to="/tracker">Track Repair Status</FooterLink>
             <FooterLink to="/privacy-policy">Privacy Policy</FooterLink>
             <FooterLink to="/terms-and-conditions">Terms & Conditions</FooterLink>

@@ -182,8 +182,8 @@ const issuesMap: Record<'laptop' | 'macbook' | 'mobile' | 'tablet', IssueOption[
 };
 
 export default function PriceEstimator() {
-  const [selectedDevice, setSelectedDevice] = useState<'laptop' | 'macbook' | 'mobile' | 'tablet'>('macbook');
-  const [selectedBrand, setSelectedBrand] = useState<string>('Apple');
+  const [selectedDevice, setSelectedDevice] = useState<'laptop' | 'macbook' | 'mobile' | 'tablet' | null>(null);
+  const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
   const [selectedIssues, setSelectedIssues] = useState<string[]>([]);
 
   // Device selections
@@ -204,28 +204,22 @@ export default function PriceEstimator() {
 
   // Trigger state reset when switching devices
   useEffect(() => {
-    const availableBrands = brandsMap[selectedDevice];
-    setSelectedBrand(availableBrands[0] || 'Apple');
-    
-    // Auto-select the first issue of the selected device to prevent empty states
-    const availableIssues = issuesMap[selectedDevice];
-    if (availableIssues && availableIssues.length > 0) {
-      setSelectedIssues([availableIssues[0].id]);
-    } else {
-      setSelectedIssues([]);
-    }
+    setSelectedBrand(null);
+    setSelectedIssues([]);
   }, [selectedDevice]);
 
-  const currentBrands = brandsMap[selectedDevice];
-  const currentIssues = issuesMap[selectedDevice];
+  // Trigger state reset when switching brands
+  useEffect(() => {
+    setSelectedIssues([]);
+  }, [selectedBrand]);
+
+  const currentBrands = selectedDevice ? brandsMap[selectedDevice] : [];
+  const currentIssues = selectedDevice ? issuesMap[selectedDevice] : [];
 
   // Handle toggling of issues
   const toggleIssue = (issueId: string) => {
     if (selectedIssues.includes(issueId)) {
-      // Allow deselecting only if it's not the last remaining selected issue
-      if (selectedIssues.length > 1) {
-        setSelectedIssues(selectedIssues.filter(id => id !== issueId));
-      }
+      setSelectedIssues(selectedIssues.filter(id => id !== issueId));
     } else {
       setSelectedIssues([...selectedIssues, issueId]);
     }
@@ -239,7 +233,7 @@ export default function PriceEstimator() {
 
   selectedIssues.forEach((issueId) => {
     const issueObj = currentIssues.find(item => item.id === issueId);
-    if (issueObj) {
+    if (issueObj && selectedBrand) {
       const priceRule = issueObj.getPrice(selectedBrand);
       subtotalMin += priceRule.min;
       subtotalMax += priceRule.max;
@@ -294,7 +288,7 @@ export default function PriceEstimator() {
                     return (
                       <button
                         key={dev.id}
-                        onClick={() => setSelectedDevice(dev.id)}
+                        onClick={() => setSelectedDevice(selectedDevice === dev.id ? null : dev.id)}
                         className={`flex flex-col items-center justify-center p-4.5 rounded-2xl border-2 text-center transition-all duration-200 cursor-pointer ${
                           isSelected
                             ? 'border-slate-900 bg-blue-50 text-slate-800 shadow-[1px_1px_0px_#0A1020] translate-x-[1.5px] translate-y-[1.5px]'
@@ -316,7 +310,7 @@ export default function PriceEstimator() {
               </div>
 
               {/* Step 2: Brand */}
-              <div className="space-y-4">
+              <div className={`space-y-4 transition-all duration-250 ${!selectedDevice ? 'opacity-30 pointer-events-none' : ''}`}>
                 <div className="flex items-center gap-2">
                   <span className="w-6 h-6 rounded-full bg-slate-900 border-2 border-slate-900 text-white flex items-center justify-center text-[10px] font-black">2</span>
                   <h3 className="text-xs font-black uppercase tracking-wider text-slate-800">Choose Hardware Brand</h3>
@@ -327,7 +321,7 @@ export default function PriceEstimator() {
                     return (
                       <button
                         key={brand}
-                        onClick={() => setSelectedBrand(brand)}
+                        onClick={() => setSelectedBrand(selectedBrand === brand ? null : brand)}
                         className={`px-4.5 py-2 rounded-xl text-xs font-black transition-all duration-200 border-2 border-slate-900 cursor-pointer ${
                           isSelected
                             ? 'bg-[#0D0D0D] text-white shadow-[1px_1px_0px_#0A1020] translate-x-[1.5px] translate-y-[1.5px]'
@@ -342,7 +336,7 @@ export default function PriceEstimator() {
               </div>
 
               {/* Step 3: Multi-Select Issues */}
-              <div className="space-y-4">
+              <div className={`space-y-4 transition-all duration-250 ${!selectedBrand ? 'opacity-30 pointer-events-none' : ''}`}>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className="w-6 h-6 rounded-full bg-slate-900 border-2 border-slate-900 text-white flex items-center justify-center text-[10px] font-black">3</span>
@@ -356,7 +350,7 @@ export default function PriceEstimator() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {currentIssues.map((issue) => {
                     const isChecked = selectedIssues.includes(issue.id);
-                    const priceRange = issue.getPrice(selectedBrand);
+                    const priceRange = selectedBrand ? issue.getPrice(selectedBrand) : { min: 0, max: 0 };
                     return (
                       <button
                         key={issue.id}
@@ -401,114 +395,130 @@ export default function PriceEstimator() {
                 {/* Ambient visual glowing light */}
                 <div className="absolute -bottom-16 -right-16 w-52 h-52 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
                 
-                <div className="space-y-6 relative z-10 text-left">
-                  {/* Header */}
-                  <div className="flex items-center justify-between border-b border-white/10 pb-4">
-                    <div className="space-y-0.5">
-                      <span className="text-[10px] font-black uppercase text-slate-400 tracking-wider">
-                        Invoice Summary
-                      </span>
-                      <div className="text-[9px] text-slate-400 capitalize">
-                        {selectedBrand} • {selectedDevice}
-                      </div>
+                {(!selectedDevice || !selectedBrand || selectedIssues.length === 0) ? (
+                  <div className="flex flex-col items-center justify-center text-center py-12 space-y-2 my-auto relative z-10">
+                    <div className="space-y-1">
+                      <h4 className="font-black text-sm uppercase tracking-wider text-slate-200">Invoice Awaiting Inputs</h4>
+                      <p className="text-xs text-slate-400 max-w-[240px] leading-relaxed">
+                        {!selectedDevice 
+                          ? "Select a device category on the left to start."
+                          : !selectedBrand 
+                          ? "Choose your hardware brand to view compatible repair modules."
+                          : "Choose one or more hardware issues below to compute estimated repair time and price."}
+                      </p>
                     </div>
-                    <span className="text-[8px] font-bold text-[#a3e635] bg-[#a3e635]/10 border border-[#a3e635]/20 px-2 py-0.5 rounded-full uppercase tracking-widest shrink-0">
-                      Live Calculator
-                    </span>
                   </div>
-
-                  {/* Itemized Price Breakdown */}
-                  <div className="space-y-3 max-h-[160px] overflow-y-auto pr-1" id="invoice-breakdown">
-                    {selectedIssues.map((issueId) => {
-                      const issueObj = currentIssues.find(item => item.id === issueId);
-                      if (!issueObj) return null;
-                      const price = issueObj.getPrice(selectedBrand);
-                      return (
-                        <div key={issueId} className="flex justify-between items-start text-[10px] pb-2.5 border-b border-white/5">
-                          <span className="text-slate-300 font-medium max-w-[70%] leading-normal line-clamp-2">
-                            {issueObj.name}
+                ) : (
+                  <>
+                    <div className="space-y-6 relative z-10 text-left">
+                      {/* Header */}
+                      <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                        <div className="space-y-0.5">
+                          <span className="text-[10px] font-black uppercase text-slate-400 tracking-wider">
+                            Invoice Summary
                           </span>
-                          <span className="text-slate-100 font-bold shrink-0">
-                            ₹{price.min} - ₹{price.max}
+                          <div className="text-[9px] text-slate-400 capitalize">
+                            {selectedBrand} • {selectedDevice}
+                          </div>
+                        </div>
+                        <span className="text-[8px] font-bold text-[#a3e635] bg-[#a3e635]/10 border border-[#a3e635]/20 px-2 py-0.5 rounded-full uppercase tracking-widest shrink-0">
+                          Live Calculator
+                        </span>
+                      </div>
+
+                      {/* Itemized Price Breakdown */}
+                      <div className="space-y-3 max-h-[160px] overflow-y-auto pr-1" id="invoice-breakdown">
+                        {selectedIssues.map((issueId) => {
+                          const issueObj = currentIssues.find(item => item.id === issueId);
+                          if (!issueObj) return null;
+                          const price = issueObj.getPrice(selectedBrand);
+                          return (
+                            <div key={issueId} className="flex justify-between items-start text-[10px] pb-2.5 border-b border-white/5">
+                              <span className="text-slate-300 font-medium max-w-[70%] leading-normal line-clamp-2">
+                                {issueObj.name}
+                              </span>
+                              <span className="text-slate-100 font-bold shrink-0">
+                                ₹{price.min} - ₹{price.max}
+                              </span>
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      {/* Price Calculations Total display */}
+                      <div className="space-y-1 pt-2">
+                        <span className="text-[9px] text-slate-400 block font-bold uppercase tracking-wider">Total Est. Cost Range</span>
+                        <div className="flex items-baseline gap-1.5 flex-wrap">
+                          <span className="text-3xl lg:text-4xl font-black text-white tracking-tight">
+                            ₹{subtotalMin.toLocaleString('en-IN')}
+                          </span>
+                          <span className="text-sm font-semibold text-slate-400">-</span>
+                          <span className="text-3xl lg:text-4xl font-black text-white tracking-tight">
+                            ₹{subtotalMax.toLocaleString('en-IN')}
                           </span>
                         </div>
-                      );
-                    })}
-                  </div>
+                        <span className="text-[9px] text-[#a3e635] font-semibold block pt-1 leading-normal">
+                          * Dynamic estimate subject to physical inspection.
+                        </span>
+                      </div>
 
-                  {/* Price Calculations Total display */}
-                  <div className="space-y-1 pt-2">
-                    <span className="text-[9px] text-slate-400 block font-bold uppercase tracking-wider">Total Est. Cost Range</span>
-                    <div className="flex items-baseline gap-1.5 flex-wrap">
-                      <span className="text-3xl lg:text-4xl font-black text-white tracking-tight">
-                        ₹{subtotalMin.toLocaleString('en-IN')}
-                      </span>
-                      <span className="text-sm font-semibold text-slate-400">-</span>
-                      <span className="text-3xl lg:text-4xl font-black text-white tracking-tight">
-                        ₹{subtotalMax.toLocaleString('en-IN')}
-                      </span>
+                      {/* Breakdown diagnostic parameters */}
+                      <div className="space-y-3.5 border-t border-white/5 pt-6 text-xs font-semibold">
+                        <div className="flex items-center justify-between">
+                          <span className="text-slate-400">Diag. Fee</span>
+                          <span className="text-[#a3e635] font-bold">FREE (With Repair)</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-slate-400">Est. Repair Time</span>
+                          <span className="text-slate-200 font-bold flex items-center gap-1">
+                            <Clock className="w-3.5 h-3.5 text-blue-400" />
+                            <span>{displayTime}</span>
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-slate-400">Transit & Pickup</span>
+                          <span className="text-[#a3e635] font-bold">FREE (Delhi NCR)</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-slate-400">Warranty Protection</span>
+                          <span className="text-slate-200 font-bold">90 Days Certificate</span>
+                        </div>
+                      </div>
                     </div>
-                    <span className="text-[9px] text-[#a3e635] font-semibold block pt-1 leading-normal">
-                      * Dynamic estimate subject to physical inspection.
-                    </span>
-                  </div>
 
-                  {/* Breakdown diagnostic parameters */}
-                  <div className="space-y-3.5 border-t border-white/5 pt-6 text-xs font-semibold">
-                    <div className="flex items-center justify-between">
-                      <span className="text-slate-400">Diag. Fee</span>
-                      <span className="text-[#a3e635] font-bold">FREE (With Repair)</span>
+                    {/* Booking CTA Button */}
+                    <div className="pt-8 border-t border-white/10 relative z-10 space-y-4">
+                      <div className="relative w-full h-[52px] group select-none cursor-pointer">
+                        {/* Outer offset thin black outline boundary */}
+                        <div className="absolute -left-[3px] -top-[3px] w-[calc(100%+6px)] h-[calc(100%+6px)] border-2 border-slate-900 rounded-xl pointer-events-none z-0"></div>
+
+                        {/* Yellow backing offset block */}
+                        <div className="absolute inset-0 bg-[#FFB800] rounded-xl -translate-x-1.5 translate-y-1.5 z-0 transition-transform duration-200 group-hover:-translate-x-2"></div>
+
+                        {/* Main button link element */}
+                        <Link
+                          to={`/contact?tab=booking&device=${selectedDevice || ''}&brand=${encodeURIComponent(selectedBrand || '')}&issues=${encodeURIComponent(
+                            selectedIssues.map(id => currentIssues.find(item => item.id === id)?.name || '').join(', ')
+                          )}`}
+                          className="absolute inset-0 z-10 bg-[#0D0D0D] border-2 border-[#0D0D0D] hover:bg-black text-white font-black text-xs tracking-widest uppercase rounded-xl flex items-center justify-center gap-2 transition-all duration-150 shadow-sm active:translate-y-[1px] active:translate-x-[1px]"
+                        >
+                          <span className="relative pb-0.5">
+                            Confirm & Book Pickup
+                            <span className="absolute left-0 -bottom-0.5 w-full h-[1.5px] bg-[#FFB800]"></span>
+                          </span>
+                          <ArrowRight className="w-4 h-4 text-[#FFB800]" />
+                        </Link>
+                      </div>
+                      
+                      <div className="flex items-center justify-center gap-2 pt-2">
+                        <ShieldCheck className="w-4 h-4 text-[#a3e635]" />
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                          ISO 9001 Lab Diagnostic Standards
+                        </span>
+                      </div>
                     </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-slate-400">Est. Repair Time</span>
-                      <span className="text-slate-200 font-bold flex items-center gap-1">
-                        <Clock className="w-3.5 h-3.5 text-blue-400" />
-                        <span>{displayTime}</span>
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-slate-400">Transit & Pickup</span>
-                      <span className="text-[#a3e635] font-bold">FREE (Delhi NCR)</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-slate-400">Warranty Protection</span>
-                      <span className="text-slate-200 font-bold">90 Days Certificate</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Booking CTA Button */}
-                <div className="pt-8 border-t border-white/10 relative z-10 space-y-4">
-                  <div className="relative w-full h-[52px] group select-none cursor-pointer">
-                    {/* Outer offset thin black outline boundary */}
-                    <div className="absolute -left-[3px] -top-[3px] w-[calc(100%+6px)] h-[calc(100%+6px)] border-2 border-slate-900 rounded-xl pointer-events-none z-0"></div>
-
-                    {/* Yellow backing offset block */}
-                    <div className="absolute inset-0 bg-[#FFB800] rounded-xl -translate-x-1.5 translate-y-1.5 z-0 transition-transform duration-200 group-hover:-translate-x-2"></div>
-
-                    {/* Main button link element */}
-                    <Link
-                      to={`/contact?tab=booking&device=${selectedDevice}&brand=${encodeURIComponent(selectedBrand)}&issues=${encodeURIComponent(
-                        selectedIssues.map(id => currentIssues.find(item => item.id === id)?.name || '').join(', ')
-                      )}`}
-                      className="absolute inset-0 z-10 bg-[#0D0D0D] border-2 border-[#0D0D0D] hover:bg-black text-white font-black text-xs tracking-widest uppercase rounded-xl flex items-center justify-center gap-2 transition-all duration-150 shadow-sm active:translate-y-[1px] active:translate-x-[1px]"
-                    >
-                      <span className="relative pb-0.5">
-                        Confirm & Book Pickup
-                        <span className="absolute left-0 -bottom-0.5 w-full h-[1.5px] bg-[#FFB800]"></span>
-                      </span>
-                      <ArrowRight className="w-4 h-4 text-[#FFB800]" />
-                    </Link>
-                  </div>
-                  
-                  <div className="flex items-center justify-center gap-2 pt-2">
-                    <ShieldCheck className="w-4 h-4 text-[#a3e635]" />
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                      ISO 9001 Lab Diagnostic Standards
-                    </span>
-                  </div>
-                </div>
-
+                  </>
+                )}
               </div>
             </div>
 
