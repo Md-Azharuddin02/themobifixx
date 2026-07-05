@@ -356,96 +356,151 @@ export default function Home() {
   return (
     <div className="pt-20 md:pt-32 pb-12 overflow-x-hidden">
       {/* SECTION 1: HERO SECTION */}
-      <section className="relative bg-white py-6 sm:py-8 lg:py-10 overflow-hidden border-b-2 border-slate-900" id="hero-section">
-        
-        {/* Neobrutalist Image Collage Gallery */}
-        <div className="max-w-full mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 auto-rows-[240px] sm:auto-rows-[300px] md:auto-rows-[380px]">
+      <section className="relative bg-white py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden border-b-2 border-slate-900" id="hero-section">
+        {/* Decorative Grid Background */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800d_1px,transparent_1px),linear-gradient(to_bottom,#8080800d_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none"></div>
+        {/* Glow Accent Effects */}
+        <div className="absolute -top-40 -left-40 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px] pointer-events-none"></div>
+        <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-yellow-500/10 rounded-full blur-[120px] pointer-events-none"></div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
             
-            {/* Collage Card 1: Cloud Image 1 (Apple Logo/MacBook/Large display) */}
-            <motion.div 
-              onClick={() => openLightbox(0)}
-              className="sm:col-span-2 sm:row-span-2 relative group overflow-hidden rounded-[32px] border-4 border-slate-900 bg-[#0A1020] shadow-[6px_6px_0px_#0A1020] hover:shadow-[10px_10px_0px_#0A1020] hover:-translate-x-1.5 hover:-translate-y-1.5 transition-all duration-300 cursor-pointer"
-              whileHover={{ y: -6 }}
-            >
-              <img 
-                src="https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783000531/WhatsApp_Image_2026-07-01_at_1.56.06_PM_pjm3ys.jpg"
-                alt="Premium MacBook Diagnostics"
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent flex flex-col justify-end p-6 text-left opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <h4 className="text-white font-black text-sm uppercase tracking-wider">MacBook & iMac Repairs</h4>
-                <p className="text-slate-300 text-[10px] font-bold">Authorized diagnostic procedures & chip-level micro-soldering.</p>
+            {/* Left Column: Bold Neobrutalist Text Content */}
+            <div className="lg:col-span-7 space-y-6 text-left">
+              <div className="inline-flex items-center space-x-2 bg-[#FFB800] border-2 border-slate-900 text-slate-900 px-3.5 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-[2px_2px_0px_#0A1020]">
+                <span>Nehru Place Master Lab • Delhi NCR</span>
               </div>
-            </motion.div>
+              
+              <h1 className="text-3xl sm:text-5xl md:text-6xl font-black text-slate-900 leading-tight tracking-tight">
+                MacBook & <br />
+                <span className="text-[#0F4CFF] relative inline-block">
+                  Mobile Repairing.
+                  <span className="absolute bottom-1.5 left-0 w-full h-2 bg-[#FFB800] -z-10 rounded"></span>
+                </span> Done Right.
+              </h1>
+              
+              <p className="text-slate-600 text-sm sm:text-base font-bold leading-relaxed max-w-xl">
+                We fix what others can't. Premium chip-level logic board diagnostics and component repairs for MacBooks, Laptops & Mobile Phones. Choose between master lab visits in Nehru Place or a free 90-min doorstep transit.
+              </p>
 
-            {/* Collage Card 2: Cloud Image 2 (Smartphone Repairs/Precision tool) */}
-            <motion.div 
-              onClick={() => openLightbox(1)}
-              className="sm:col-span-1 sm:row-span-1 relative group overflow-hidden rounded-[32px] border-4 border-slate-900 bg-[#0A1020] shadow-[6px_6px_0px_#0A1020] hover:shadow-[10px_10px_0px_#0A1020] hover:-translate-x-1.5 hover:-translate-y-1.5 transition-all duration-300 cursor-pointer"
-              whileHover={{ y: -6 }}
-            >
-              <img 
-                src="https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783000531/WhatsApp_Image_2026-06-30_at_8.23.29_PM_bcwdde.jpg"
-                alt="Precision Smartphone Screen Fix"
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent flex flex-col justify-end p-4 text-left opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <h4 className="text-white font-black text-xs uppercase tracking-wider">Smartphone Panels</h4>
-                <p className="text-slate-300 text-[9px] font-bold">100% genuine glass screens & digitizers.</p>
-              </div>
-            </motion.div>
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
+                <Link
+                  to="/contact?tab=booking"
+                  className="inline-flex items-center justify-center gap-2 bg-[#FFB800] text-slate-950 border-2 border-slate-900 font-black text-xs tracking-widest uppercase py-4 px-8 rounded-xl shadow-[4px_4px_0px_#0D0D0D] hover:shadow-[6px_6px_0px_#0D0D0D] hover:-translate-x-[2px] hover:-translate-y-[2px] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0px_#0D0D0D] transition-all cursor-pointer text-center font-bold"
+                >
+                  <span>Book Doorstep Pickup</span>
+                  <ArrowRight className="w-4.5 h-4.5" />
+                </Link>
 
-            {/* Collage Card 3: Cloud Image 3 (iPads & Tablets / Circuit view) */}
-            <motion.div 
-              onClick={() => openLightbox(2)}
-              className="sm:col-span-1 sm:row-span-1 relative group overflow-hidden rounded-[32px] border-4 border-slate-900 bg-[#0A1020] shadow-[6px_6px_0px_#0A1020] hover:shadow-[10px_10px_0px_#0A1020] hover:-translate-x-1.5 hover:-translate-y-1.5 transition-all duration-300 cursor-pointer"
-              whileHover={{ y: -6 }}
-            >
-              <img 
-                src="https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783000532/WhatsApp_Image_2026-07-01_at_1.56.08_PM_mhnaxr.jpg"
-                alt="Tablet & iPad Motherboard Repairs"
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent flex flex-col justify-end p-4 text-left opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <h4 className="text-white font-black text-xs uppercase tracking-wider">iPads & Tablets</h4>
-                <p className="text-slate-300 text-[9px] font-bold">ESD-safe laboratory workbench diagnostics.</p>
+                <a
+                  href="tel:+919310112994"
+                  className="inline-flex items-center justify-center gap-2 bg-white text-slate-955 border-2 border-slate-900 font-black text-xs tracking-widest uppercase py-4 px-8 rounded-xl shadow-[4px_4px_0px_#0D0D0D] hover:shadow-[6px_6px_0px_#0D0D0D] hover:-translate-x-[2px] hover:-translate-y-[2px] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0px_#0D0D0D] transition-all cursor-pointer text-center font-bold"
+                >
+                  <Phone className="w-4 h-4 text-[#0F4CFF]" />
+                  <span>Call +91 9310112994</span>
+                </a>
               </div>
-            </motion.div>
 
-            {/* Collage Card 4: Unsplash Micro-Soldering */}
-            <motion.div 
-              onClick={() => openLightbox(3)}
-              className="sm:col-span-1 sm:row-span-1 relative group overflow-hidden rounded-[32px] border-4 border-slate-900 bg-[#0A1020] shadow-[6px_6px_0px_#0A1020] hover:shadow-[10px_10px_0px_#0A1020] hover:-translate-x-1.5 hover:-translate-y-1.5 transition-all duration-300 cursor-pointer"
-              whileHover={{ y: -6 }}
-            >
-              <img 
-                src="https://images.unsplash.com/photo-1597733336794-12d05021d510?w=800&auto=format&fit=crop&q=80"
-                alt="Chip-Level Logic Board Solder"
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent flex flex-col justify-end p-4 text-left opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <h4 className="text-white font-black text-xs uppercase tracking-wider">Logic Board Soldering</h4>
-                <p className="text-slate-300 text-[9px] font-bold">BGA reballing & micro-soldering restoration.</p>
+              {/* Mini Trust Highlights */}
+              <div className="flex flex-wrap items-center gap-x-6 gap-y-2 pt-4 border-t border-slate-200 text-slate-500 text-[10px] font-black uppercase tracking-wider">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[#0F4CFF]">✔</span> 90-Day Warranty
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[#0F4CFF]">✔</span> Free Diagnostics
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[#0F4CFF]">✔</span> No Fix, No Fee
+                </div>
               </div>
-            </motion.div>
+            </div>
 
-            {/* Collage Card 5: Unsplash Multimeter Precision */}
-            <motion.div 
-              onClick={() => openLightbox(4)}
-              className="sm:col-span-1 sm:row-span-1 relative group overflow-hidden rounded-[32px] border-4 border-slate-900 bg-[#0A1020] shadow-[6px_6px_0px_#0A1020] hover:shadow-[10px_10px_0px_#0A1020] hover:-translate-x-1.5 hover:-translate-y-1.5 transition-all duration-300 cursor-pointer"
-              whileHover={{ y: -6 }}
-            >
-              <img 
-                src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=800&auto=format&fit=crop&q=80"
-                alt="Precision Laboratory Multimeter Diagnostics"
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent flex flex-col justify-end p-4 text-left opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <h4 className="text-white font-black text-xs uppercase tracking-wider">Precision Testing</h4>
-                <p className="text-slate-300 text-[9px] font-bold">Multimeter calibration & voltage checkups.</p>
-              </div>
-            </motion.div>
+            {/* Right Column: High-Tech Interactive Diagnostic Card */}
+            <div className="lg:col-span-5 relative">
+              <motion.div 
+                className="bg-white border-4 border-slate-900 rounded-[32px] p-6 sm:p-8 shadow-[8px_8px_0px_#0A1020] relative overflow-hidden"
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ type: "spring", stiffness: 100, damping: 15 }}
+              >
+                {/* Header status bar */}
+                <div className="flex items-center justify-between pb-4 border-b-2 border-slate-900 mb-6">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-3.5 h-3.5 bg-red-500 rounded-full border border-slate-900"></div>
+                    <div className="w-3.5 h-3.5 bg-yellow-500 rounded-full border border-slate-900"></div>
+                    <div className="w-3.5 h-3.5 bg-green-500 rounded-full border border-slate-900"></div>
+                  </div>
+                  <div className="bg-slate-100 border border-slate-900 px-3 py-1 rounded-full text-[9px] font-black uppercase text-slate-700 tracking-wider">
+                    Diagnostic Bench
+                  </div>
+                </div>
+
+                <div className="space-y-6">
+                  {/* Title indicator */}
+                  <div className="space-y-1 text-left">
+                    <span className="text-[10px] font-black uppercase text-[#0F4CFF] tracking-wider block">Live Lab Status</span>
+                    <h3 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Nehru Place Workbench</h3>
+                  </div>
+
+                  {/* Diagnostic status item list */}
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between bg-slate-50 border-2 border-slate-900 p-3.5 rounded-2xl shadow-[2px_2px_0px_#0A1020]">
+                      <div className="flex items-center space-x-3 text-left">
+                        <span className="text-lg">💻</span>
+                        <div className="flex flex-col">
+                          <span className="text-xs font-black text-slate-900 leading-none">Apple MacBook Pro</span>
+                          <span className="text-[9px] font-bold text-slate-500 mt-1">Logic Board Micro-Soldering</span>
+                        </div>
+                      </div>
+                      <span className="bg-[#FFB800] text-slate-900 border border-slate-900 text-[8px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full shadow-[1px_1px_0px_#0D0D0D]">
+                        Repaired
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between bg-slate-50 border-2 border-slate-900 p-3.5 rounded-2xl shadow-[2px_2px_0px_#0A1020]">
+                      <div className="flex items-center space-x-3 text-left">
+                        <span className="text-lg">📱</span>
+                        <div className="flex flex-col">
+                          <span className="text-xs font-black text-slate-900 leading-none">iPhone 14 Pro Max</span>
+                          <span className="text-[9px] font-bold text-slate-500 mt-1">Broken Glass Panel Repair</span>
+                        </div>
+                      </div>
+                      <span className="bg-[#FFB800] text-slate-900 border border-slate-900 text-[8px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full shadow-[1px_1px_0px_#0D0D0D]">
+                        Repaired
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between bg-[#0F4CFF]/5 border-2 border-slate-900 p-3.5 rounded-2xl shadow-[3px_3px_0px_#0F4CFF]">
+                      <div className="flex items-center space-x-3 text-left">
+                        <span className="text-lg">⚡</span>
+                        <div className="flex flex-col">
+                          <span className="text-xs font-black text-slate-900 leading-none">HP EliteBook Hinge</span>
+                          <span className="text-[9px] font-bold text-slate-500 mt-1">Structural Frame Restore</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-1.5">
+                        <span className="w-1.5 h-1.5 bg-blue-600 rounded-full animate-ping"></span>
+                        <span className="text-blue-700 text-[8px] font-black uppercase tracking-widest">
+                          Testing
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Button link to live ticket tracking */}
+                  <Link
+                    to="/tracker"
+                    className="w-full inline-flex items-center justify-center gap-2 bg-[#0F4CFF] text-white border-2 border-slate-900 font-black text-xs tracking-widest uppercase py-3.5 px-6 rounded-xl shadow-[3px_3px_0px_#0D0D0D] hover:shadow-[5px_5px_0px_#0D0D0D] hover:-translate-x-1 hover:-translate-y-1 active:translate-x-1 active:translate-y-1 active:shadow-[1.5px_1.5px_0px_#0D0D0D] transition-all cursor-pointer text-center font-bold"
+                  >
+                    <span>Track Live Repair Ticket</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+
+                </div>
+              </motion.div>
+            </div>
 
           </div>
         </div>
@@ -889,6 +944,110 @@ export default function Home() {
                 ))}
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 6.5: MASTER LAB GALLERY */}
+      <section className="py-16 bg-slate-50 border-b-2 border-slate-900" id="gallery-section">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12 space-y-4">
+            <div className="inline-flex items-center space-x-2 bg-white border-2 border-slate-900 text-slate-800 px-3.5 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-[2px_2px_0px_#0A1020]">
+              <span>Real Work Bench Images</span>
+            </div>
+            <h3 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
+              Peek Inside Our Advanced Repair Lab
+            </h3>
+            <p className="text-slate-500 max-w-xl mx-auto text-xs sm:text-sm font-bold">
+              We operate dust-free cleaning stations, precision micro-soldering heat guns, thermal camera diagnostic systems, and specialized chip testing benches.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 auto-rows-[240px] sm:auto-rows-[300px] md:auto-rows-[380px]">
+            {/* Collage Card 1: Cloud Image 1 (Apple Logo/MacBook/Large display) */}
+            <motion.div 
+              onClick={() => openLightbox(0)}
+              className="sm:col-span-2 sm:row-span-2 relative group overflow-hidden rounded-[32px] border-4 border-slate-900 bg-[#0A1020] shadow-[6px_6px_0px_#0A1020] hover:shadow-[10px_10px_0px_#0A1020] hover:-translate-x-1.5 hover:-translate-y-1.5 transition-all duration-300 cursor-pointer"
+              whileHover={{ y: -6 }}
+            >
+              <img 
+                src="https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783000531/WhatsApp_Image_2026-07-01_at_1.56.06_PM_pjm3ys.jpg"
+                alt="Premium MacBook Diagnostics"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent flex flex-col justify-end p-6 text-left opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <h4 className="text-white font-black text-sm uppercase tracking-wider">MacBook & iMac Repairs</h4>
+                <p className="text-slate-300 text-[10px] font-bold">Authorized diagnostic procedures & chip-level micro-soldering.</p>
+              </div>
+            </motion.div>
+
+            {/* Collage Card 2: Cloud Image 2 (Smartphone Repairs/Precision tool) */}
+            <motion.div 
+              onClick={() => openLightbox(1)}
+              className="sm:col-span-1 sm:row-span-1 relative group overflow-hidden rounded-[32px] border-4 border-slate-900 bg-[#0A1020] shadow-[6px_6px_0px_#0A1020] hover:shadow-[10px_10px_0px_#0A1020] hover:-translate-x-1.5 hover:-translate-y-1.5 transition-all duration-300 cursor-pointer"
+              whileHover={{ y: -6 }}
+            >
+              <img 
+                src="https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783000531/WhatsApp_Image_2026-06-30_at_8.23.29_PM_bcwdde.jpg"
+                alt="Precision Smartphone Screen Fix"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent flex flex-col justify-end p-4 text-left opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <h4 className="text-white font-black text-xs uppercase tracking-wider">Smartphone Panels</h4>
+                <p className="text-slate-300 text-[9px] font-bold">100% genuine glass screens & digitizers.</p>
+              </div>
+            </motion.div>
+
+            {/* Collage Card 3: Cloud Image 3 (iPads & Tablets / Circuit view) */}
+            <motion.div 
+              onClick={() => openLightbox(2)}
+              className="sm:col-span-1 sm:row-span-1 relative group overflow-hidden rounded-[32px] border-4 border-slate-900 bg-[#0A1020] shadow-[6px_6px_0px_#0A1020] hover:shadow-[10px_10px_0px_#0A1020] hover:-translate-x-1.5 hover:-translate-y-1.5 transition-all duration-300 cursor-pointer"
+              whileHover={{ y: -6 }}
+            >
+              <img 
+                src="https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783000532/WhatsApp_Image_2026-07-01_at_1.56.08_PM_mhnaxr.jpg"
+                alt="Tablet & iPad Motherboard Repairs"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent flex flex-col justify-end p-4 text-left opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <h4 className="text-white font-black text-xs uppercase tracking-wider">iPads & Tablets</h4>
+                <p className="text-slate-300 text-[9px] font-bold">ESD-safe laboratory workbench diagnostics.</p>
+              </div>
+            </motion.div>
+
+            {/* Collage Card 4: Unsplash Micro-Soldering */}
+            <motion.div 
+              onClick={() => openLightbox(3)}
+              className="sm:col-span-1 sm:row-span-1 relative group overflow-hidden rounded-[32px] border-4 border-slate-900 bg-[#0A1020] shadow-[6px_6px_0px_#0A1020] hover:shadow-[10px_10px_0px_#0A1020] hover:-translate-x-1.5 hover:-translate-y-1.5 transition-all duration-300 cursor-pointer"
+              whileHover={{ y: -6 }}
+            >
+              <img 
+                src="https://images.unsplash.com/photo-1597733336794-12d05021d510?w=800&auto=format&fit=crop&q=80"
+                alt="Chip-Level Logic Board Solder"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent flex flex-col justify-end p-4 text-left opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <h4 className="text-white font-black text-xs uppercase tracking-wider">Logic Board Soldering</h4>
+                <p className="text-slate-300 text-[9px] font-bold">BGA reballing & micro-soldering restoration.</p>
+              </div>
+            </motion.div>
+
+            {/* Collage Card 5: Unsplash Multimeter Precision */}
+            <motion.div 
+              onClick={() => openLightbox(4)}
+              className="sm:col-span-1 sm:row-span-1 relative group overflow-hidden rounded-[32px] border-4 border-slate-900 bg-[#0A1020] shadow-[6px_6px_0px_#0A1020] hover:shadow-[10px_10px_0px_#0A1020] hover:-translate-x-1.5 hover:-translate-y-1.5 transition-all duration-300 cursor-pointer"
+              whileHover={{ y: -6 }}
+            >
+              <img 
+                src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=800&auto=format&fit=crop&q=80"
+                alt="Precision Laboratory Multimeter Diagnostics"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent flex flex-col justify-end p-4 text-left opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <h4 className="text-white font-black text-xs uppercase tracking-wider">Precision Testing</h4>
+                <p className="text-slate-300 text-[9px] font-bold">Multimeter calibration & voltage checkups.</p>
+              </div>
+            </motion.div>
           </div>
         </div>
       </section>

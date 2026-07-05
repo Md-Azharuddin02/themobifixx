@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import logoImg from '../../assets/logo.jpeg';
 import { motion, AnimatePresence } from 'motion/react';
 import { Menu, X, Phone, MessageSquare, Laptop, Smartphone, Cpu, Tablet, Hammer, Search, ArrowRight, User } from 'lucide-react';
 import { getAuthUser, clearAuth } from '../utils/auth';
@@ -160,45 +161,19 @@ export default function Header() {
             initial="rest"
             whileHover="hover"
             whileTap="tap"
-            className="flex items-center min-w-[160px] sm:min-w-[220px] md:min-w-[240px] shrink-0 mr-4"
+            className="flex items-center shrink-0 mr-4"
           >
-            <Link to="/" className="flex items-center space-x-2 sm:space-x-3 text-[#0A1020]" id="logo-link">
-              <motion.div 
-                className="w-8 h-8 sm:w-9 sm:h-9 bg-[#0F4CFF] rounded-xl flex items-center justify-center shrink-0 shadow-lg shadow-blue-500/20 relative overflow-hidden"
+            <Link to="/" className="flex items-center text-[#0A1020]" id="logo-link">
+              <motion.img 
+                src={logoImg} 
+                alt="TheMobifixx Logo" 
+                className="h-10 sm:h-12 md:h-14 w-auto object-contain"
                 variants={{
-                  hover: { scale: 1.08, rotate: 10 },
+                  hover: { scale: 1.05 },
                   tap: { scale: 0.95 }
                 }}
                 transition={{ type: "spring", stiffness: 450, damping: 15 }}
-              >
-                {/* Embedded live scanning line on hover */}
-                <motion.div 
-                  className="absolute inset-x-0 h-0.5 bg-cyan-300/60 top-0"
-                  variants={{
-                    rest: { y: -5 },
-                    hover: { 
-                      y: [0, 36, 0],
-                      transition: { repeat: Infinity, duration: 1.5, ease: "linear" }
-                    }
-                  }}
-                />
-                <motion.div 
-                  className="w-3.5 h-3.5 sm:w-4 sm:h-4 bg-white rounded-md"
-                  variants={{
-                    hover: { rotate: 45 },
-                    rest: { rotate: 0 }
-                  }}
-                  transition={{ type: "spring", stiffness: 300, damping: 18 }}
-                />
-              </motion.div>
-              <div className="flex flex-col text-left">
-                <span className="font-black tracking-wider text-sm sm:text-base md:text-lg text-[#0A1020] leading-none">
-                  TheMobifixx
-                </span>
-                <span className="text-[7.5px] font-bold text-[#0F4CFF] tracking-widest uppercase mt-0.5 leading-none">
-                  Best Repair Solutions
-                </span>
-              </div>
+              />
             </Link>
           </motion.div>
 

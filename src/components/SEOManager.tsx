@@ -10,8 +10,8 @@ export default function SEOManager() {
 
     // Matching routes dynamically to set professional and localized meta tags
     if (pathname === '/') {
-      title = 'TheMobifixx | Professional Laptop & MacBook Repair in Nehru Place, New Delhi';
-      description = 'Delhi NCR\'s leading repair hub in Nehru Place market. Certified chip-level motherboard and logic board repairs with safe 90-min doorstep pickup across Delhi, Noida, and Gurugram.';
+      title = 'TheMobifixx | Premium Laptop, MacBook & Mobile Repairing in Nehru Place, New Delhi';
+      description = 'Delhi NCR\'s leading mobile repairing and MacBook repair hub in Nehru Place. Certified chip-level logic board repairs with safe 90-min doorstep pickup across Delhi, Noida, and Gurugram.';
     } else if (pathname === '/about') {
       title = 'About Us | TheMobifixx Nehru Place - Leading Hardware Repair Lab';
       description = 'Established in the heart of Nehru Place market, New Delhi, TheMobifixx is Delhi NCR\'s premier chip-level logic board repair facility housing cleanroom testing benches and certified engineers.';
