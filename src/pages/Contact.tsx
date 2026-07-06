@@ -40,7 +40,7 @@ export default function Contact() {
   ];
 
   return (
-    <div className="pt-20 md:pt-32 pb-0 bg-[#F8FAFC] min-h-screen">
+    <div className="pt-24 md:pt-36 pb-0 bg-[#F8FAFC] min-h-screen">
 
       {/* ─── HERO HEADER ─────────────────────────────────────────── */}
       <section

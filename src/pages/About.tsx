@@ -56,7 +56,7 @@ export default function About() {
   ];
 
   return (
-    <div className="pt-20 md:pt-32 pb-0 bg-[#F8FAFC]">
+    <div className="pt-24 md:pt-36 pb-0 bg-[#F8FAFC]">
 
       {/* ─── HERO HEADER ─────────────────────────────────────────── */}
       <section

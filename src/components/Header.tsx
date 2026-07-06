@@ -155,7 +155,7 @@ export default function Header() {
 
       {/* Main Top Navbar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 md:h-20">
+        <div className="flex items-center justify-between h-[72px] sm:h-[80px] md:h-[96px]">
           {/* Logo */}
           <motion.div
             initial="rest"
@@ -167,7 +167,7 @@ export default function Header() {
               <motion.img 
                 src={logoImg} 
                 alt="TheMobifixx Logo" 
-                className="h-11 sm:h-14 md:h-16 w-auto object-contain"
+                className="h-[56px] sm:h-[64px] md:h-[76px] lg:h-[84px] w-auto object-contain shrink-0"
                 variants={{
                   hover: { scale: 1.05 },
                   tap: { scale: 0.95 }

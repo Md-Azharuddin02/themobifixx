@@ -83,7 +83,7 @@ export default function ServiceDetail() {
   ];
 
   return (
-    <div className="pt-20 md:pt-32 pb-12 bg-[#F8FAFC] min-h-screen">
+    <div className="pt-24 md:pt-36 pb-12 bg-[#F8FAFC] min-h-screen">
       {/* Detail Hero Section */}
       <section
         className="relative py-16 sm:py-20 border-b-2 border-slate-900 overflow-hidden"

@@ -354,7 +354,7 @@ export default function Home() {
   };
 
   return (
-    <div className="pt-20 md:pt-32 pb-12 overflow-x-hidden">
+    <div className="pt-24 md:pt-36 pb-12 overflow-x-hidden">
       {/* SECTION 1: HERO SECTION */}
       <section className="relative bg-white py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden border-b-2 border-slate-900" id="hero-section">
         {/* Decorative Grid Background */}

@@ -115,7 +115,7 @@ export default function Footer() {
               <img 
                 src={logoImg} 
                 alt="TheMobifixx Logo" 
-                className="h-11 sm:h-14 md:h-16 w-auto object-contain"
+                className="h-11 sm:h-14 md:h-16 w-auto object-contain shrink-0"
               />
             </Link>
             <p className="text-sm text-slate-600 leading-relaxed font-bold">
