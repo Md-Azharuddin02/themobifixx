@@ -10,64 +10,34 @@ import DeviceComparison from '../components/DeviceComparison';
 
 const BRAND_LOGOS: Record<string, React.ReactNode> = {
   Apple: (
-    <img 
-      src="https://logo.clearbit.com/apple.com" 
-      alt="Apple logo" 
-      className="h-8 w-auto object-contain select-none transition-all duration-300 group-hover:scale-105 shrink-0"
-      onError={(e) => {
-        e.currentTarget.src = "https://cdn.jsdelivr.net/npm/simple-icons@13.0.0/icons/apple.svg";
-      }}
-    />
+    <svg viewBox="0 0 24 24" className="h-8 w-auto fill-slate-900 shrink-0 transition-transform duration-300 group-hover:scale-105" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.54 9.103 1.51 12.06 1.005 1.45 2.19 3.07 3.755 3.01 1.514-.06 2.083-.98 3.912-.98 1.817 0 2.348.98 3.93.948 1.606-.027 2.653-1.46 3.636-2.9 1.13-1.66 1.6-3.27 1.628-3.36-.062-.03-3.117-1.199-3.153-4.79-.027-3.007 2.457-4.442 2.485-4.46-1.408-2.068-3.59-2.298-4.363-2.357-1.85-.152-3.486 1.078-4.372 1.078zM16.14 3.738c.783-.96 1.312-2.3 1.163-3.64-1.12.048-2.484.757-3.29 1.706-.697.8-1.306 2.157-1.13 3.47 1.25.1 2.5-.537 3.257-1.536z"/>
+    </svg>
   ),
   Dell: (
-    <img 
-      src="https://logo.clearbit.com/dell.com" 
-      alt="Dell logo" 
-      className="h-7 w-auto object-contain select-none transition-all duration-300 group-hover:scale-105 shrink-0"
-      onError={(e) => {
-        e.currentTarget.src = "https://cdn.jsdelivr.net/npm/simple-icons@13.0.0/icons/dell.svg";
-      }}
-    />
+    <svg viewBox="0 0 24 24" className="h-8 w-auto fill-[#007DBA] shrink-0 transition-transform duration-300 group-hover:scale-105" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zm-3.23 4.298l-.29.805a.172.172 0 0 0 .102.22l5.067 1.834a.173.173 0 0 0 .221-.102l.29-.805a.173.173 0 0 0-.102-.222L8.99 4.194a.173.173 0 0 0-.222.104zm-.532 2.82v5.764c0 .288.175.474.453.474h2.153c1.782 0 2.802-.917 2.802-2.825V10.98c0-1.908-1.02-2.826-2.802-2.826H8.692a.453.453 0 0 0-.454.453zm3.929 2.915c0 1.05-.443 1.545-1.422 1.545h-.939v-4.46h.94c.978 0 1.421.496 1.421 1.546v1.37zM15.4 7.632h3.407v1.443H16.92v1.37h1.618v1.37h-1.618v1.37h1.885v1.444H15.4V7.632zm4.62 0h1.52v5.764h2.247v1.444h-3.768V7.632zm4.619 0h1.521v5.764h2.247v1.444h-3.768V7.632z"/>
+    </svg>
   ),
   HP: (
-    <img 
-      src="https://logo.clearbit.com/hp.com" 
-      alt="HP logo" 
-      className="h-8 w-auto object-contain select-none transition-all duration-300 group-hover:scale-105 shrink-0"
-      onError={(e) => {
-        e.currentTarget.src = "https://cdn.jsdelivr.net/npm/simple-icons@13.0.0/icons/hp.svg";
-      }}
-    />
+    <svg viewBox="0 0 24 24" className="h-8 w-auto fill-[#0096D6] shrink-0 transition-transform duration-300 group-hover:scale-105" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm1.758 17.52h-1.895l1.96-7.854h1.896l-1.96 7.854zm-4.743-7.854h1.895l-.946 3.79h1.896l.946-3.79h1.895l-1.96 7.854h-1.895l.946-3.789h-1.896l-.946 3.79H6.054l1.96-7.854z"/>
+    </svg>
   ),
   Lenovo: (
-    <img 
-      src="https://logo.clearbit.com/lenovo.com" 
-      alt="Lenovo logo" 
-      className="h-6 w-auto object-contain select-none transition-all duration-300 group-hover:scale-105 shrink-0"
-      onError={(e) => {
-        e.currentTarget.src = "https://cdn.jsdelivr.net/npm/simple-icons@13.0.0/icons/lenovo.svg";
-      }}
-    />
+    <svg viewBox="0 0 24 24" className="h-6 w-auto fill-[#E2231A] shrink-0 transition-transform duration-300 group-hover:scale-105" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 8v8h24V8H0zm4.5 6.2c-.3 0-.5-.1-.7-.3l-1.3-1.3c-.2-.2-.3-.5-.3-.7 0-.3.1-.5.3-.7l1.3-1.3c.2-.2.5-.3.7-.3.3 0 .5.1.7.3l1.3 1.3c.2.2.3.5.3.7 0 .3-.1.5-.3.7l-1.3 1.3c-.2.2-.4.3-.7.3zm3.5 0v-4.4h1.2v3.4H12v1H8zm5.5 0v-4.4h1.2v3.4h2.8v1h-4zm5.5 0v-4.4h1.2v3.4h2.8v1H19z"/>
+    </svg>
   ),
   Samsung: (
-    <img 
-      src="https://logo.clearbit.com/samsung.com" 
-      alt="Samsung logo" 
-      className="h-4.5 w-auto object-contain select-none transition-all duration-300 group-hover:scale-105 shrink-0"
-      onError={(e) => {
-        e.currentTarget.src = "https://cdn.jsdelivr.net/npm/simple-icons@13.0.0/icons/samsung.svg";
-      }}
-    />
+    <svg viewBox="0 0 115 15" className="h-4 w-auto fill-[#0A47B7] shrink-0 transition-transform duration-300 group-hover:scale-105" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 8.57h1.96c.07.72.7 1.25 1.54 1.25.9 0 1.48-.52 1.48-1.2v-.02c0-.62-.43-1.01-1.63-1.32-1.74-.46-2.73-1.07-2.73-2.58v-.02c0-1.58 1.26-2.65 3.03-2.65 1.8 0 2.94.99 3.06 2.45h-1.9c-.08-.62-.64-1.06-1.22-1.06-.75 0-1.19.46-1.19 1.02v.02c0 .66.45 1.01 1.7 1.31 1.77.42 2.68 1.15 2.68 2.58v.02c0 1.69-1.27 2.72-3.23 2.72-1.87 0-3.27-1.01-3.48-2.62zm10.51 2.37l-.95-2.71h-2.9l-.95 2.71H3.68l3.18-8.54h2.15l3.18 8.54h-1.68zm-1.37-3.92l-1.08-3.08-1.08 3.08h2.16zm8.88 3.92v-8.54h1.61v5.6c0 1.44.81 2.05 1.82 2.05s1.82-.61 1.82-2.05v-5.6h1.61v8.54h-1.61v-.8c-.4.57-1.14.93-1.92.93-1.46 0-2.31-.85-2.31-2.48v-.65zm14.17 0v-8.54h2.24l2.12 3.86 2.12-3.86h2.24v8.54h-1.61V6.26l-2.05 3.73H39.2l-2.05-3.73v5.11h-1.61zm15.7 0v-8.54h1.61v5.6c0 1.44.81 2.05 1.82 2.05s1.82-.61 1.82-2.05v-5.6h1.61v8.54h-1.61v-.8c-.4.57-1.14.93-1.92.93-1.46 0-2.31-.85-2.31-2.48v-.65zm11.75-4.27c0-2.58 1.84-4.47 4.29-4.47 1.29 0 2.29.54 2.87 1.44v-1.24h1.56v8.27c0 2.58-1.84 4.47-4.29 4.47-2.31 0-4.04-1.61-4.26-3.81h1.65c.18 1.34 1.23 2.25 2.61 2.25 1.54 0 2.47-1.1 2.47-2.72v-.65c-.58.9-1.58 1.44-2.87 1.44-2.45 0-4.29-1.89-4.29-4.47v-.3zm7.04.15c0-1.67-.99-2.82-2.42-2.82s-2.42 1.15-2.42 2.82v.3c0 1.67.99 2.82 2.42 2.82s2.42-1.15 2.42-2.82v-.3z"/>
+    </svg>
   ),
   OnePlus: (
-    <img 
-      src="https://logo.clearbit.com/oneplus.com" 
-      alt="OnePlus logo" 
-      className="h-6 w-auto object-contain select-none transition-all duration-300 group-hover:scale-105 shrink-0"
-      onError={(e) => {
-        e.currentTarget.src = "https://cdn.jsdelivr.net/npm/simple-icons@13.0.0/icons/oneplus.svg";
-      }}
-    />
+    <svg viewBox="0 0 24 24" className="h-6 w-auto fill-[#F50014] shrink-0 transition-transform duration-300 group-hover:scale-105" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0v24h24V0H0zm18.6 13.5h-5.1v5.1h-3v-5.1H5.4v-3h5.1V5.4h3v5.1h5.1v3z"/>
+    </svg>
   )
 };
 
@@ -683,7 +653,7 @@ export default function Home() {
               <span>How it Works</span>
             </div>
             <h3 className="text-3xl sm:text-4xl font-extrabold text-[#0A1020] tracking-tight">
-              The TheMobifixx Service Journey
+              TheMobifixx Service Journey
             </h3>
             <p className="text-base text-slate-500 max-w-2xl mx-auto leading-relaxed">
               From secure, door-to-door transit to cleanroom diagnostics, we make high-quality gadget repair stress-free.
