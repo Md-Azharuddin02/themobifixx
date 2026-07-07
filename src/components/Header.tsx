@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import logoImg from '../../assets/logo.jpeg';
+import logoImg from '../../assets/logo.png';
 import { motion, AnimatePresence } from 'motion/react';
 import { Menu, X, Phone, MessageSquare, Laptop, Smartphone, Cpu, Tablet, Hammer, Search, ArrowRight, User } from 'lucide-react';
 import { getAuthUser, clearAuth } from '../utils/auth';
