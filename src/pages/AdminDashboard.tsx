@@ -1,17 +1,17 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { 
-  Users, 
-  Wrench, 
-  MessageSquare, 
-  UserCheck, 
-  Trash2, 
-  Edit3, 
-  Plus, 
-  Loader2, 
-  AlertCircle, 
-  Calendar, 
+import {
+  Users,
+  Wrench,
+  MessageSquare,
+  UserCheck,
+  Trash2,
+  Edit3,
+  Plus,
+  Loader2,
+  AlertCircle,
+  Calendar,
   CheckCircle,
   Clock,
   Layers,
@@ -20,12 +20,6 @@ import {
 } from 'lucide-react';
 import { getAuthToken, getAuthUser, clearAuth } from '../utils/auth';
 import { User, RepairRequest, Testimonial, Technician, Inquiry } from '../types';
-
-const dotgridStyle = {
-  backgroundImage: `radial-gradient(circle, #CBD5E1 1px, transparent 1px)`,
-  backgroundSize: '22px 22px',
-  backgroundColor: '#F8FAFC',
-};
 
 const stages = ['pending', 'accepted', 'in_repair', 'completed', 'cancelled'];
 
@@ -37,19 +31,24 @@ export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<'orders' | 'users' | 'reviews' | 'technicians' | 'inquiries'>('orders');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  
-  // Data lists
+
   const [usersList, setUsersList] = useState<User[]>([]);
   const [ordersList, setOrdersList] = useState<RepairRequest[]>([]);
   const [reviewsList, setReviewsList] = useState<Testimonial[]>([]);
   const [techList, setTechList] = useState<Technician[]>([]);
   const [inquiriesList, setInquiriesList] = useState<Inquiry[]>([]);
 
-  // Technician Form states
   const [isTechFormOpen, setIsTechFormOpen] = useState(false);
   const [editingTech, setEditingTech] = useState<Technician | null>(null);
 
-  // Custom neobrutalist dialog configurations
+  const [isTestimonialFormOpen, setIsTestimonialFormOpen] = useState(false);
+  const [newTestimonial, setNewTestimonial] = useState({
+    customerName: '',
+    rating: 5,
+    deviceType: '',
+    review: ''
+  });
+
   const [dialog, setDialog] = useState<{
     isOpen: boolean;
     type: 'alert' | 'confirm';
@@ -95,7 +94,6 @@ export default function AdminDashboard() {
     try {
       const headers = { 'Authorization': `Bearer ${token}` };
 
-      // Fetch users
       const uRes = await fetch('/api/admin/users', { headers });
       if (uRes.status === 401) {
         clearAuth();
@@ -107,7 +105,6 @@ export default function AdminDashboard() {
       const uData = await uRes.json();
       setUsersList(Array.isArray(uData) ? uData : []);
 
-      // Fetch repair bookings
       const oRes = await fetch('/api/admin/repair-requests', { headers });
       if (oRes.status === 401) {
         clearAuth();
@@ -119,19 +116,16 @@ export default function AdminDashboard() {
       const oData = await oRes.json();
       setOrdersList(Array.isArray(oData) ? oData : []);
 
-      // Fetch testimonials
       const rRes = await fetch('/api/testimonials');
       if (!rRes.ok) throw new Error('Failed to fetch testimonials');
       const rData = await rRes.json();
       setReviewsList(Array.isArray(rData) ? rData : []);
 
-      // Fetch technicians
       const tRes = await fetch('/api/technicians');
       if (!tRes.ok) throw new Error('Failed to fetch technicians');
       const tData = await tRes.json();
       setTechList(Array.isArray(tData) ? tData : []);
 
-      // Fetch general inquiries
       const iRes = await fetch('/api/admin/inquiries', { headers });
       if (iRes.status === 401) {
         clearAuth();
@@ -158,29 +152,10 @@ export default function AdminDashboard() {
     loadAllAdminData();
   }, [token, admin, navigate]);
 
-  // Operations
-  const handleToggleUserAccess = async (userId: string, currentAccess: boolean) => {
-    try {
-      const response = await fetch(`/api/admin/users/${userId}/access`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({ dashboardAccess: !currentAccess })
-      });
-      if (!response.ok) throw new Error('Failed to toggle dashboard access.');
-      
-      setUsersList(prev => prev.map(u => u.id === userId ? { ...u, dashboardAccess: !currentAccess } : u));
-    } catch (err: any) {
-      showAlert('Error updating access', err.message);
-    }
-  };
-
   const handleDeleteUser = async (userId: string) => {
     showConfirm(
-      'Delete User Profile', 
-      'Are you sure you want to delete this user profile? All dashboard credentials and doorstep references will be permanently removed.', 
+      'Delete User Profile',
+      'Are you sure you want to delete this user profile? All dashboard credentials and doorstep references will be permanently removed.',
       async () => {
         try {
           const response = await fetch(`/api/admin/users/${userId}`, {
@@ -188,7 +163,7 @@ export default function AdminDashboard() {
             headers: { 'Authorization': `Bearer ${token}` }
           });
           if (!response.ok) throw new Error('Failed to delete user.');
-          
+
           setUsersList(prev => prev.filter(u => u.id !== userId));
           showAlert('Success', 'User profile deleted successfully.');
         } catch (err: any) {
@@ -209,7 +184,7 @@ export default function AdminDashboard() {
         body: JSON.stringify({ status })
       });
       if (!response.ok) throw new Error('Failed to update status.');
-      
+
       setOrdersList(prev => prev.map(o => o.id === orderId ? { ...o, status: status as any } : o));
     } catch (err: any) {
       showAlert('Error updating status', err.message);
@@ -218,8 +193,8 @@ export default function AdminDashboard() {
 
   const handleDeleteOrder = async (orderId: string) => {
     showConfirm(
-      'Delete Repair Request', 
-      'Are you sure you want to delete this repair request? This action cannot be undone and will erase all diagnostics data.', 
+      'Delete Repair Request',
+      'Are you sure you want to delete this repair request? This action cannot be undone and will erase all diagnostics data.',
       async () => {
         try {
           const response = await fetch(`/api/admin/repair-requests/${orderId}`, {
@@ -227,7 +202,7 @@ export default function AdminDashboard() {
             headers: { 'Authorization': `Bearer ${token}` }
           });
           if (!response.ok) throw new Error('Failed to delete order.');
-          
+
           setOrdersList(prev => prev.filter(o => o.id !== orderId));
           showAlert('Success', 'Repair request deleted successfully.');
         } catch (err: any) {
@@ -239,8 +214,8 @@ export default function AdminDashboard() {
 
   const handleDeleteInquiry = async (inqId: string) => {
     showConfirm(
-      'Delete Inquiry', 
-      'Are you sure you want to delete this general inquiry message?', 
+      'Delete Inquiry',
+      'Are you sure you want to delete this general inquiry message?',
       async () => {
         try {
           const response = await fetch(`/api/admin/inquiries/${inqId}`, {
@@ -248,7 +223,7 @@ export default function AdminDashboard() {
             headers: { 'Authorization': `Bearer ${token}` }
           });
           if (!response.ok) throw new Error('Failed to delete inquiry.');
-          
+
           setInquiriesList(prev => prev.filter(i => i.id !== inqId));
           showAlert('Success', 'General inquiry deleted successfully.');
         } catch (err: any) {
@@ -258,10 +233,33 @@ export default function AdminDashboard() {
     );
   };
 
+  const handleAddTestimonial = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newTestimonial.customerName || !newTestimonial.review) return;
+    try {
+      const response = await fetch('/api/testimonials', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(newTestimonial)
+      });
+      if (!response.ok) throw new Error('Failed to add testimonial');
+      const data = await response.json();
+      setReviewsList(prev => [data, ...prev]);
+      setIsTestimonialFormOpen(false);
+      setNewTestimonial({ customerName: '', rating: 5, deviceType: '', review: '' });
+      showAlert('Success', 'Testimonial added successfully');
+    } catch (err: any) {
+      showAlert('Error', err.message);
+    }
+  };
+
   const handleDeleteTestimonial = async (reviewId: string) => {
     showConfirm(
-      'Delete Testimonial', 
-      'Are you sure you want to delete this testimonial review from the database?', 
+      'Delete Testimonial',
+      'Are you sure you want to delete this testimonial review from the database?',
       async () => {
         try {
           const response = await fetch(`/api/admin/testimonials/${reviewId}`, {
@@ -269,7 +267,7 @@ export default function AdminDashboard() {
             headers: { 'Authorization': `Bearer ${token}` }
           });
           if (!response.ok) throw new Error('Failed to delete testimonial review.');
-          
+
           setReviewsList(prev => prev.filter(r => r.id !== reviewId));
           showAlert('Success', 'Testimonial review deleted successfully.');
         } catch (err: any) {
@@ -281,8 +279,8 @@ export default function AdminDashboard() {
 
   const handleDeleteTech = async (techId: string) => {
     showConfirm(
-      'Delete Technician Profile', 
-      'Are you sure you want to delete this technician profile? The engineer will no longer be listed.', 
+      'Delete Technician Profile',
+      'Are you sure you want to delete this technician profile? The engineer will no longer be listed.',
       async () => {
         try {
           const response = await fetch(`/api/admin/technicians/${techId}`, {
@@ -290,7 +288,7 @@ export default function AdminDashboard() {
             headers: { 'Authorization': `Bearer ${token}` }
           });
           if (!response.ok) throw new Error('Failed to delete technician.');
-          
+
           setTechList(prev => prev.filter(t => t.id !== techId));
           showAlert('Success', 'Technician profile deleted successfully.');
         } catch (err: any) {
@@ -340,7 +338,7 @@ export default function AdminDashboard() {
         certifications: data.certifications.split(',').map((c: string) => c.trim()).filter(Boolean),
       };
 
-      const url = editingTech 
+      const url = editingTech
         ? `/api/admin/technicians/${editingTech.id}`
         : '/api/admin/technicians';
 
@@ -356,7 +354,7 @@ export default function AdminDashboard() {
       });
 
       if (!response.ok) throw new Error('Failed to save technician information.');
-      
+
       setIsTechFormOpen(false);
       loadAllAdminData();
       showAlert('Success', 'Technician database saved successfully.');
@@ -367,45 +365,44 @@ export default function AdminDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen pt-32 pb-16 flex items-center justify-center bg-[#F8FAFC]">
+      <div className="min-h-screen pt-32 pb-16 flex items-center justify-center bg-slate-50">
         <div className="text-center space-y-3">
-          <Loader2 className="w-8 h-8 text-[#0F4CFF] animate-spin mx-auto" />
-          <p className="text-sm text-slate-500 font-bold uppercase tracking-wider">Syncing Admin Console...</p>
+          <Loader2 className="w-8 h-8 text-brand-orange animate-spin mx-auto" />
+          <p className="text-sm text-gray-500 font-bold uppercase tracking-wider">Loading Admin Console...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="pt-36 md:pt-44 pb-20 min-h-screen" style={dotgridStyle}>
+    <div className="pt-24 md:pt-32 pb-20 min-h-screen bg-slate-50 font-sans text-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+
         {/* Main Header Banner */}
-        <div className="bg-slate-900 border-2 border-slate-900 rounded-2xl p-6 md:p-8 text-white shadow-[6px_6px_0px_#FFB800] mb-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="bg-white border border-gray-100 rounded-2xl p-6 md:p-8 shadow-sm mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <span className="text-[10px] font-black uppercase tracking-widest text-[#FFB800]">Administration Hub</span>
-            <h1 className="text-2xl md:text-3xl font-black mt-1">TheMobifixx Operations Suite</h1>
-            <p className="text-xs text-slate-300 font-medium mt-1">Audit diagnostics, grant dashboard tokens, edit engineers, or verify feedback testimonials.</p>
+            <span className="text-[10px] font-bold uppercase tracking-widest text-brand-orange">Administration Hub</span>
+            <h1 className="text-2xl md:text-3xl font-bold mt-1">TheMobifixx Operations Suite</h1>
+            <p className="text-sm text-gray-500 mt-2">Manage diagnostics, user access, engineers, and verify feedback.</p>
           </div>
-          <div className="bg-[#FFB800] text-slate-950 border-2 border-slate-900 px-4 py-2.5 rounded-xl text-xs font-black shadow-[2px_2px_0px_#ffffff]">
-            Logged in as {admin?.name}
+          <div className="bg-slate-100 text-gray-800 border border-gray-200 px-5 py-2.5 rounded-full text-sm font-bold shadow-sm">
+            Admin: {admin?.name}
           </div>
         </div>
 
         {error && (
-          <div className="mb-6 flex items-center space-x-2 bg-white border-2 border-rose-500 text-rose-600 p-3.5 rounded-xl text-sm font-bold shadow-[2px_2px_0px_#F43F5E]">
+          <div className="mb-6 flex items-center space-x-2 bg-rose-50 border border-rose-200 text-rose-600 p-4 rounded-xl text-sm font-medium">
             <AlertCircle className="w-5 h-5 shrink-0" />
             <span>{error}</span>
           </div>
         )}
 
         {/* Tab switchers */}
-        <div className="flex flex-wrap gap-2.5 mb-8 border-b-2 border-slate-200 pb-5">
+        <div className="flex flex-wrap gap-2 mb-8 border-b border-gray-200 pb-4">
           <button
             onClick={() => setActiveTab('orders')}
-            className={`inline-flex items-center gap-1.5 px-4 py-3 rounded-xl border-2 text-xs font-black uppercase tracking-wider shadow-[3px_3px_0px_#0A1020] hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px] transition-all cursor-pointer ${
-              activeTab === 'orders' ? 'bg-[#0f4cff] text-white border-slate-900' : 'bg-white text-slate-700 border-slate-900'
-            }`}
+            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold transition-colors ${activeTab === 'orders' ? 'bg-primary text-white shadow-sm' : 'bg-white text-gray-600 border border-gray-200 hover:text-primary hover:border-gray-300'
+              }`}
           >
             <Wrench className="w-4 h-4" />
             <span>Repair Orders ({ordersList.length})</span>
@@ -413,9 +410,8 @@ export default function AdminDashboard() {
 
           <button
             onClick={() => setActiveTab('users')}
-            className={`inline-flex items-center gap-1.5 px-4 py-3 rounded-xl border-2 text-xs font-black uppercase tracking-wider shadow-[3px_3px_0px_#0A1020] hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px] transition-all cursor-pointer ${
-              activeTab === 'users' ? 'bg-[#0f4cff] text-white border-slate-900' : 'bg-white text-slate-700 border-slate-900'
-            }`}
+            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold transition-colors ${activeTab === 'users' ? 'bg-primary text-white shadow-sm' : 'bg-white text-gray-600 border border-gray-200 hover:text-primary hover:border-gray-300'
+              }`}
           >
             <Users className="w-4 h-4" />
             <span>Users & Access ({usersList.length})</span>
@@ -423,9 +419,8 @@ export default function AdminDashboard() {
 
           <button
             onClick={() => setActiveTab('reviews')}
-            className={`inline-flex items-center gap-1.5 px-4 py-3 rounded-xl border-2 text-xs font-black uppercase tracking-wider shadow-[3px_3px_0px_#0A1020] hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px] transition-all cursor-pointer ${
-              activeTab === 'reviews' ? 'bg-[#0f4cff] text-white border-slate-900' : 'bg-white text-slate-700 border-slate-900'
-            }`}
+            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold transition-colors ${activeTab === 'reviews' ? 'bg-primary text-white shadow-sm' : 'bg-white text-gray-600 border border-gray-200 hover:text-primary hover:border-gray-300'
+              }`}
           >
             <MessageSquare className="w-4 h-4" />
             <span>Testimonials ({reviewsList.length})</span>
@@ -433,9 +428,8 @@ export default function AdminDashboard() {
 
           <button
             onClick={() => setActiveTab('technicians')}
-            className={`inline-flex items-center gap-1.5 px-4 py-3 rounded-xl border-2 text-xs font-black uppercase tracking-wider shadow-[3px_3px_0px_#0A1020] hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px] transition-all cursor-pointer ${
-              activeTab === 'technicians' ? 'bg-[#0f4cff] text-white border-slate-900' : 'bg-white text-slate-700 border-slate-900'
-            }`}
+            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold transition-colors ${activeTab === 'technicians' ? 'bg-primary text-white shadow-sm' : 'bg-white text-gray-600 border border-gray-200 hover:text-primary hover:border-gray-300'
+              }`}
           >
             <UserCheck className="w-4 h-4" />
             <span>Technicians ({techList.length})</span>
@@ -443,9 +437,8 @@ export default function AdminDashboard() {
 
           <button
             onClick={() => setActiveTab('inquiries')}
-            className={`inline-flex items-center gap-1.5 px-4 py-3 rounded-xl border-2 text-xs font-black uppercase tracking-wider shadow-[3px_3px_0px_#0A1020] hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px] transition-all cursor-pointer ${
-              activeTab === 'inquiries' ? 'bg-[#0f4cff] text-white border-slate-900' : 'bg-white text-slate-700 border-slate-900'
-            }`}
+            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold transition-colors ${activeTab === 'inquiries' ? 'bg-primary text-white shadow-sm' : 'bg-white text-gray-600 border border-gray-200 hover:text-primary hover:border-gray-300'
+              }`}
           >
             <Mail className="w-4 h-4" />
             <span>Inquiries ({inquiriesList.length})</span>
@@ -453,14 +446,14 @@ export default function AdminDashboard() {
         </div>
 
         {/* Tab contents */}
-        <div className="bg-white border-2 border-slate-900 rounded-2xl p-6 md:p-8 shadow-[5px_5px_0px_#0A1020]">
-          
+        <div className="bg-white border border-gray-100 rounded-2xl p-6 md:p-8 shadow-sm">
+
           {/* TAB 1: ORDERS */}
           {activeTab === 'orders' && (
             <div className="space-y-6">
-              <div className="flex justify-between items-center border-b border-slate-100 pb-4">
-                <h2 className="text-lg font-black text-slate-900 uppercase">Repair Diagnostics Queue</h2>
-                <span className="text-xs bg-blue-50 text-blue-700 font-bold border border-blue-200 px-3 py-1 rounded-xl">
+              <div className="flex justify-between items-center border-b border-gray-100 pb-4">
+                <h2 className="text-lg font-bold text-gray-900">Repair Diagnostics Queue</h2>
+                <span className="text-xs bg-slate-100 text-gray-600 font-bold border border-gray-200 px-3 py-1.5 rounded-full">
                   {ordersList.length} inquiries registered
                 </span>
               </div>
@@ -468,56 +461,56 @@ export default function AdminDashboard() {
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse min-w-[700px]">
                   <thead>
-                    <tr className="border-b-2 border-slate-900 bg-slate-50 text-[10px] uppercase font-black tracking-wider text-slate-500">
-                      <th className="py-3 px-4">Order ID / Date</th>
-                      <th className="py-3 px-4">Customer info</th>
-                      <th className="py-3 px-4">Device Details</th>
-                      <th className="py-3 px-4 text-center">Status Step</th>
-                      <th className="py-3 px-4 text-right">Actions</th>
+                    <tr className="border-b border-gray-200 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                      <th className="py-3 px-4 font-bold">Order ID / Date</th>
+                      <th className="py-3 px-4 font-bold">Customer info</th>
+                      <th className="py-3 px-4 font-bold">Device Details</th>
+                      <th className="py-3 px-4 font-bold">Status Step</th>
+                      <th className="py-3 px-4 text-right font-bold">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     {Array.isArray(ordersList) && ordersList.map((order) => (
-                      <tr key={order.id} className="border-b border-slate-100 hover:bg-slate-50/50 text-xs">
+                      <tr key={order.id} className="border-b border-gray-50 hover:bg-slate-50/50 text-sm">
                         <td className="py-4 px-4">
-                          <span className="font-mono font-black text-slate-900 uppercase">{order.id}</span>
-                          <span className="block text-[10px] text-slate-400 mt-0.5">{new Date(order.createdAt).toLocaleDateString()}</span>
-                        </td>
-                        <td className="py-4 px-4 font-medium">
-                          <p className="font-black text-slate-900">{order.customerName}</p>
-                          <p className="text-[10px] text-slate-500">{order.phone}</p>
+                          <span className="font-mono font-bold text-gray-900">{order.id}</span>
+                          <span className="block text-xs text-gray-400 mt-1">{new Date(order.createdAt).toLocaleDateString()}</span>
                         </td>
                         <td className="py-4 px-4">
-                          <p className="font-bold text-slate-800 uppercase">{order.brand} {order.model}</p>
-                          <p className="text-[10px] text-slate-400 font-bold uppercase">{order.deviceType}</p>
+                          <p className="font-bold text-gray-900">{order.customerName}</p>
+                          <p className="text-xs text-gray-500">{order.phone}</p>
+                        </td>
+                        <td className="py-4 px-4">
+                          <p className="font-bold text-gray-800">{order.brand} {order.model}</p>
+                          <p className="text-xs text-gray-500 capitalize">{order.deviceType}</p>
                         </td>
                         <td className="py-4 px-4">
                           <div className="relative inline-block w-44">
                             <select
                               value={order.status}
                               onChange={(e) => handleUpdateOrderStatus(order.id!, e.target.value)}
-                              className="w-full bg-[#F8FAFC] border-2 border-slate-900 rounded-xl px-2.5 py-1.5 font-bold text-slate-900 focus:outline-none appearance-none cursor-pointer"
+                              className="w-full bg-slate-100 border border-gray-200 rounded-lg px-3 py-2 text-sm font-bold text-gray-900 focus:outline-none focus:border-accent appearance-none cursor-pointer"
                             >
                               {stages.map(s => (
                                 <option key={s} value={s}>{s.toUpperCase().replace('_', ' ')}</option>
                               ))}
                             </select>
-                            <ChevronDown className="absolute right-3 top-3 w-3 h-3 text-slate-600 pointer-events-none" />
+                            <ChevronDown className="absolute right-3 top-3 w-4 h-4 text-gray-400 pointer-events-none" />
                           </div>
                         </td>
                         <td className="py-4 px-4 text-right space-x-2">
                           <button
                             onClick={() => navigate(`/tracker?id=${order.id}`)}
-                            className="inline-flex items-center gap-1 text-[10px] font-black text-[#0f4cff] border border-[#0f4cff]/30 px-2 py-1 rounded hover:bg-[#0f4cff]/5"
+                            className="inline-flex items-center gap-1 text-xs font-bold text-primary bg-slate-100 px-3 py-1.5 rounded-lg hover:bg-slate-200 transition-colors"
                           >
-                            <span>Open Tracker</span>
+                            Tracker
                           </button>
                           <button
                             onClick={() => handleDeleteOrder(order.id!)}
-                            className="inline-flex items-center gap-1 text-[10px] font-black text-rose-500 border border-rose-200 bg-rose-50 p-1.5 rounded hover:bg-rose-100 cursor-pointer"
+                            className="inline-flex items-center gap-1 text-xs font-bold text-rose-500 bg-rose-50 p-1.5 rounded-lg hover:bg-rose-100 transition-colors"
                             title="Delete Order"
                           >
-                            <Trash2 className="w-3.5 h-3.5" />
+                            <Trash2 className="w-4 h-4" />
                           </button>
                         </td>
                       </tr>
@@ -531,9 +524,9 @@ export default function AdminDashboard() {
           {/* TAB 2: USERS */}
           {activeTab === 'users' && (
             <div className="space-y-6">
-              <div className="flex justify-between items-center border-b border-slate-100 pb-4">
-                <h2 className="text-lg font-black text-slate-900 uppercase">User Accounts Management</h2>
-                <span className="text-xs bg-blue-50 text-blue-700 font-bold border border-blue-200 px-3 py-1 rounded-xl">
+              <div className="flex justify-between items-center border-b border-gray-100 pb-4">
+                <h2 className="text-lg font-bold text-gray-900">User Accounts Management</h2>
+                <span className="text-xs bg-slate-100 text-gray-600 font-bold border border-gray-200 px-3 py-1.5 rounded-full">
                   {usersList.length} Profiles Registered
                 </span>
               </div>
@@ -541,50 +534,32 @@ export default function AdminDashboard() {
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse min-w-[600px]">
                   <thead>
-                    <tr className="border-b-2 border-slate-900 bg-slate-50 text-[10px] uppercase font-black tracking-wider text-slate-500">
+                    <tr className="border-b border-gray-200 text-xs font-bold text-gray-500 uppercase tracking-wider">
                       <th className="py-3 px-4">Name / Date</th>
                       <th className="py-3 px-4">Email</th>
                       <th className="py-3 px-4">Role</th>
-                      <th className="py-3 px-4 text-center">Dashboard Access</th>
-                      <th className="py-3 px-4 text-right">Delete Account</th>
+                      <th className="py-3 px-4 text-right">Action</th>
                     </tr>
                   </thead>
                   <tbody>
                     {Array.isArray(usersList) && usersList.map((userRecord) => (
-                      <tr key={userRecord.id} className="border-b border-slate-100 hover:bg-slate-50/50 text-xs">
+                      <tr key={userRecord.id} className="border-b border-gray-50 hover:bg-slate-50/50 text-sm">
                         <td className="py-4 px-4">
-                          <p className="font-black text-slate-900">{userRecord.name}</p>
-                          <span className="text-[10px] text-slate-400">{new Date(userRecord.createdAt).toLocaleDateString()}</span>
+                          <p className="font-bold text-gray-900">{userRecord.name}</p>
+                          <span className="text-xs text-gray-400 block mt-0.5">{new Date(userRecord.createdAt).toLocaleDateString()}</span>
                         </td>
-                        <td className="py-4 px-4 font-mono font-bold text-slate-700">{userRecord.email}</td>
+                        <td className="py-4 px-4 text-gray-700">{userRecord.email}</td>
                         <td className="py-4 px-4">
-                          <span className={`inline-block px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider border-2 ${
-                            userRecord.role === 'admin' ? 'bg-[#FFB800] border-slate-900 text-slate-900' : 'bg-slate-100 border-slate-300 text-slate-600'
-                          }`}>
+                          <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold capitalize ${userRecord.role === 'admin' ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-600'
+                            }`}>
                             {userRecord.role}
                           </span>
-                        </td>
-                        <td className="py-4 px-4 text-center">
-                          {userRecord.role === 'admin' ? (
-                            <span className="text-slate-400 font-bold text-[10px] uppercase">Always Enabled</span>
-                          ) : (
-                            <button
-                              onClick={() => handleToggleUserAccess(userRecord.id, userRecord.dashboardAccess)}
-                              className={`inline-flex items-center gap-1 text-[10px] font-black uppercase px-3 py-1.5 rounded-xl border-2 transition-all cursor-pointer ${
-                                userRecord.dashboardAccess 
-                                  ? 'bg-emerald-100 border-emerald-300 text-emerald-800 shadow-[1px_1px_0px_#00c48c]'
-                                  : 'bg-rose-100 border-rose-300 text-rose-800 shadow-[1px_1px_0px_#f43f5e]'
-                              }`}
-                            >
-                              <span>{userRecord.dashboardAccess ? 'Access Approved' : 'Requires Approval'}</span>
-                            </button>
-                          )}
                         </td>
                         <td className="py-4 px-4 text-right">
                           {userRecord.role !== 'admin' && (
                             <button
                               onClick={() => handleDeleteUser(userRecord.id)}
-                              className="text-rose-500 hover:text-rose-600 p-1 bg-rose-50 hover:bg-rose-100 rounded border border-rose-200 transition-colors cursor-pointer"
+                              className="text-rose-500 hover:text-rose-700 p-2 bg-rose-50 hover:bg-rose-100 rounded-lg transition-colors cursor-pointer"
                             >
                               <Trash2 className="w-4 h-4" />
                             </button>
@@ -601,40 +576,117 @@ export default function AdminDashboard() {
           {/* TAB 3: TESTIMONIAL REVIEWS */}
           {activeTab === 'reviews' && (
             <div className="space-y-6">
-              <div className="flex justify-between items-center border-b border-slate-100 pb-4">
-                <h2 className="text-lg font-black text-slate-900 uppercase">Testimonials Feedback Audit</h2>
-                <span className="text-xs bg-blue-50 text-blue-700 font-bold border border-blue-200 px-3 py-1 rounded-xl">
-                  {reviewsList.length} Feedbacks active
-                </span>
+              <div className="flex justify-between items-center border-b border-gray-100 pb-4">
+                <div>
+                  <h2 className="text-lg font-bold text-gray-900">Testimonials Feedback Audit</h2>
+                  <span className="text-xs bg-slate-100 text-gray-600 font-bold border border-gray-200 px-3 py-1.5 rounded-full mt-2 inline-block">
+                    {reviewsList.length} Feedbacks active
+                  </span>
+                </div>
+                <button
+                  onClick={() => setIsTestimonialFormOpen(true)}
+                  className="bg-primary text-white px-4 py-2 rounded-xl text-sm font-bold shadow-sm hover:bg-secondary flex items-center gap-2"
+                >
+                  <Plus className="w-4 h-4" /> Add Testimonial
+                </button>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {Array.isArray(reviewsList) && reviewsList.map((review) => (
-                  <div key={review.id} className="border-2 border-slate-900 rounded-xl p-4 flex flex-col justify-between shadow-[3px_3px_0px_#0A1020]">
+              {isTestimonialFormOpen && (
+                <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-6">
+                  <h3 className="text-md font-bold mb-4">Add New Testimonial</h3>
+                  <form onSubmit={handleAddTestimonial} className="space-y-4 max-w-xl">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs font-bold text-gray-700 mb-1">Customer Name</label>
+                        <input
+                          type="text"
+                          required
+                          value={newTestimonial.customerName}
+                          onChange={e => setNewTestimonial({ ...newTestimonial, customerName: e.target.value })}
+                          className="w-full bg-slate-100 border border-gray-200 text-sm rounded-xl px-3 py-2 outline-none focus:border-accent"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold text-gray-700 mb-1">Rating</label>
+                        <select
+                          value={newTestimonial.rating}
+                          onChange={e => setNewTestimonial({ ...newTestimonial, rating: Number(e.target.value) })}
+                          className="w-full bg-slate-100 border border-gray-200 text-sm rounded-xl px-3 py-2 outline-none focus:border-accent"
+                        >
+                          <option value={5}>5 Stars</option>
+                          <option value={4}>4 Stars</option>
+                          <option value={3}>3 Stars</option>
+                          <option value={2}>2 Stars</option>
+                          <option value={1}>1 Star</option>
+                        </select>
+                      </div>
+                    </div>
                     <div>
-                      <div className="flex items-center justify-between pb-2 border-b border-slate-100 mb-3">
-                        <div className="flex items-center gap-2">
-                          <img src={review.image} className="w-8 h-8 rounded-full border border-slate-900" alt="" />
+                      <label className="block text-xs font-bold text-gray-700 mb-1">Device Fixed (Optional)</label>
+                      <input
+                        type="text"
+                        value={newTestimonial.deviceType}
+                        onChange={e => setNewTestimonial({ ...newTestimonial, deviceType: e.target.value })}
+                        placeholder="e.g. iPhone 13 Pro"
+                        className="w-full bg-slate-100 border border-gray-200 text-sm rounded-xl px-3 py-2 outline-none focus:border-accent"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-gray-700 mb-1">Review Content</label>
+                      <textarea
+                        required
+                        rows={3}
+                        value={newTestimonial.review}
+                        onChange={e => setNewTestimonial({ ...newTestimonial, review: e.target.value })}
+                        className="w-full bg-slate-100 border border-gray-200 text-sm rounded-xl px-3 py-2 outline-none focus:border-accent resize-none"
+                      ></textarea>
+                    </div>
+                    <div className="flex justify-end gap-3 pt-2">
+                      <button
+                        type="button"
+                        onClick={() => setIsTestimonialFormOpen(false)}
+                        className="px-4 py-2 text-sm font-bold text-gray-600 hover:text-gray-900"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        className="px-6 py-2 bg-primary text-white text-sm font-bold rounded-xl shadow-sm hover:bg-secondary"
+                      >
+                        Save Testimonial
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              )}
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {Array.isArray(reviewsList) && reviewsList.map((review) => (
+                  <div key={review.id} className="border border-gray-100 rounded-2xl p-5 flex flex-col justify-between shadow-sm">
+                    <div>
+                      <div className="flex items-center justify-between pb-3 border-b border-gray-50 mb-3">
+                        <div className="flex items-center gap-3">
+                          <img src={review.image} className="w-10 h-10 rounded-full object-cover" alt="" />
                           <div>
-                            <p className="text-xs font-black text-slate-900">{review.customerName}</p>
-                            <p className="text-[9px] text-slate-400 uppercase font-black mt-0.5">{review.deviceType}</p>
+                            <p className="text-sm font-bold text-gray-900">{review.customerName}</p>
+                            <p className="text-xs text-gray-400 mt-0.5">{review.deviceType}</p>
                           </div>
                         </div>
-                        <div className="flex items-center gap-1 text-amber-500 font-bold text-xs">
+                        <div className="flex items-center gap-1 text-amber-500 font-bold text-sm">
                           <span>★</span>
                           <span>{review.rating}.0</span>
                         </div>
                       </div>
-                      <p className="text-xs text-slate-600 leading-relaxed font-medium line-clamp-3">"{review.review}"</p>
+                      <p className="text-sm text-gray-600 leading-relaxed font-medium line-clamp-3">"{review.review}"</p>
                     </div>
-                    <div className="flex justify-between items-center mt-4 pt-3 border-t border-slate-100 text-[10px]">
-                      <span className="text-slate-400 font-mono font-bold uppercase">{review.id}</span>
+                    <div className="flex justify-between items-center mt-4 pt-3 border-t border-gray-50 text-xs">
+                      <span className="text-gray-400 font-mono">{review.id}</span>
                       <button
                         onClick={() => handleDeleteTestimonial(review.id!)}
-                        className="inline-flex items-center gap-1 text-rose-500 hover:text-rose-600 font-black cursor-pointer uppercase"
+                        className="inline-flex items-center gap-1 text-rose-500 hover:text-rose-600 font-bold transition-colors cursor-pointer"
                       >
-                        <Trash2 className="w-3.5 h-3.5" />
-                        <span>Delete Review</span>
+                        <Trash2 className="w-4 h-4" />
+                        <span>Delete</span>
                       </button>
                     </div>
                   </div>
@@ -646,14 +698,14 @@ export default function AdminDashboard() {
           {/* TAB 4: TECHNICIANS */}
           {activeTab === 'technicians' && (
             <div className="space-y-6">
-              <div className="flex justify-between items-center border-b border-slate-100 pb-4">
+              <div className="flex justify-between items-center border-b border-gray-100 pb-4">
                 <div>
-                  <h2 className="text-lg font-black text-slate-900 uppercase">Engineers Directory</h2>
-                  <p className="text-xs text-slate-500 mt-0.5">Manage technician profile listings, completed repair counts, and specializations.</p>
+                  <h2 className="text-lg font-bold text-gray-900">Engineers Directory</h2>
+                  <p className="text-sm text-gray-500 mt-1">Manage technician profiles and specializations.</p>
                 </div>
                 <button
                   onClick={handleOpenAddTech}
-                  className="inline-flex items-center gap-1 text-xs font-black text-slate-950 border-2 border-slate-900 bg-[#FFB800] px-4 py-2.5 rounded-xl shadow-[3px_3px_0px_#0A1020] hover:-translate-y-0.5 transition-all cursor-pointer"
+                  className="inline-flex items-center gap-2 text-sm font-bold text-white bg-primary px-5 py-2.5 rounded-full hover:bg-secondary transition-colors shadow-sm"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Add Engineer</span>
@@ -662,100 +714,100 @@ export default function AdminDashboard() {
 
               {/* Add/Edit Form Overlay */}
               {isTechFormOpen && (
-                <div className="bg-slate-50 border-2 border-slate-900 rounded-xl p-5 md:p-6 mb-8 space-y-4">
-                  <h3 className="text-sm font-black uppercase text-slate-800 tracking-wider">
+                <div className="bg-gray-50 border border-gray-200 rounded-2xl p-6 md:p-8 mb-8 space-y-5">
+                  <h3 className="text-base font-bold text-gray-900">
                     {editingTech ? 'Modify Engineer Profile' : 'Register New Service Engineer'}
                   </h3>
 
                   <form onSubmit={handleSubmit(onSubmitTechForm)} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                     <div>
-                      <label className="block text-[10px] font-black uppercase tracking-wider text-slate-500 mb-1">Full Name</label>
+                      <label className="block text-xs font-bold text-gray-600 mb-1.5">Full Name</label>
                       <input
                         type="text"
                         {...register('name', { required: true })}
-                        className="w-full text-xs border-2 border-slate-900 rounded-lg p-2.5 bg-white"
+                        className="w-full text-sm border border-gray-200 rounded-lg p-3 bg-white focus:outline-none focus:border-accent"
                       />
                     </div>
                     <div>
-                      <label className="block text-[10px] font-black uppercase tracking-wider text-slate-500 mb-1">Designation</label>
+                      <label className="block text-xs font-bold text-gray-600 mb-1.5">Designation</label>
                       <input
                         type="text"
                         {...register('designation', { required: true })}
-                        className="w-full text-xs border-2 border-slate-900 rounded-lg p-2.5 bg-white"
+                        className="w-full text-sm border border-gray-200 rounded-lg p-3 bg-white focus:outline-none focus:border-accent"
                       />
                     </div>
                     <div>
-                      <label className="block text-[10px] font-black uppercase tracking-wider text-slate-500 mb-1">Experience (Years)</label>
+                      <label className="block text-xs font-bold text-gray-600 mb-1.5">Experience (Years)</label>
                       <input
                         type="number"
                         {...register('experience', { required: true, valueAsNumber: true })}
-                        className="w-full text-xs border-2 border-slate-900 rounded-lg p-2.5 bg-white"
+                        className="w-full text-sm border border-gray-200 rounded-lg p-3 bg-white focus:outline-none focus:border-accent"
                       />
                     </div>
                     <div>
-                      <label className="block text-[10px] font-black uppercase tracking-wider text-slate-500 mb-1">Specialization</label>
+                      <label className="block text-xs font-bold text-gray-600 mb-1.5">Specialization</label>
                       <input
                         type="text"
                         {...register('specialization', { required: true })}
-                        className="w-full text-xs border-2 border-slate-900 rounded-lg p-2.5 bg-white"
+                        className="w-full text-sm border border-gray-200 rounded-lg p-3 bg-white focus:outline-none focus:border-accent"
                         placeholder="e.g. Logic Board Repair"
                       />
                     </div>
                     <div>
-                      <label className="block text-[10px] font-black uppercase tracking-wider text-slate-500 mb-1">Repairs Completed</label>
+                      <label className="block text-xs font-bold text-gray-600 mb-1.5">Repairs Completed</label>
                       <input
                         type="number"
                         {...register('repairsCompleted', { required: true, valueAsNumber: true })}
-                        className="w-full text-xs border-2 border-slate-900 rounded-lg p-2.5 bg-white"
+                        className="w-full text-sm border border-gray-200 rounded-lg p-3 bg-white focus:outline-none focus:border-accent"
                       />
                     </div>
                     <div>
-                      <label className="block text-[10px] font-black uppercase tracking-wider text-slate-500 mb-1">Rating</label>
+                      <label className="block text-xs font-bold text-gray-600 mb-1.5">Rating</label>
                       <input
                         type="number"
                         step="0.1"
                         {...register('rating', { required: true, valueAsNumber: true })}
-                        className="w-full text-xs border-2 border-slate-900 rounded-lg p-2.5 bg-white"
+                        className="w-full text-sm border border-gray-200 rounded-lg p-3 bg-white focus:outline-none focus:border-accent"
                       />
                     </div>
                     <div className="sm:col-span-2">
-                      <label className="block text-[10px] font-black uppercase tracking-wider text-slate-500 mb-1">Service Areas (Comma-separated)</label>
+                      <label className="block text-xs font-bold text-gray-600 mb-1.5">Service Areas (Comma-separated)</label>
                       <input
                         type="text"
                         {...register('serviceAreas', { required: true })}
-                        className="w-full text-xs border-2 border-slate-900 rounded-lg p-2.5 bg-white"
+                        className="w-full text-sm border border-gray-200 rounded-lg p-3 bg-white focus:outline-none focus:border-accent"
                         placeholder="e.g. Nehru Place, Gurugram, Noida"
                       />
                     </div>
                     <div className="sm:col-span-2">
-                      <label className="block text-[10px] font-black uppercase tracking-wider text-slate-500 mb-1">Certifications (Comma-separated)</label>
+                      <label className="block text-xs font-bold text-gray-600 mb-1.5">Certifications (Comma-separated)</label>
                       <input
                         type="text"
                         {...register('certifications')}
-                        className="w-full text-xs border-2 border-slate-900 rounded-lg p-2.5 bg-white"
-                        placeholder="e.g. Apple Certified Technical Coordinator"
+                        className="w-full text-sm border border-gray-200 rounded-lg p-3 bg-white focus:outline-none focus:border-accent"
+                        placeholder="e.g. ACMT, Electronics Eng"
                       />
                     </div>
                     <div className="sm:col-span-2">
-                      <label className="block text-[10px] font-black uppercase tracking-wider text-slate-500 mb-1">Photo Image URL</label>
+                      <label className="block text-xs font-bold text-gray-600 mb-1.5">Photo Image URL</label>
                       <input
                         type="text"
                         {...register('profileImage')}
-                        className="w-full text-xs border-2 border-slate-900 rounded-lg p-2.5 bg-white"
+                        className="w-full text-sm border border-gray-200 rounded-lg p-3 bg-white focus:outline-none focus:border-accent"
                       />
                     </div>
 
-                    <div className="sm:col-span-3 flex justify-end gap-2.5 mt-2.5">
+                    <div className="sm:col-span-3 flex justify-end gap-3 mt-4">
                       <button
                         type="button"
                         onClick={() => setIsTechFormOpen(false)}
-                        className="text-xs font-black text-slate-700 border border-slate-300 px-4 py-2 rounded-xl bg-white hover:bg-slate-50 transition-colors"
+                        className="text-sm font-bold text-gray-700 bg-white border border-gray-200 px-5 py-2.5 rounded-full hover:bg-slate-100 transition-colors"
                       >
                         Cancel
                       </button>
                       <button
                         type="submit"
-                        className="text-xs font-black text-white bg-[#0F4CFF] border-2 border-slate-900 px-4 py-2 rounded-xl shadow-[2px_2px_0px_#0A1020] hover:-translate-y-0.5 hover:shadow-[3px_3px_0px] transition-all cursor-pointer"
+                        className="text-sm font-bold text-white bg-primary px-6 py-2.5 rounded-full hover:bg-secondary shadow-sm transition-colors cursor-pointer"
                       >
                         Save Engineer Profile
                       </button>
@@ -767,38 +819,39 @@ export default function AdminDashboard() {
               {/* Technician list grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {Array.isArray(techList) && techList.map((tech) => (
-                  <div key={tech.id} className="border-2 border-slate-900 rounded-2xl overflow-hidden shadow-[4px_4px_0px_#0A1020] bg-white flex flex-col justify-between">
+                  <div key={tech.id} className="border border-gray-100 rounded-2xl overflow-hidden shadow-sm bg-white hover:shadow-md transition-shadow flex flex-col justify-between">
                     <div>
-                      <div className="relative h-44 bg-slate-100 border-b-2 border-slate-900">
+                      <div className="relative h-48 bg-gray-100">
                         <img src={tech.profileImage} className="w-full h-full object-cover object-top" alt="" />
-                        <span className="absolute bottom-3 left-3 bg-slate-900 text-white text-[9px] font-black px-2 py-0.5 rounded border border-slate-700 uppercase">
+                        <span className="absolute bottom-3 left-3 bg-white/90 backdrop-blur-sm text-primary text-xs font-bold px-3 py-1 rounded-full shadow-sm">
                           {tech.designation}
                         </span>
                       </div>
-                      <div className="p-4 space-y-3">
+                      <div className="p-5 space-y-3">
                         <div>
-                          <h3 className="font-black text-slate-900 text-base">{tech.name}</h3>
-                          <p className="text-[10px] text-slate-400 font-bold uppercase mt-0.5">Specialty: {tech.specialization}</p>
+                          <h3 className="font-bold text-gray-900 text-lg">{tech.name}</h3>
+                          <p className="text-sm text-gray-500 mt-0.5">{tech.specialization}</p>
                         </div>
-                        <div className="grid grid-cols-2 gap-2 text-[10px] font-bold text-slate-600 bg-slate-50 p-2 rounded-lg border border-slate-200">
+                        <div className="grid grid-cols-2 gap-2 text-xs font-bold text-gray-600 bg-slate-100 p-3 rounded-xl border border-gray-100">
                           <div>EXP: {tech.experience} Years</div>
                           <div className="text-right">REPAIRS: {tech.repairsCompleted}+</div>
                         </div>
                       </div>
                     </div>
-                    <div className="p-4 pt-0 border-t border-slate-100 mt-2 flex justify-between gap-2.5">
+                    <div className="p-5 pt-0 flex justify-between gap-3">
                       <button
                         onClick={() => handleOpenEditTech(tech)}
-                        className="flex-1 inline-flex items-center justify-center gap-1 text-[10px] font-black text-slate-700 border border-slate-300 py-2 rounded-lg bg-slate-50 hover:bg-slate-100 transition-colors cursor-pointer"
+                        className="flex-1 inline-flex items-center justify-center gap-1.5 text-sm font-bold text-gray-700 bg-slate-100 hover:bg-slate-200 border border-gray-200 py-2.5 rounded-xl transition-colors cursor-pointer"
                       >
-                        <Edit3 className="w-3.5 h-3.5" />
-                        <span>Edit Profile</span>
+                        <Edit3 className="w-4 h-4" />
+                        <span>Edit</span>
                       </button>
                       <button
                         onClick={() => handleDeleteTech(tech.id!)}
-                        className="inline-flex items-center justify-center text-[10px] font-black text-rose-500 border border-rose-200 bg-rose-50 hover:bg-rose-100 p-2 rounded-lg transition-colors cursor-pointer"
+                        className="inline-flex items-center justify-center text-rose-500 border border-rose-200 bg-rose-50 hover:bg-rose-100 p-2.5 rounded-xl transition-colors cursor-pointer"
+                        title="Delete"
                       >
-                        <Trash2 className="w-3.5 h-3.5" />
+                        <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
                   </div>
@@ -807,102 +860,97 @@ export default function AdminDashboard() {
             </div>
           )}
 
-          {/* TAB 5: GENERAL INQUIRIES */}
+          {/* TAB 5: INQUIRIES */}
           {activeTab === 'inquiries' && (
             <div className="space-y-6">
-              <div className="flex justify-between items-center border-b border-slate-100 pb-4">
-                <div>
-                  <h2 className="text-lg font-black text-slate-900 uppercase">General Inquiries Queue</h2>
-                  <p className="text-xs text-slate-500 mt-0.5">Audit contact messages, customer requests, and support queries submitted via web form.</p>
-                </div>
-                <span className="text-xs bg-blue-50 text-blue-700 font-bold border border-blue-200 px-3 py-1 rounded-xl">
+              <div className="flex justify-between items-center border-b border-gray-100 pb-4">
+                <h2 className="text-lg font-bold text-gray-900">General Inquiries Inbox</h2>
+                <span className="text-xs bg-slate-100 text-gray-600 font-bold border border-gray-200 px-3 py-1.5 rounded-full">
                   {inquiriesList.length} Messages
                 </span>
               </div>
 
-              <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse min-w-[700px]">
-                  <thead>
-                    <tr className="border-b-2 border-slate-900 bg-slate-50 text-[10px] uppercase font-black tracking-wider text-slate-500">
-                      <th className="py-3 px-4">Inquiry Details</th>
-                      <th className="py-3 px-4">Contact info</th>
-                      <th className="py-3 px-4">Message Context</th>
-                      <th className="py-3 px-4 text-right">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {Array.isArray(inquiriesList) && inquiriesList.map((inq) => (
-                      <tr key={inq.id} className="border-b border-slate-100 hover:bg-slate-50/50 text-xs">
-                        <td className="py-4 px-4">
-                          <span className="font-mono font-black text-slate-900 uppercase">{inq.id}</span>
-                          <span className="block text-[10px] text-slate-400 mt-0.5">{new Date(inq.createdAt).toLocaleDateString()}</span>
-                        </td>
-                        <td className="py-4 px-4 font-medium">
-                          <p className="font-black text-slate-900">{inq.name}</p>
-                          <p className="text-[10px] text-slate-500 font-bold">{inq.phone}</p>
-                          <p className="text-[10px] text-slate-400">{inq.email}</p>
-                        </td>
-                        <td className="py-4 px-4">
-                          <p className="font-bold text-slate-700 max-w-md break-words font-medium">"{inq.message}"</p>
-                        </td>
-                        <td className="py-4 px-4 text-right">
-                          <button
-                            onClick={() => handleDeleteInquiry(inq.id!)}
-                            className="inline-flex items-center justify-center text-[10px] font-black text-rose-500 border border-rose-200 bg-rose-50 hover:bg-rose-100 p-1.5 rounded-lg transition-colors cursor-pointer"
-                            title="Delete Inquiry"
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {Array.isArray(inquiriesList) && inquiriesList.map((inq) => (
+                  <div key={inq.id} className="border border-gray-100 rounded-2xl p-5 bg-white shadow-sm flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-start justify-between border-b border-gray-50 pb-3 mb-3">
+                        <div>
+                          <h4 className="font-bold text-gray-900">{inq.name}</h4>
+                          <p className="text-xs text-gray-500 mt-1">{new Date(inq.createdAt).toLocaleString()}</p>
+                        </div>
+                        <button
+                          onClick={() => handleDeleteInquiry(inq.id!)}
+                          className="text-rose-400 hover:text-rose-600 transition-colors p-1"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+
+                      <div className="space-y-2 mb-4 text-sm text-gray-700">
+                        <p><strong>Phone:</strong> {inq.phone}</p>
+                        {inq.email && <p><strong>Email:</strong> {inq.email}</p>}
+                      </div>
+                      <div className="bg-slate-100 border border-gray-100 rounded-xl p-4 text-sm text-gray-700 leading-relaxed font-medium">
+                        "{inq.message}"
+                      </div>
+                    </div>
+
+                    <div className="mt-5 pt-3 border-t border-gray-50 flex items-center justify-end">
+                      <a
+                        href={`https://wa.me/91${inq.phone}?text=Hi%20${encodeURIComponent(inq.name)},%20we%20received%20your%20inquiry%20regarding:%20${encodeURIComponent(inq.message)}`}
+                        target="_blank" rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 text-sm font-bold text-white bg-green-500 px-5 py-2 rounded-full hover:bg-green-600 transition-colors"
+                      >
+                        <MessageSquare className="w-4 h-4" />
+                        <span>Reply via WhatsApp</span>
+                      </a>
+                    </div>
+                  </div>
+                ))}
+
+                {inquiriesList.length === 0 && (
+                  <div className="col-span-full py-10 text-center text-gray-500">
+                    <Mail className="w-10 h-10 mx-auto text-gray-300 mb-3" />
+                    <p className="font-medium text-sm">Inbox is empty. No general inquiries yet.</p>
+                  </div>
+                )}
               </div>
             </div>
           )}
+
+        </div>
       </div>
 
-      {/* Unified Custom Neobrutalist Dialog Modal */}
+      {/* Global Dialog Modal */}
       {dialog.isOpen && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white border-4 border-slate-900 rounded-2xl p-6 max-w-md w-full shadow-[8px_8px_0px_#0A1020] relative transform transition-transform duration-200">
-            <div className="mb-4">
-              <span className="text-[10px] font-black uppercase tracking-widest bg-rose-100 text-rose-700 border-2 border-rose-300 px-2 py-0.5 rounded">
-                System Notification
-              </span>
-              <h3 className="text-xl font-black text-slate-900 mt-2 uppercase tracking-tight">
-                {dialog.title}
-              </h3>
-            </div>
-            <p className="text-xs font-bold text-slate-600 mb-6 leading-relaxed">
-              {dialog.message}
-            </p>
-            <div className="flex items-center justify-end gap-3.5">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/40 backdrop-blur-sm p-4">
+          <div className="bg-white border border-gray-100 p-6 md:p-8 rounded-2xl max-w-md w-full shadow-lg">
+            <h3 className="text-xl font-bold text-gray-900 mb-2">{dialog.title}</h3>
+            <p className="text-sm text-gray-600 mb-8 leading-relaxed">{dialog.message}</p>
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={closeDialog}
+                className="text-sm font-bold text-gray-700 bg-white border border-gray-200 px-5 py-2.5 rounded-full hover:bg-slate-100 transition-colors"
+              >
+                {dialog.type === 'confirm' ? 'Cancel' : 'Dismiss'}
+              </button>
               {dialog.type === 'confirm' && (
                 <button
-                  onClick={closeDialog}
-                  className="px-4 py-2 border-2 border-slate-900 bg-slate-100 text-slate-700 rounded-xl text-xs font-black uppercase tracking-wider hover:-translate-y-0.5 active:translate-y-0 shadow-[2px_2px_0px_#0A1020] cursor-pointer"
+                  onClick={() => {
+                    dialog.onConfirm?.();
+                    closeDialog();
+                  }}
+                  className="text-sm font-bold text-white bg-primary px-6 py-2.5 rounded-full hover:bg-secondary shadow-sm transition-colors cursor-pointer"
                 >
-                  Cancel
+                  Confirm Action
                 </button>
               )}
-              <button
-                onClick={() => {
-                  if (dialog.type === 'confirm' && dialog.onConfirm) {
-                    dialog.onConfirm();
-                  }
-                  closeDialog();
-                }}
-                className="px-4 py-2 border-2 border-slate-900 bg-[#FFB800] text-slate-950 rounded-xl text-xs font-black uppercase tracking-wider hover:-translate-y-0.5 active:translate-y-0 shadow-[2px_2px_0px_#0A1020] cursor-pointer"
-              >
-                {dialog.type === 'confirm' ? 'Yes, Proceed' : 'Okay'}
-              </button>
             </div>
           </div>
         </div>
       )}
-      </div>
+
     </div>
   );
 }

@@ -2,61 +2,50 @@ import { Shield, Hammer, Info, CheckCircle2 } from 'lucide-react';
 
 export function PrivacyPolicy() {
   return (
-    <div className="pt-32 pb-16 bg-white min-h-screen">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-        <div className="space-y-4">
-          <div className="inline-flex items-center space-x-2 bg-slate-100 text-slate-800 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
-            <Shield className="w-3.5 h-3.5 text-[#0F4CFF]" />
+    <div className="pt-32 pb-24 bg-gray-50 min-h-screen font-sans text-gray-800">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+
+        <div className="bg-white border border-gray-100 rounded-3xl p-8 md:p-12 shadow-sm space-y-6 text-center">
+          <div className="inline-flex items-center space-x-2 bg-orange-50 text-brand-orange px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider">
+            <Shield className="w-4 h-4" />
             <span>Data Protection Audit</span>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">Privacy Policy</h1>
-          <p className="text-xs text-slate-400 font-mono">Effective Date: June 24, 2026 | Last Updated: June 24, 2026</p>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 tracking-tight">Privacy Policy</h1>
+          <p className="text-sm text-gray-500 font-mono">Effective Date: June 24, 2026 | Last Updated: June 24, 2026</p>
         </div>
 
-        <div className="prose prose-slate prose-sm text-slate-600 space-y-6 text-sm leading-relaxed border-t border-slate-100 pt-8">
-          <h2 className="font-bold text-slate-900 text-lg">1. Introduction</h2>
-          <p>
-            Welcome to TheMobifixx ("we," "our," or "us"). We are committed to protecting your privacy and ensuring your personal devices, hard drives, and system credentials are handled with the highest standards of safety and data confidentiality. This Privacy Policy describes how we collect, use, and secure your personal details and diagnostic files during your service cycle.
-          </p>
-
-          <h2 className="font-bold text-slate-900 text-lg">2. Information We Collect</h2>
-          <p>
-            When you request a repair pickup or submit inquiries, we collect the following:
-          </p>
-          <ul className="list-disc pl-6 space-y-2">
-            <li><strong>Personal Coordinates:</strong> Your full name, Indian phone number, email address, and home or corporate physical address for pickup/delivery mapping.</li>
-            <li><strong>Device Specifications:</strong> System type (laptop, MacBook, smartphone, etc.), brand, model serials, and user-provided fault logs.</li>
-            <li><strong>Diagnostic Logs:</strong> Performance files and hardware errors logged by our laboratory machines during initial testing.</li>
-          </ul>
-
-          <h2 className="font-bold text-slate-900 text-lg">3. Hard Drive & Data Privacy Guarantee</h2>
-          <p>
-            TheMobifixx adheres to an ironclad data privacy policy:
-          </p>
-          <div className="bg-slate-50 border border-slate-100 rounded-xl p-5 space-y-2">
-            <div className="flex items-center gap-2 text-slate-900 font-bold">
-              <CheckCircle2 className="w-4 h-4 text-[#00C48C]" />
-              <span>Full Data Isolation</span>
+        <div className="bg-white border border-gray-100 rounded-3xl p-8 md:p-12 shadow-sm">
+          <div className="prose prose-slate max-w-none text-gray-600 space-y-8 text-sm leading-relaxed">
+            <div>
+              <h2 className="font-bold text-gray-900 text-xl mb-3">1. Introduction</h2>
+              <p>
+                Welcome to TheMobifixx ("we," "our," or "us"). We are committed to protecting your privacy and ensuring your personal devices, hard drives, and system credentials are handled with the highest standards of safety and data confidentiality. This Privacy Policy describes how we collect, use, and secure your personal details and diagnostic files during your service cycle.
+              </p>
             </div>
-            <p className="text-xs text-slate-500">
-              Our engineers are strictly forbidden from exploring, downloading, or duplicating folders, photos, or data on client drives. Hard drive arrays are isolated during motherboard soldering jobs to prevent thermal or static discharge corruption.
-            </p>
+
+            <div>
+              <h2 className="font-bold text-gray-900 text-xl mb-3">2. Information We Collect</h2>
+              <p className="mb-3">When you request a repair pickup or submit inquiries, we collect the following:</p>
+              <ul className="list-disc pl-6 space-y-2">
+                <li><strong>Personal Coordinates:</strong> Your full name, Indian phone number, email address, and home or corporate physical address for pickup/delivery mapping.</li>
+                <li><strong>Device Specifications:</strong> System type (laptop, MacBook, smartphone, etc.), brand, model serials, and user-provided fault logs.</li>
+                <li><strong>Diagnostic Logs:</strong> Performance files and hardware errors logged by our laboratory machines during initial testing.</li>
+              </ul>
+            </div>
+
+            <div>
+              <h2 className="font-bold text-gray-900 text-xl mb-4">3. Hard Drive & Data Privacy Guarantee</h2>
+              <div className="bg-gray-50 border border-gray-100 rounded-2xl p-6 space-y-3">
+                <div className="flex items-center gap-3 text-gray-900 font-bold text-base">
+                  <CheckCircle2 className="w-5 h-5 text-green-500" />
+                  <span>Full Data Isolation</span>
+                </div>
+                <p className="text-sm text-gray-600">
+                  Our engineers are strictly forbidden from exploring, downloading, or duplicating folders, photos, or data on client drives. Hard drive arrays are isolated during motherboard soldering jobs to prevent thermal or static discharge corruption.
+                </p>
+              </div>
+            </div>
           </div>
-
-          <h2 className="font-bold text-slate-900 text-lg">4. Sharing Your Data</h2>
-          <p>
-            We do not sell, rent, or trade your personal or business coordinates to third parties. Your delivery address and phone are shared only with our in-house transit specialists to complete pick-ups and returns.
-          </p>
-
-          <h2 className="font-bold text-slate-900 text-lg">5. Security Standards</h2>
-          <p>
-            Our master repair labs in Nehru Place are protected by continuous physical security monitoring, ESD anti-static mats, and local encrypted servers. Digital logs of repairs are kept on an isolated secure intranet database.
-          </p>
-
-          <h2 className="font-bold text-slate-900 text-lg">6. Contacting Our Data Officer</h2>
-          <p>
-            If you have any questions about our privacy methods, please email our security officer at: <a href="mailto:privacy@themobifixx.in" className="text-[#0F4CFF] hover:underline font-bold">privacy@themobifixx.in</a> or call <a href="tel:+919310112994" className="text-[#0F4CFF] hover:underline font-bold">+91 9310112994</a>.
-          </p>
         </div>
       </div>
     </div>
@@ -65,56 +54,50 @@ export function PrivacyPolicy() {
 
 export function TermsAndConditions() {
   return (
-    <div className="pt-32 pb-16 bg-white min-h-screen">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-        <div className="space-y-4">
-          <div className="inline-flex items-center space-x-2 bg-slate-100 text-slate-800 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
-            <Hammer className="w-3.5 h-3.5 text-[#FF7A00]" />
+    <div className="pt-32 pb-24 bg-gray-50 min-h-screen font-sans text-gray-800">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+
+        <div className="bg-white border border-gray-100 rounded-3xl p-8 md:p-12 shadow-sm text-center space-y-6">
+          <div className="inline-flex items-center space-x-2 bg-orange-50 text-brand-orange px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider">
+            <Hammer className="w-4 h-4" />
             <span>Service Contract</span>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">Terms and Conditions</h1>
-          <p className="text-xs text-slate-400 font-mono">Effective Date: June 24, 2026 | Last Updated: June 24, 2026</p>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 tracking-tight">Terms and Conditions</h1>
+          <p className="text-sm text-gray-500 font-mono">Effective Date: June 24, 2026 | Last Updated: June 24, 2026</p>
         </div>
 
-        <div className="prose prose-slate prose-sm text-slate-600 space-y-6 text-sm leading-relaxed border-t border-slate-100 pt-8">
-          <h2 className="font-bold text-slate-900 text-lg">1. Repair Agreements</h2>
-          <p>
-            By booking a repair or requesting doorstep pickup with TheMobifixx, you authorize our certified engineers to execute diagnostic scans and open system panels to assess hardware faults.
-          </p>
-
-          <h2 className="font-bold text-slate-900 text-lg">2. Diagnosis & Inspection Fee Waiver</h2>
-          <p>
-            Diagnostic testing is entirely free of cost if you approve the recommended repair estimate. In cases where the client rejects the estimate and requests return without any repair, a nominal inspection transport fee of ₹299 will be charged to cover transit.
-          </p>
-
-          <h2 className="font-bold text-slate-900 text-lg">3. Warranty Limits & Terms</h2>
-          <div className="bg-slate-50 border border-slate-100 rounded-xl p-5 space-y-3">
-            <div className="flex items-center gap-2 text-slate-900 font-bold">
-              <Info className="w-4 h-4 text-[#FF7A00]" />
-              <span>90-Day Repair Guarantee</span>
+        <div className="bg-white border border-gray-100 rounded-3xl p-8 md:p-12 shadow-sm">
+          <div className="prose prose-slate max-w-none text-gray-600 space-y-8 text-sm leading-relaxed">
+            <div>
+              <h2 className="font-bold text-gray-900 text-xl mb-3">1. Repair Agreements</h2>
+              <p>
+                By booking a repair or requesting doorstep pickup with TheMobifixx, you authorize our certified engineers to execute diagnostic scans and open system panels to assess hardware faults.
+              </p>
             </div>
-            <p className="text-xs text-slate-500 leading-relaxed">
-              We offer a solid 90-day warranty on all logic-board, chip-level, and component repairs.
-            </p>
-            <p className="text-xs text-slate-500 leading-relaxed">
-              Warranty is immediately voided in cases of subsequent physical drops, water ingress, or third-party disassembly attempts after TheMobifixx's tamper seal is broken.
-            </p>
+
+            <div>
+              <h2 className="font-bold text-gray-900 text-xl mb-3">2. Diagnosis & Inspection Fee Waiver</h2>
+              <p>
+                Diagnostic testing is entirely free of cost if you approve the recommended repair estimate. In cases where the client rejects the estimate and requests return without any repair, a nominal inspection transport fee of ₹299 will be charged to cover transit.
+              </p>
+            </div>
+
+            <div>
+              <h2 className="font-bold text-gray-900 text-xl mb-4">3. Warranty Limits & Terms</h2>
+              <div className="bg-gray-50 border border-gray-100 rounded-2xl p-6 space-y-3">
+                <div className="flex items-center gap-3 text-gray-900 font-bold text-base">
+                  <Info className="w-5 h-5 text-brand-orange" />
+                  <span>90-Day Repair Guarantee</span>
+                </div>
+                <p className="text-sm text-gray-600 leading-relaxed">
+                  We offer a solid 90-day warranty on all logic-board, chip-level, and component repairs.
+                </p>
+                <p className="text-sm text-gray-600 leading-relaxed">
+                  Warranty is immediately voided in cases of subsequent physical drops, water ingress, or third-party disassembly attempts after TheMobifixx's tamper seal is broken.
+                </p>
+              </div>
+            </div>
           </div>
-
-          <h2 className="font-bold text-slate-900 text-lg">4. Data Loss & Storage Liabilities</h2>
-          <p>
-            While TheMobifixx uses state-of-the-art procedures to protect physical disks, hardware failures can be highly unpredictable. The client is strongly advised to perform a full system backup before handing over any device. TheMobifixx is not liable for data loss occurring due to pre-existing motherboard failures.
-          </p>
-
-          <h2 className="font-bold text-slate-900 text-lg">5. Storage of Repaired Devices</h2>
-          <p>
-            Devices remaining in our laboratory for more than 45 days after repair completion notice without payment will carry a storage holding fee. After 90 days, TheMobifixx reserves the rights to recycle or auction the device components to recover outstanding spare parts bills.
-          </p>
-
-          <h2 className="font-bold text-slate-900 text-lg">6. Jurisdictions</h2>
-          <p>
-            Any legal disputes or complaints originating from TheMobifixx contracts shall fall strictly under the exclusive jurisdiction of the state courts of Delhi NCR, India.
-          </p>
         </div>
       </div>
     </div>

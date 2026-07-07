@@ -347,134 +347,6 @@ const SEED_TECHNICIANS: Technician[] = [
   }
 ];
 
-const SEED_TESTIMONIALS: Testimonial[] = [
-  {
-    customerName: "Vikramaditya Sharma",
-    rating: 5,
-    review: "Amazing experience! My MacBook Pro logic board was declared dead by Apple Service Center, quoting ₹48,000 for replacement. Rajesh from LapyZone repaired the short circuit on the board for just ₹6,500. It works beautifully now. Highly recommended!",
-    image: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=120&auto=format&fit=crop&q=60",
-    deviceType: "Apple MacBook Pro",
-    createdAt: new Date().toISOString()
-  },
-  {
-    customerName: "Priyanka Sen",
-    rating: 5,
-    review: "Requested a doorstep SSD and RAM upgrade for my HP laptop. Sandeep arrived in Karol Bagh within 2 hours, set up everything in front of my eyes, cloned all my files safely. My old laptop is flying now! Outstanding transparency.",
-    image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=120&auto=format&fit=crop&q=60",
-    deviceType: "HP Pavilion Laptop",
-    createdAt: new Date().toISOString()
-  },
-  {
-    customerName: "Ananya Deshmukh",
-    rating: 5,
-    review: "My iPhone screen was cracked, and I didn't want to leave it at a local market shop. LapyZone sent Amit to my apartment in Dwarka. He fixed the OLED panel in 30 minutes right in my dining room. Absolute luxury and top-tier security.",
-    image: "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=120&auto=format&fit=crop&q=60",
-    deviceType: "iPhone 14 Pro",
-    createdAt: new Date().toISOString()
-  },
-  {
-    customerName: "Karan Malhotra",
-    rating: 5,
-    review: "We had 15 corporate laptops from our office in Gurugram CyberCity requiring deep clean and thermal grease tuning due to overheating. Aditya and the team handled the bulk service over the weekend. Impeccable professional delivery.",
-    image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=120&auto=format&fit=crop&q=60",
-    deviceType: "Lenovo ThinkPad X1 (Bulk)",
-    createdAt: new Date().toISOString()
-  },
-  {
-    customerName: "Gurpreet Singh",
-    rating: 5,
-    review: "Outstanding data recovery team. My external HDD took a heavy fall and stopped spinning. I was desperate for my daughter's childhood photos. Vikram retrieved 98% of the data. I cannot thank them enough. Fair pricing.",
-    image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=120&auto=format&fit=crop&q=60",
-    deviceType: "Seagate 2TB External HDD",
-    createdAt: new Date().toISOString()
-  },
-  {
-    customerName: "Shreya Ghoshal",
-    rating: 4,
-    review: "Got my Dell Inspiron battery replaced. LapyZone had the genuine model in stock, unlike other local vendors. Service was prompt, and I got a 1-year stamped warranty card.",
-    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=60",
-    deviceType: "Dell Inspiron 15",
-    createdAt: new Date().toISOString()
-  },
-  {
-    customerName: "Rakesh Jhunjhunwala",
-    rating: 5,
-    review: "My iPad Air screen was completely blank. Meera repaired the backlight IC loop with amazing finesse. Fast pickup and delivery, transparent tracking alerts on WhatsApp. Top tier!",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&auto=format&fit=crop&q=60",
-    deviceType: "iPad Air 5th Gen",
-    createdAt: new Date().toISOString()
-  },
-  {
-    customerName: "Siddharth Roy",
-    rating: 5,
-    review: "Excellent response for virus removal and malware cleaning. My computer was hijacked with continuous popup warnings. LapyZone sorted out the registries, set up proper security, and optimized startup items. Smooth and clean.",
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=120&auto=format&fit=crop&q=60",
-    deviceType: "Lenovo Ideapad",
-    createdAt: new Date().toISOString()
-  },
-  {
-    customerName: "Neha Kakkar",
-    rating: 5,
-    review: "LapyZone is my go-to tech repair partner in Delhi NCR now. They are extremely professional, provide GST invoices, and have highly specialized technicians who know what they are doing.",
-    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&auto=format&fit=crop&q=60",
-    deviceType: "Asus Zenbook Duo",
-    createdAt: new Date().toISOString()
-  },
-  {
-    customerName: "Zafar Khan",
-    rating: 5,
-    review: "Brilliant customer support. Same-day keyboard replacement for my MacBook Air. The keys feel clicky and the backlight works perfectly. Extremely professional staff.",
-    image: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=120&auto=format&fit=crop&q=60",
-    deviceType: "Apple MacBook Air M1",
-    createdAt: new Date().toISOString()
-  }
-];
-
-const SEED_REPAIR_REQUESTS: RepairRequest[] = [
-  {
-    id: "LAPY-89241",
-    customerName: "Rahul Sharma",
-    phone: "9876543210",
-    email: "rahul@gmail.com",
-    deviceType: "macbook",
-    brand: "Apple",
-    model: "MacBook Pro 16\" M1 Pro",
-    issueDescription: "Accidentally spilled green tea on keyboard, display flickers and keys sticky.",
-    pickupRequired: true,
-    preferredDate: "2026-06-23",
-    status: "in_repair",
-    createdAt: "2026-06-23T08:30:00.000Z"
-  },
-  {
-    id: "LAPY-73105",
-    customerName: "Sneha Gupta",
-    phone: "9988776655",
-    email: "sneha@yahoo.com",
-    deviceType: "laptop",
-    brand: "Dell",
-    model: "XPS 15 9510",
-    issueDescription: "Battery swelling up, touchpad pushed upwards, overheating under moderate loads.",
-    pickupRequired: false,
-    preferredDate: "2026-06-24",
-    status: "accepted",
-    createdAt: "2026-06-24T01:15:00.000Z"
-  },
-  {
-    id: "LAPY-12045",
-    customerName: "Amit Verma",
-    phone: "9123456789",
-    email: "amit.verma@outlook.com",
-    deviceType: "mobile",
-    brand: "Apple",
-    model: "iPhone 13 Pro",
-    issueDescription: "Front glass screen completely shattered, multi-touch unresponsive in bottom left.",
-    pickupRequired: true,
-    preferredDate: "2026-06-22",
-    status: "completed",
-    createdAt: "2026-06-22T10:00:00.000Z"
-  }
-];
-
 // DB Operations Layer
 
 export interface UserDbRecord {
@@ -522,10 +394,10 @@ const mapTechnician = (row: any): Technician => {
   let certifications: string[] = [];
   try {
     serviceAreas = typeof row.service_areas === 'string' ? JSON.parse(row.service_areas) : (Array.isArray(row.service_areas) ? row.service_areas : []);
-  } catch (e) {}
+  } catch (e) { }
   try {
     certifications = typeof row.certifications === 'string' ? JSON.parse(row.certifications) : (Array.isArray(row.certifications) ? row.certifications : []);
-  } catch (e) {}
+  } catch (e) { }
 
   return {
     id: row.id,
@@ -567,7 +439,7 @@ const mapService = (row: any): ServiceCategory => {
   let highlights: string[] = [];
   try {
     highlights = typeof row.highlights === 'string' ? JSON.parse(row.highlights) : (Array.isArray(row.highlights) ? row.highlights : []);
-  } catch (e) {}
+  } catch (e) { }
 
   return {
     id: row.id,
@@ -593,7 +465,7 @@ export const Storage = {
         const client = await pgPool.connect();
         console.log('Successfully connected to PostgreSQL database.');
         client.release();
-        
+
         await this.runMigrations();
         await this.seedPg();
       } catch (err) {
@@ -623,7 +495,7 @@ export const Storage = {
     if (!pgPool) return;
     try {
       console.log('Running database migrations...');
-      
+
       // Users Table
       await pgPool.query(`
         CREATE TABLE IF NOT EXISTS users (
@@ -794,34 +666,11 @@ export const Storage = {
         }
       }
 
-      // Seed Testimonials (Disabled seeding dummy reviews per request)
-      // Wiping out existing dummy testimonials to keep feedback clean
-      await pgPool.query(`
-        DELETE FROM testimonials 
-        WHERE customer_name IN (
-          'Vikramaditya Sharma', 'Priyanka Sen', 'Ananya Deshmukh', 
-          'Karan Malhotra', 'Gurpreet Singh', 'Shreya Ghoshal', 
-          'Rakesh Jhunjhunwala', 'Siddharth Roy', 'Neha Kakkar', 'Zafar Khan'
-        )
-      `);
-      if (false) {
-        console.log('Seeding PostgreSQL "testimonials" table...');
-        for (const t of SEED_TESTIMONIALS) {
-          await pgPool.query(
-            `INSERT INTO testimonials (id, customer_name, rating, review, device_type, image, user_id, created_at)
-             VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
-            [
-              t.id || crypto.randomUUID(),
-              t.customerName,
-              t.rating,
-              t.review,
-              t.deviceType,
-              t.image,
-              t.userId || null,
-              new Date().toISOString()
-            ]
-          );
-        }
+      // Clear dummy data from repair_requests if any exist from old seeds
+      const repairCheck = await pgPool.query("SELECT COUNT(*) FROM repair_requests WHERE id LIKE 'LAPY-%'");
+      if (parseInt(repairCheck.rows[0].count, 10) > 0) {
+        console.log('Clearing dummy repair requests...');
+        await pgPool.query("DELETE FROM repair_requests WHERE id LIKE 'LAPY-%'");
       }
     } catch (err) {
       console.error('Error seeding PostgreSQL database:', err);
@@ -841,8 +690,8 @@ export const Storage = {
     if (!fs.existsSync(INQUIRIES_PATH)) {
       writeJsonFile(INQUIRIES_PATH, []);
     }
-    if (!fs.existsSync(REPAIR_REQUESTS_PATH) || readJsonFile<any[]>(REPAIR_REQUESTS_PATH, []).length === 0) {
-      writeJsonFile(REPAIR_REQUESTS_PATH, SEED_REPAIR_REQUESTS);
+    if (!fs.existsSync(REPAIR_REQUESTS_PATH)) {
+      writeJsonFile(REPAIR_REQUESTS_PATH, []);
     }
     if (!fs.existsSync(USERS_PATH)) {
       writeJsonFile(USERS_PATH, []);
@@ -969,7 +818,6 @@ export const Storage = {
           newReq.createdAt
         ]
       );
-      return newReq;
     }
     const list = readJsonFile<RepairRequest[]>(REPAIR_REQUESTS_PATH, []);
     list.push(newReq);

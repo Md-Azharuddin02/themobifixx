@@ -5,25 +5,27 @@ import { motion, AnimatePresence } from 'motion/react';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Home from './pages/Home';
-import About from './pages/About';
-import Services from './pages/Services';
-import ServiceDetail from './pages/ServiceDetail';
-import Technicians from './pages/Technicians';
-import Testimonials from './pages/Testimonials';
 import RepairTracker from './pages/RepairTracker';
+import CursorFollower from './pages/CursorFollower';
 import Contact from './pages/Contact';
-import ComparisonPage from './pages/ComparisonPage';
-import { PrivacyPolicy, TermsAndConditions } from './pages/Legal';
+import { PrivacyPolicy, TermsAndConditions } from './pages/Legal'; // This will now resolve correctly
+import { ForgotPassword, ResetPassword } from './pages/PasswordReset';
 import SEOManager from './components/SEOManager';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import UserDashboard from './pages/UserDashboard';
 import AdminDashboard from './pages/AdminDashboard';
+import BrandPage from './pages/BrandPage';
+import DeviceRepairPage from './pages/DeviceRepairPage';
+import CategoryPage from './CategoryPage';
+import Services from './pages/Services';
+import ServiceDetail from './pages/ServiceDetail';
+
 
 // Scroll Restoration Utility
 function ScrollToTop() {
   const { pathname } = useLocation();
-  
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
@@ -56,7 +58,7 @@ function FloatingCTAs() {
 
   return (
     <div className="fixed bottom-6 right-6 z-40 flex flex-col items-center space-y-4">
-      {/* Go To Top Button - Retro Neobrutalist */}
+      {/* Go To Top Button */}
       <AnimatePresence>
         {isScrollToTopVisible && (
           <motion.button
@@ -65,47 +67,45 @@ function FloatingCTAs() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: 10 }}
             transition={{ type: "spring", stiffness: 400, damping: 15 }}
-            className="w-12 h-12 bg-[#FFB800] text-slate-950 border-2 border-slate-900 rounded-full flex items-center justify-center shadow-[3px_3px_0px_#0A1020] hover:shadow-[4px_4px_0px_#0A1020] relative group cursor-pointer transition-all duration-200"
-            whileHover={{ scale: 1.08, y: -2, x: -2 }}
-            whileTap={{ scale: 0.95, y: 1.5, x: 1.5 }}
+            className="w-12 h-12 bg-white text-gray-900 rounded-full flex items-center justify-center shadow-md hover:shadow-lg border border-gray-100 relative group cursor-pointer transition-all duration-200"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             aria-label="Scroll to top of page"
           >
-            <ArrowUp className="w-5 h-5 group-hover:-translate-y-0.5 transition-transform duration-200" />
-            <span className="absolute right-14 bg-white border-2 border-slate-900 text-slate-900 text-[10px] font-black tracking-wider uppercase px-3 py-1.5 rounded-xl shadow-[2px_2px_0px_#0A1020] opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap hidden sm:inline-block pointer-events-none">
+            <ArrowUp className="w-5 h-5 text-gray-500 group-hover:text-brand-orange transition-colors duration-200" />
+            <span className="absolute right-16 bg-gray-900 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap hidden sm:inline-block pointer-events-none">
               Back To Top
             </span>
           </motion.button>
         )}
       </AnimatePresence>
 
-      {/* Call Hotline - Retro Neobrutalist */}
+      {/* Call Hotline */}
       <motion.a
-        href="tel:+919310112994"
-        className="w-12 h-12 bg-slate-950 text-white border-2 border-slate-900 rounded-full flex items-center justify-center shadow-[3px_3px_0px_#FFB800] hover:shadow-[4px_4px_0px_#FFB800] relative group cursor-pointer transition-all duration-200"
+        href="tel:+919818409122"
+        className="w-12 h-12 bg-gray-900 text-white rounded-full flex items-center justify-center shadow-md hover:shadow-lg hover:bg-black relative group cursor-pointer transition-all duration-200"
         aria-label="Call TheMobifixx Support"
-        whileHover={{ scale: 1.08, y: -2, x: -2 }}
-        whileTap={{ scale: 0.95, y: 1.5, x: 1.5 }}
-        transition={{ type: "spring", stiffness: 450, damping: 12 }}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
       >
         <Phone className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
-        <span className="absolute right-14 bg-white border-2 border-slate-900 text-slate-900 text-[10px] font-black tracking-wider uppercase px-3 py-1.5 rounded-xl shadow-[2px_2px_0px_#0A1020] opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap hidden sm:inline-block pointer-events-none">
-          Call +91 9310112994
+        <span className="absolute right-16 bg-gray-900 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap hidden sm:inline-block pointer-events-none">
+          Call +91 9818409122
         </span>
       </motion.a>
 
-      {/* WhatsApp Chat Support - Retro Neobrutalist */}
+      {/* WhatsApp Chat Support */}
       <motion.a
-        href="https://wa.me/919310112994?text=Hi%20TheMobifixx,%20I%20have%20a%20device%20repair%20inquiry."
+        href="https://wa.me/919818409122?text=Hi%20TheMobifixx,%20I%20have%20a%20device%20repair%20inquiry."
         target="_blank"
         rel="noopener noreferrer"
-        className="w-12 h-12 bg-[#00C48C] text-white border-2 border-slate-900 rounded-full flex items-center justify-center shadow-[3px_3px_0px_#0A1020] hover:shadow-[4px_4px_0px_#0A1020] relative group cursor-pointer transition-all duration-200 animate-bounce-slow"
+        className="w-12 h-12 bg-green-500 text-white rounded-full flex items-center justify-center shadow-md hover:shadow-lg hover:bg-green-600 relative group cursor-pointer transition-all duration-200"
         aria-label="WhatsApp Support Desk"
-        whileHover={{ scale: 1.08, y: -2, x: -2 }}
-        whileTap={{ scale: 0.95, y: 1.5, x: 1.5 }}
-        transition={{ type: "spring", stiffness: 450, damping: 12 }}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
       >
         <MessageSquare className="w-5 h-5 fill-white/10 group-hover:scale-110 transition-transform duration-300" />
-        <span className="absolute right-14 bg-white border-2 border-slate-900 text-slate-900 text-[10px] font-black tracking-wider uppercase px-3 py-1.5 rounded-xl shadow-[2px_2px_0px_#0A1020] opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap hidden sm:inline-block pointer-events-none">
+        <span className="absolute right-16 bg-gray-900 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap hidden sm:inline-block pointer-events-none">
           WhatsApp Chat Desk
         </span>
       </motion.a>
@@ -118,6 +118,7 @@ export default function App() {
     <BrowserRouter>
       <SEOManager />
       <ScrollToTop />
+      <CursorFollower />
       <div className="min-h-screen flex flex-col justify-between font-sans bg-slate-50 text-slate-800 antialiased">
         {/* Navigation Sticky Bar */}
         <Header />
@@ -126,21 +127,22 @@ export default function App() {
         <main className="flex-grow">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/services" element={<Services />} />
-            <Route path="/services/:slug" element={<ServiceDetail />} />
-            <Route path="/technicians" element={<Technicians />} />
-            <Route path="/testimonials" element={<Testimonials />} />
             <Route path="/tracker" element={<RepairTracker />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/comparison" element={<ComparisonPage />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/dashboard" element={<UserDashboard />} />
             <Route path="/admin" element={<AdminDashboard />} />
-            
+            <Route path="/brand/:brandId" element={<BrandPage />} />
+            <Route path="/repair/:brandId/:modelId" element={<DeviceRepairPage />} />
+            <Route path="/category/:categoryId" element={<CategoryPage />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/services/:slug" element={<ServiceDetail />} />
+
             {/* Fallback Catch-all Redirect */}
             <Route path="*" element={<Home />} />
           </Routes>

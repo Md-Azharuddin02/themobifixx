@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { 
-  Laptop, Smartphone, Tablet, ShieldCheck, 
+import {
+  Laptop, Smartphone, Tablet, ShieldCheck,
   ArrowRight, Clock, Sparkles, CheckSquare, Square
 } from 'lucide-react';
 
@@ -248,38 +248,47 @@ export default function PriceEstimator() {
   const displayTime = hasMultipleIssues ? `${estimatedTimeStr} (Concurrent Services)` : estimatedTimeStr;
 
   return (
-    <section className="py-24 bg-slate-50/40 border-b-2 border-slate-900 relative overflow-hidden" id="price-estimator">
+    <section className="py-24 bg-white relative overflow-hidden" id="price-estimator">
       {/* Dynamic blurred backdrop blobs */}
-      <div className="absolute top-1/3 left-0 w-80 h-80 bg-blue-100/20 rounded-full blur-3xl pointer-events-none -translate-x-12"></div>
-      <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-emerald-100/20 rounded-full blur-3xl pointer-events-none translate-x-12"></div>
+      <div className="absolute top-1/3 left-0 w-80 h-80 bg-blue-50 rounded-full blur-3xl pointer-events-none -translate-x-12"></div>
+      <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-orange-50 rounded-full blur-3xl pointer-events-none translate-x-12"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
+
         {/* Title Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0A1020] tracking-tight">
-            Configure Your Custom Repair Invoice
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight">
+            {"Configure Your Custom Repair Invoice".split(" ").map((word, i) => (
+              <motion.span
+                key={i}
+                animate={{ y: [0, -4, 0] }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  delay: i * 0.1,
+                  ease: 'easeInOut'
+                }}
+                className="inline-block mr-3"
+              >{word}</motion.span>
+            ))}
           </h2>
-          <p className="text-base text-slate-500 max-w-xl mx-auto leading-relaxed">
+          <p className="text-base text-gray-500 max-w-xl mx-auto leading-relaxed">
             Select multiple repair services and upgrades concurrently. Watch your live diagnostics breakdown adapt instantly below.
           </p>
         </div>
 
-        {/* Dynamic Estimation Container - Retro Offset Design */}
+        {/* Dynamic Estimation Container */}
         <div className="max-w-6xl mx-auto relative group">
-          {/* Retro offset shadow outline on the bottom-left of the estimator card */}
-          <div className="absolute -left-[6px] -bottom-[6px] inset-0 border-b-4 border-l-4 border-slate-900 rounded-[32px] bg-transparent pointer-events-none z-0"></div>
+          <div className="relative z-10 bg-white border border-gray-100 rounded-[2.5rem] p-6 lg:p-10 shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
 
-          <div className="relative z-10 bg-white border-4 border-slate-900 rounded-[32px] p-6 lg:p-10 shadow-2xl grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
-            
             {/* Inputs Panel (Left Side - 7 Cols) */}
             <div className="lg:col-span-7 space-y-8 text-left">
-              
+
               {/* Step 1: Device */}
               <div className="space-y-4">
                 <div className="flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-full bg-slate-900 border-2 border-slate-900 text-white flex items-center justify-center text-[10px] font-black">1</span>
-                  <h3 className="text-xs font-black uppercase tracking-wider text-slate-800">Select Device Category</h3>
+                  <span className="w-6 h-6 rounded-full bg-brand-orange text-white flex items-center justify-center text-[10px] font-bold">1</span>
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-gray-800">Select Device Category</h3>
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                   {devices.map((dev) => {
@@ -289,18 +298,16 @@ export default function PriceEstimator() {
                       <button
                         key={dev.id}
                         onClick={() => setSelectedDevice(selectedDevice === dev.id ? null : dev.id)}
-                        className={`flex flex-col items-center justify-center p-4.5 rounded-2xl border-2 text-center transition-all duration-200 cursor-pointer ${
-                          isSelected
-                            ? 'border-slate-900 bg-blue-50 text-slate-800 shadow-[1px_1px_0px_#0A1020] translate-x-[1.5px] translate-y-[1.5px]'
-                            : 'border-slate-900 bg-white text-slate-800 shadow-[3px_3px_0px_#0A1020] hover:-translate-x-[1px] hover:-translate-y-[1px] hover:shadow-[4px_4px_0px_#0A1020] active:translate-x-[1px] active:translate-y-[1px]'
-                        }`}
+                        className={`flex flex-col items-center justify-center p-4 rounded-2xl border text-center transition-all duration-200 cursor-pointer ${isSelected
+                            ? 'border-brand-orange bg-orange-50 text-brand-orange shadow-sm'
+                            : 'border-gray-200 bg-white text-gray-600 hover:border-orange-200 hover:bg-orange-50 hover:text-brand-orange shadow-sm'
+                          }`}
                       >
-                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 border-2 ${
-                          isSelected ? 'bg-[#0D0D0D] text-white border-[#0D0D0D]' : 'bg-slate-50 text-slate-600 border-slate-900'
-                        }`}>
+                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 ${isSelected ? 'bg-white text-brand-orange' : 'bg-gray-50 text-gray-500 group-hover:text-brand-orange'
+                          }`}>
                           <Icon className="w-5 h-5" />
                         </div>
-                        <span className="text-xs font-black tracking-tight text-slate-800 leading-none">
+                        <span className="text-xs font-bold tracking-tight leading-none">
                           {dev.name}
                         </span>
                       </button>
@@ -312,8 +319,8 @@ export default function PriceEstimator() {
               {/* Step 2: Brand */}
               <div className={`space-y-4 transition-all duration-250 ${!selectedDevice ? 'opacity-30 pointer-events-none' : ''}`}>
                 <div className="flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-full bg-slate-900 border-2 border-slate-900 text-white flex items-center justify-center text-[10px] font-black">2</span>
-                  <h3 className="text-xs font-black uppercase tracking-wider text-slate-800">Choose Hardware Brand</h3>
+                  <span className="w-6 h-6 rounded-full bg-brand-orange text-white flex items-center justify-center text-[10px] font-bold">2</span>
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-gray-800">Choose Hardware Brand</h3>
                 </div>
                 <div className="flex flex-wrap gap-2.5">
                   {currentBrands.map((brand) => {
@@ -322,11 +329,10 @@ export default function PriceEstimator() {
                       <button
                         key={brand}
                         onClick={() => setSelectedBrand(selectedBrand === brand ? null : brand)}
-                        className={`px-4.5 py-2 rounded-xl text-xs font-black transition-all duration-200 border-2 border-slate-900 cursor-pointer ${
-                          isSelected
-                            ? 'bg-[#0D0D0D] text-white shadow-[1px_1px_0px_#0A1020] translate-x-[1.5px] translate-y-[1.5px]'
-                            : 'bg-white text-slate-700 shadow-[3px_3px_0px_#0A1020] hover:-translate-x-[1px] hover:-translate-y-[1px] hover:shadow-[4px_4px_0px_#0A1020] active:translate-x-[1px] active:translate-y-[1px]'
-                        }`}
+                        className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all duration-200 border cursor-pointer shadow-sm ${isSelected
+                            ? 'bg-gray-900 text-white border-gray-900'
+                            : 'bg-white text-gray-600 border-gray-200 hover:border-gray-900 hover:text-gray-900'
+                          }`}
                       >
                         {brand}
                       </button>
@@ -339,14 +345,14 @@ export default function PriceEstimator() {
               <div className={`space-y-4 transition-all duration-250 ${!selectedBrand ? 'opacity-30 pointer-events-none' : ''}`}>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="w-6 h-6 rounded-full bg-slate-900 border-2 border-slate-900 text-white flex items-center justify-center text-[10px] font-black">3</span>
-                    <h3 className="text-xs font-black uppercase tracking-wider text-slate-800">Select Repairs Needed (Select Multiple)</h3>
+                    <span className="w-6 h-6 rounded-full bg-brand-orange text-white flex items-center justify-center text-[10px] font-bold">3</span>
+                    <h3 className="text-xs font-bold uppercase tracking-wider text-gray-800">Select Repairs Needed (Select Multiple)</h3>
                   </div>
-                  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">
+                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest bg-gray-100 px-2 py-1 rounded-full">
                     {selectedIssues.length} Selected
                   </span>
                 </div>
-                
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {currentIssues.map((issue) => {
                     const isChecked = selectedIssues.includes(issue.id);
@@ -355,26 +361,24 @@ export default function PriceEstimator() {
                       <button
                         key={issue.id}
                         onClick={() => toggleIssue(issue.id)}
-                        className={`w-full flex items-start gap-3 p-4 rounded-xl border-2 border-slate-900 text-left transition-all duration-200 cursor-pointer ${
-                          isChecked
-                            ? 'bg-blue-50/10 shadow-[1px_1px_0px_#0A1020] translate-x-[1.5px] translate-y-[1.5px]'
-                            : 'bg-white shadow-[3px_3px_0px_#0A1020] hover:-translate-x-[1px] hover:-translate-y-[1px] hover:shadow-[4px_4px_0px_#0A1020] active:translate-x-[1px] active:translate-y-[1px]'
-                        }`}
+                        className={`w-full flex items-start gap-3 p-4 rounded-2xl border text-left transition-all duration-200 cursor-pointer shadow-sm ${isChecked
+                            ? 'bg-orange-50 border-orange-200'
+                            : 'bg-white border-gray-100 hover:border-gray-300'
+                          }`}
                       >
                         <div className="mt-0.5 shrink-0">
                           {isChecked ? (
-                            <CheckSquare className="w-4 h-4 text-[#0F4CFF]" />
+                            <CheckSquare className="w-5 h-5 text-brand-orange" />
                           ) : (
-                            <Square className="w-4 h-4 text-slate-800" />
+                            <Square className="w-5 h-5 text-gray-300" />
                           )}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <div className={`text-[11px] leading-snug font-bold ${
-                            isChecked ? 'text-slate-900' : 'text-slate-600'
-                          }`}>
+                          <div className={`text-xs leading-snug font-bold ${isChecked ? 'text-gray-900' : 'text-gray-600'
+                            }`}>
                             {issue.name}
                           </div>
-                          <span className="inline-block mt-2 text-[9px] font-bold tracking-wider text-emerald-600 bg-emerald-50 border border-emerald-100 px-2 py-0.5 rounded-full">
+                          <span className={`inline-block mt-2 text-[10px] font-bold tracking-wider px-2.5 py-1 rounded-full ${isChecked ? 'text-brand-orange bg-white' : 'text-gray-500 bg-gray-50 border border-gray-100'}`}>
                             Est: ₹{priceRange.min} - ₹{priceRange.max}
                           </span>
                         </div>
@@ -386,25 +390,22 @@ export default function PriceEstimator() {
 
             </div>
 
-            {/* Live Invoice Results Panel (Right Side - 5 Cols) - Retro Offset */}
+            {/* Live Invoice Results Panel (Right Side - 5 Cols) */}
             <div className="relative lg:col-span-5 flex flex-col justify-between h-full">
-              {/* Retro offset shadow outline for invoice card */}
-              <div className="absolute -left-[4px] -bottom-[4px] inset-0 border-b-2 border-l-2 border-slate-900 rounded-[24px] bg-transparent pointer-events-none z-0"></div>
-
-              <div className="relative z-10 bg-[#0b1410] border-2 border-slate-900 text-white rounded-[24px] p-6 lg:p-8 flex flex-col justify-between h-full overflow-hidden shadow-xl shadow-emerald-950/20">
+              <div className="relative z-10 bg-gray-900 text-white rounded-[2rem] p-6 lg:p-8 flex flex-col justify-between h-full overflow-hidden shadow-lg">
                 {/* Ambient visual glowing light */}
-                <div className="absolute -bottom-16 -right-16 w-52 h-52 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
-                
+                <div className="absolute -bottom-16 -right-16 w-52 h-52 bg-brand-orange/20 rounded-full blur-3xl pointer-events-none"></div>
+
                 {(!selectedDevice || !selectedBrand || selectedIssues.length === 0) ? (
                   <div className="flex flex-col items-center justify-center text-center py-12 space-y-2 my-auto relative z-10">
-                    <div className="space-y-1">
-                      <h4 className="font-black text-sm uppercase tracking-wider text-slate-200">Invoice Awaiting Inputs</h4>
-                      <p className="text-xs text-slate-400 max-w-[240px] leading-relaxed">
-                        {!selectedDevice 
+                    <div className="space-y-2">
+                      <h4 className="font-bold text-sm uppercase tracking-wider text-gray-200">Invoice Awaiting Inputs</h4>
+                      <p className="text-xs text-gray-400 max-w-[240px] leading-relaxed">
+                        {!selectedDevice
                           ? "Select a device category on the left to start."
-                          : !selectedBrand 
-                          ? "Choose your hardware brand to view compatible repair modules."
-                          : "Choose one or more hardware issues below to compute estimated repair time and price."}
+                          : !selectedBrand
+                            ? "Choose your hardware brand to view compatible repair modules."
+                            : "Choose one or more hardware issues below to compute estimated repair time and price."}
                       </p>
                     </div>
                   </div>
@@ -413,15 +414,15 @@ export default function PriceEstimator() {
                     <div className="space-y-6 relative z-10 text-left">
                       {/* Header */}
                       <div className="flex items-center justify-between border-b border-white/10 pb-4">
-                        <div className="space-y-0.5">
-                          <span className="text-[10px] font-black uppercase text-slate-400 tracking-wider">
+                        <div className="space-y-1">
+                          <span className="text-[10px] font-bold uppercase text-gray-400 tracking-wider">
                             Invoice Summary
                           </span>
-                          <div className="text-[9px] text-slate-400 capitalize">
+                          <div className="text-xs text-gray-300 capitalize font-medium">
                             {selectedBrand} • {selectedDevice}
                           </div>
                         </div>
-                        <span className="text-[8px] font-bold text-[#a3e635] bg-[#a3e635]/10 border border-[#a3e635]/20 px-2 py-0.5 rounded-full uppercase tracking-widest shrink-0">
+                        <span className="text-[9px] font-bold text-white bg-green-500/20 text-green-400 px-3 py-1 rounded-full uppercase tracking-widest shrink-0">
                           Live Calculator
                         </span>
                       </div>
@@ -433,11 +434,11 @@ export default function PriceEstimator() {
                           if (!issueObj) return null;
                           const price = issueObj.getPrice(selectedBrand);
                           return (
-                            <div key={issueId} className="flex justify-between items-start text-[10px] pb-2.5 border-b border-white/5">
-                              <span className="text-slate-300 font-medium max-w-[70%] leading-normal line-clamp-2">
+                            <div key={issueId} className="flex justify-between items-start text-xs pb-3 border-b border-white/5">
+                              <span className="text-gray-300 font-medium max-w-[70%] leading-relaxed line-clamp-2">
                                 {issueObj.name}
                               </span>
-                              <span className="text-slate-100 font-bold shrink-0">
+                              <span className="text-white font-bold shrink-0">
                                 ₹{price.min} - ₹{price.max}
                               </span>
                             </div>
@@ -447,17 +448,17 @@ export default function PriceEstimator() {
 
                       {/* Price Calculations Total display */}
                       <div className="space-y-1 pt-2">
-                        <span className="text-[9px] text-slate-400 block font-bold uppercase tracking-wider">Total Est. Cost Range</span>
-                        <div className="flex items-baseline gap-1.5 flex-wrap">
-                          <span className="text-3xl lg:text-4xl font-black text-white tracking-tight">
+                        <span className="text-[10px] text-gray-400 block font-bold uppercase tracking-wider">Total Est. Cost Range</span>
+                        <div className="flex items-baseline gap-2 flex-wrap">
+                          <span className="text-3xl lg:text-4xl font-bold text-white tracking-tight">
                             ₹{subtotalMin.toLocaleString('en-IN')}
                           </span>
-                          <span className="text-sm font-semibold text-slate-400">-</span>
-                          <span className="text-3xl lg:text-4xl font-black text-white tracking-tight">
+                          <span className="text-sm font-semibold text-gray-400">-</span>
+                          <span className="text-3xl lg:text-4xl font-bold text-white tracking-tight">
                             ₹{subtotalMax.toLocaleString('en-IN')}
                           </span>
                         </div>
-                        <span className="text-[9px] text-[#a3e635] font-semibold block pt-1 leading-normal">
+                        <span className="text-[10px] text-brand-orange font-semibold block pt-2 leading-normal">
                           * Dynamic estimate subject to physical inspection.
                         </span>
                       </div>
@@ -465,54 +466,46 @@ export default function PriceEstimator() {
                       {/* Breakdown diagnostic parameters */}
                       <div className="space-y-3.5 border-t border-white/5 pt-6 text-xs font-semibold">
                         <div className="flex items-center justify-between">
-                          <span className="text-slate-400">Diag. Fee</span>
-                          <span className="text-[#a3e635] font-bold">FREE (With Repair)</span>
+                          <span className="text-gray-400">Diag. Fee</span>
+                          <span className="text-green-400 font-bold">FREE (With Repair)</span>
                         </div>
                         <div className="flex items-center justify-between">
-                          <span className="text-slate-400">Est. Repair Time</span>
-                          <span className="text-slate-200 font-bold flex items-center gap-1">
-                            <Clock className="w-3.5 h-3.5 text-blue-400" />
+                          <span className="text-gray-400">Est. Repair Time</span>
+                          <span className="text-white font-bold flex items-center gap-1.5">
+                            <Clock className="w-4 h-4 text-blue-400" />
                             <span>{displayTime}</span>
                           </span>
                         </div>
                         <div className="flex items-center justify-between">
-                          <span className="text-slate-400">Transit & Pickup</span>
-                          <span className="text-[#a3e635] font-bold">FREE (Delhi NCR)</span>
+                          <span className="text-gray-400">Transit & Pickup</span>
+                          <span className="text-green-400 font-bold">FREE (Delhi NCR)</span>
                         </div>
                         <div className="flex items-center justify-between">
-                          <span className="text-slate-400">Warranty Protection</span>
-                          <span className="text-slate-200 font-bold">90 Days Certificate</span>
+                          <span className="text-gray-400">Warranty Protection</span>
+                          <span className="text-white font-bold">90 Days Certificate</span>
                         </div>
                       </div>
                     </div>
 
                     {/* Booking CTA Button */}
                     <div className="pt-8 border-t border-white/10 relative z-10 space-y-4">
-                      <div className="relative w-full h-[52px] group select-none cursor-pointer">
-                        {/* Outer offset thin black outline boundary */}
-                        <div className="absolute -left-[3px] -top-[3px] w-[calc(100%+6px)] h-[calc(100%+6px)] border-2 border-slate-900 rounded-xl pointer-events-none z-0"></div>
-
-                        {/* Yellow backing offset block */}
-                        <div className="absolute inset-0 bg-[#FFB800] rounded-xl -translate-x-1.5 translate-y-1.5 z-0 transition-transform duration-200 group-hover:-translate-x-2"></div>
-
-                        {/* Main button link element */}
+                      <div className="relative w-full group">
                         <Link
                           to={`/contact?tab=booking&device=${selectedDevice || ''}&brand=${encodeURIComponent(selectedBrand || '')}&issues=${encodeURIComponent(
                             selectedIssues.map(id => currentIssues.find(item => item.id === id)?.name || '').join(', ')
                           )}`}
-                          className="absolute inset-0 z-10 bg-[#0D0D0D] border-2 border-[#0D0D0D] hover:bg-black text-white font-black text-xs tracking-widest uppercase rounded-xl flex items-center justify-center gap-2 transition-all duration-150 shadow-sm active:translate-y-[1px] active:translate-x-[1px]"
+                          className="w-full bg-brand-orange hover:bg-orange-600 text-white font-bold py-4 px-6 rounded-full flex items-center justify-center gap-2 transition-colors shadow-lg"
                         >
-                          <span className="relative pb-0.5">
+                          <span>
                             Confirm & Book Pickup
-                            <span className="absolute left-0 -bottom-0.5 w-full h-[1.5px] bg-[#FFB800]"></span>
                           </span>
-                          <ArrowRight className="w-4 h-4 text-[#FFB800]" />
+                          <ArrowRight className="w-4 h-4 text-white" />
                         </Link>
                       </div>
-                      
+
                       <div className="flex items-center justify-center gap-2 pt-2">
-                        <ShieldCheck className="w-4 h-4 text-[#a3e635]" />
-                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                        <ShieldCheck className="w-4 h-4 text-green-400" />
+                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
                           ISO 9001 Lab Diagnostic Standards
                         </span>
                       </div>

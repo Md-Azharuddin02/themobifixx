@@ -2,8 +2,11 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import express, { Request, Response, NextFunction } from 'express';
+import os from 'os';
 import path from 'path';
 import crypto from 'crypto';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
 import { createServer as createViteServer } from 'vite';
 import { Storage } from './server/storage';
 import { User } from './src/types';
@@ -16,18 +19,33 @@ async function bootstrap() {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
-  // Global HTTP Security Headers (Protects against URL script injections, clickjacking, and MIME sniffing)
-  app.use((req: Request, res: Response, next: NextFunction) => {
-    res.setHeader('X-Frame-Options', 'DENY');
-    res.setHeader('X-Content-Type-Options', 'nosniff');
-    res.setHeader('X-XSS-Protection', '1; mode=block');
-    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
-    res.setHeader(
-      'Content-Security-Policy',
-      "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://apis.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://res.cloudinary.com https://images.unsplash.com; frame-src 'self' https://www.google.com https://maps.google.com; connect-src 'self' ws: wss:;"
-    );
-    next();
+  // Apply Helmet for a robust suite of security headers
+  app.use(helmet({
+    contentSecurityPolicy: {
+      directives: {
+        ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+        "script-src": ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://apis.google.com"],
+        "style-src": ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+        "font-src": ["'self'", "https://fonts.gstatic.com"],
+        "img-src": ["'self'", "data:", "https://res.cloudinary.com", "https://images.unsplash.com", "https://cdn.simpleicons.org", "https://upload.wikimedia.org", "https://1000logos.net", "https://api.dicebear.com", "https://www.transparenttextures.com"],
+        "frame-src": ["'self'", "https://www.google.com", "https://maps.google.com"],
+        "connect-src": ["'self'", "ws:", "wss:"],
+      },
+    },
+  }));
+
+  // Apply rate limiting to all API routes to prevent abuse
+  const apiLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // Limit each IP to 100 requests per window
+    standardHeaders: true,
+    legacyHeaders: false,
+    handler: (req, res, next, options) =>
+      res.status(options.statusCode).json({
+        error: options.message
+      }),
   });
+  app.use('/api/', apiLimiter);
 
   const toUserResponse = (user: any): User => ({
     id: user.id,
@@ -74,7 +92,7 @@ async function bootstrap() {
       if (!name || !email || !password) {
         return res.status(400).json({ error: 'All registration fields are required' });
       }
-      
+
       const existing = await Storage.getUserByEmail(email);
       if (existing) {
         return res.status(400).json({ error: 'An account with this email already exists' });
@@ -89,7 +107,7 @@ async function bootstrap() {
         passwordHash,
         salt,
         role: 'user',
-        dashboardAccess: false // Requires admin approval
+        dashboardAccess: true // Grant access by default
       });
 
       const sessionToken = crypto.randomBytes(32).toString('hex');
@@ -205,9 +223,9 @@ async function bootstrap() {
       if (isNaN(numRating) || numRating < 1 || numRating > 5) {
         return res.status(400).json({ error: 'Rating must be a number between 1 and 5' });
       }
-      
+
       const defaultImage = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(authUser.name)}&backgroundColor=0f4cff,00c48c,ff7a00,3b82f6`;
-      
+
       const record = await Storage.addTestimonial({
         customerName: authUser.name,
         rating: numRating,
@@ -358,10 +376,11 @@ async function bootstrap() {
     try {
       const { id } = req.params;
       const { status } = req.body;
-      if (!status) {
+      const validStatuses = ['pending', 'accepted', 'in_repair', 'completed', 'cancelled'];
+      if (!status || !validStatuses.includes(status)) {
         return res.status(400).json({ error: 'Status value is required' });
       }
-      const success = await Storage.updateRepairRequestStatus(id, status);
+      const success = await Storage.updateRepairRequestStatus(id, status as any);
       if (!success) {
         return res.status(404).json({ error: 'Repair request not found' });
       }
@@ -505,7 +524,21 @@ async function bootstrap() {
 
   // Start listening
   const server = app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server listening at http://localhost:${PORT}`);
+    const getNetworkAddress = () => {
+      const interfaces = os.networkInterfaces();
+      for (const name of Object.keys(interfaces)) {
+        for (const iface of interfaces[name]!) {
+          if (iface.family === 'IPv4' && !iface.internal) {
+            return iface.address;
+          }
+        }
+      }
+      return 'localhost';
+    };
+    const networkAddress = getNetworkAddress();
+    console.log('\nServer is running and accessible on:');
+    console.log(`  - Local:   http://localhost:${PORT}`);
+    console.log(`  - Network: http://${networkAddress}:${PORT}\n`);
   });
 
 
