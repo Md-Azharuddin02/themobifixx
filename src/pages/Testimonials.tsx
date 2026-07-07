@@ -225,13 +225,39 @@ export default function Testimonials() {
               <div key={n} className="h-48 bg-white border-2 border-slate-900 rounded-2xl shadow-[3px_3px_0px_#0A1020]" />
             ))}
           </div>
+        ) : testimonials.length === 0 ? (
+          <div className="text-center py-16 bg-white border-2 border-slate-900 rounded-2xl max-w-lg mx-auto p-8 shadow-[5px_5px_0px_#0A1020]">
+            <MessageSquare className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+            <h3 className="font-black text-slate-800 text-lg mb-1">No feedback</h3>
+            <p className="text-sm text-slate-500 mb-6">Be first to give feedback.</p>
+            <button
+              onClick={() => {
+                if (!token || !user) {
+                  navigate('/login');
+                } else {
+                  setCustomerName(user.name);
+                  setIsModalOpen(true);
+                }
+              }}
+              className="bg-[#0F4CFF] text-white text-xs font-black uppercase tracking-wider px-6 py-3 rounded-xl border-2 border-slate-900 shadow-[3px_3px_0px_#0A1020] hover:-translate-y-[1px] hover:-translate-x-[1px] hover:shadow-[4px_4px_0px_#0A1020] active:translate-y-[1px] active:translate-x-[1px] transition-all cursor-pointer"
+            >
+              Write First Review
+            </button>
+          </div>
         ) : getFilteredList().length === 0 ? (
           <div className="text-center py-16 bg-white border-2 border-slate-900 rounded-2xl max-w-lg mx-auto p-8 shadow-[5px_5px_0px_#0A1020]">
             <MessageSquare className="w-12 h-12 text-slate-300 mx-auto mb-4" />
             <h3 className="font-black text-slate-800 text-lg mb-1">No matching testimonials found</h3>
             <p className="text-sm text-slate-500 mb-6">Try broadening your device or star-rating filters, or submit a brand-new review first!</p>
             <button
-              onClick={() => setIsModalOpen(true)}
+              onClick={() => {
+                if (!token || !user) {
+                  navigate('/login');
+                } else {
+                  setCustomerName(user.name);
+                  setIsModalOpen(true);
+                }
+              }}
               className="bg-[#0F4CFF] text-white text-xs font-black uppercase tracking-wider px-6 py-3 rounded-xl border-2 border-slate-900 shadow-[3px_3px_0px_#0A1020] hover:-translate-y-[1px] hover:-translate-x-[1px] hover:shadow-[4px_4px_0px_#0A1020] active:translate-y-[1px] active:translate-x-[1px] transition-all cursor-pointer"
             >
               Write First Review

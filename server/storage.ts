@@ -794,10 +794,17 @@ export const Storage = {
         }
       }
 
-      // Seed Testimonials
-      const testimonialsCheck = await pgPool.query('SELECT COUNT(*) FROM testimonials');
-      const testimonialsCount = parseInt(testimonialsCheck.rows[0].count, 10);
-      if (testimonialsCount === 0) {
+      // Seed Testimonials (Disabled seeding dummy reviews per request)
+      // Wiping out existing dummy testimonials to keep feedback clean
+      await pgPool.query(`
+        DELETE FROM testimonials 
+        WHERE customer_name IN (
+          'Vikramaditya Sharma', 'Priyanka Sen', 'Ananya Deshmukh', 
+          'Karan Malhotra', 'Gurpreet Singh', 'Shreya Ghoshal', 
+          'Rakesh Jhunjhunwala', 'Siddharth Roy', 'Neha Kakkar', 'Zafar Khan'
+        )
+      `);
+      if (false) {
         console.log('Seeding PostgreSQL "testimonials" table...');
         for (const t of SEED_TESTIMONIALS) {
           await pgPool.query(
@@ -829,7 +836,7 @@ export const Storage = {
       writeJsonFile(TECHNICIANS_PATH, SEED_TECHNICIANS);
     }
     if (!fs.existsSync(TESTIMONIALS_PATH)) {
-      writeJsonFile(TESTIMONIALS_PATH, SEED_TESTIMONIALS);
+      writeJsonFile(TESTIMONIALS_PATH, []);
     }
     if (!fs.existsSync(INQUIRIES_PATH)) {
       writeJsonFile(INQUIRIES_PATH, []);
@@ -1096,7 +1103,7 @@ export const Storage = {
       const res = await pgPool.query('SELECT * FROM testimonials ORDER BY created_at DESC');
       return res.rows.map(mapTestimonial);
     }
-    return readJsonFile<Testimonial[]>(TESTIMONIALS_PATH, SEED_TESTIMONIALS);
+    return readJsonFile<Testimonial[]>(TESTIMONIALS_PATH, []);
   },
 
   async addTestimonial(testimonial: Omit<Testimonial, 'id' | 'createdAt'>): Promise<Testimonial> {
@@ -1122,7 +1129,7 @@ export const Storage = {
       );
       return newTestimonial;
     }
-    const list = readJsonFile<Testimonial[]>(TESTIMONIALS_PATH, SEED_TESTIMONIALS);
+    const list = readJsonFile<Testimonial[]>(TESTIMONIALS_PATH, []);
     list.unshift(newTestimonial);
     writeJsonFile(TESTIMONIALS_PATH, list);
     return newTestimonial;
@@ -1133,7 +1140,7 @@ export const Storage = {
       const res = await pgPool.query('DELETE FROM testimonials WHERE id = $1', [id]);
       return (res.rowCount ?? 0) > 0;
     }
-    const list = readJsonFile<Testimonial[]>(TESTIMONIALS_PATH, SEED_TESTIMONIALS);
+    const list = readJsonFile<Testimonial[]>(TESTIMONIALS_PATH, []);
     const filtered = list.filter(t => t.id !== id);
     if (filtered.length === list.length) return false;
     writeJsonFile(TESTIMONIALS_PATH, filtered);
