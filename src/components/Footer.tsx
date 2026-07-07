@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import logoImg from '../../assets/logo.jpeg';
+import logoImg from '../../assets/logo.png';
 import { Phone, Mail, MapPin, Clock, Shield, Award, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
