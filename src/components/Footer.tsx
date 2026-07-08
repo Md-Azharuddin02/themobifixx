@@ -14,7 +14,7 @@ export default function Footer() {
           {/* Brand & About */}
           <div className="space-y-6">
             <Link to="/">
-              <img src='https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783492584/logo_ixtnqx.jpg' alt="TheMobifixx" className="h-20 w-auto" />
+              <img src='https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783492584/logo_ixtnqx.jpg' alt="TheMobifixx" className="h-16 w-auto" />
             </Link>
             <p className="text-sm leading-relaxed text-slate-900">
               India's most trusted doorstep repair service for smartphones, tablets, laptops, and smartwatches. We bring the repair center to you.

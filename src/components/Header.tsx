@@ -115,7 +115,7 @@ export default function Header() {
                 <Menu className="h-6 w-6" />
               </button>
               <Link to="/" className="flex items-center">
-                <img src='https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783492584/logo_ixtnqx.jpg' alt="TheMobifixx" className="h-16 sm:h-18 lg:h-24 w-auto object-contain" />
+                <img src='https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783492584/logo_ixtnqx.jpg' alt="TheMobifixx" className="h-14 sm:h-16 lg:h-20 w-auto object-contain" />
               </Link>
             </div>
 
