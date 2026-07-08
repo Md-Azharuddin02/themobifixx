@@ -60,21 +60,21 @@ export default function Contact() {
               <h3 className="font-bold text-gray-900 text-lg border-b border-gray-100 pb-3">Emergency Support</h3>
               <ul className="space-y-6">
                 <li className="flex items-start gap-4">
-                  <div className="w-10 h-10 bg-brand-orange/10 text-brand-orange rounded-xl flex items-center justify-center shrink-0">
+                  <div className="w-10 h-10 bg-[#0b1f3a]/10 text-[#0b1f3a] rounded-xl flex items-center justify-center shrink-0">
                     <Phone className="w-5 h-5" />
                   </div>
                   <div>
                     <span className="text-gray-400 text-[10px] block uppercase font-bold tracking-widest mb-1">Direct Hotline</span>
                     <a
                       href="tel:+919818409122"
-                      className="text-gray-900 font-bold text-lg hover:text-brand-orange transition-colors"
+                      className="text-gray-900 font-bold text-lg hover:text-[#0b1f3a] transition-colors"
                     >
                       +91 9818409122
                     </a>
                   </div>
                 </li>
                 <li className="flex items-start gap-4">
-                  <div className="w-10 h-10 bg-green-100 text-green-600 rounded-xl flex items-center justify-center shrink-0">
+                  <div className="w-10 h-10 bg-[#0b1f3a]/10 text-[#0b1f3a] rounded-xl flex items-center justify-center shrink-0">
                     <MessageSquare className="w-5 h-5" />
                   </div>
                   <div>
@@ -82,14 +82,14 @@ export default function Contact() {
                     <a
                       href="https://wa.me/919818409122?text=Hi%20TheMobifixx,%20I%20need%20to%20consult%20regarding%20repair."
                       target="_blank" rel="noopener noreferrer"
-                      className="text-gray-900 font-bold text-lg hover:text-green-600 transition-colors"
+                      className="text-gray-900 font-bold text-lg hover:text-[#0b1f3a] transition-colors"
                     >
                       Chat with us
                     </a>
                   </div>
                 </li>
                 <li className="flex items-start gap-4">
-                  <div className="w-10 h-10 bg-gray-100 text-gray-600 rounded-xl flex items-center justify-center shrink-0">
+                  <div className="w-10 h-10 bg-[#0b1f3a]/10 text-[#0b1f3a] rounded-xl flex items-center justify-center shrink-0">
                     <Clock className="w-5 h-5" />
                   </div>
                   <div>
@@ -108,7 +108,7 @@ export default function Contact() {
                 {branches.map((b, idx) => (
                   <div key={idx} className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm space-y-3 hover:shadow-md transition-shadow">
                     <div className="flex items-center gap-2 text-gray-900 font-bold text-sm">
-                      <MapPin className="w-5 h-5 text-brand-orange" />
+                      <MapPin className="w-5 h-5 text-[#0b1f3a]" />
                       <span>{b.city}</span>
                     </div>
                     <p className="text-sm text-gray-500 leading-relaxed">{b.address}</p>
@@ -140,7 +140,7 @@ export default function Contact() {
               <button
                 onClick={() => changeTab('booking')}
                 className={`flex-1 py-2.5 text-sm font-bold rounded-full transition-colors ${
-                  activeTab === 'booking' ? 'bg-brand-orange text-white shadow-sm' : 'text-gray-500 hover:text-brand-orange'
+                  activeTab === 'booking' ? 'bg-[#0b1f3a] text-white shadow-sm' : 'text-gray-500 hover:text-[#0b1f3a]'
                 }`}
               >
                 Book Repair
@@ -148,7 +148,7 @@ export default function Contact() {
               <button
                 onClick={() => changeTab('inquiry')}
                 className={`flex-1 py-2.5 text-sm font-bold rounded-full transition-colors ${
-                  activeTab === 'inquiry' ? 'bg-brand-orange text-white shadow-sm' : 'text-gray-500 hover:text-brand-orange'
+                  activeTab === 'inquiry' ? 'bg-[#0b1f3a] text-white shadow-sm' : 'text-gray-500 hover:text-[#0b1f3a]'
                 }`}
               >
                 General Inquiry

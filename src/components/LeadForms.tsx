@@ -88,9 +88,9 @@ export function InquiryForm() {
             </p>
 
             {!getAuthToken() && submittedData && (
-              <div className="mt-6 mb-2 p-5 bg-gray-50 border border-gray-100 rounded-xl space-y-4 max-w-sm w-full text-left">
-                <p className="text-xs font-bold text-brand-orange">Direct Support Links</p>
-                <p className="text-xs text-gray-600 leading-relaxed">
+              <div className="mt-6 mb-2 p-5 bg-gray-100 border border-gray-100 rounded-xl space-y-4 max-w-sm w-full text-left">
+                <p className="text-xs font-bold text-[#0b1f3a]">Direct Support Links</p>
+                <p className="text-xs text-gray-900 leading-relaxed">
                   To ensure fastest resolution, you can also send this inquiry directly to our support handlers via:
                 </p>
                 <div className="flex flex-col gap-3">
@@ -212,7 +212,7 @@ export function InquiryForm() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full flex items-center justify-center gap-2 bg-brand-orange disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold text-sm px-6 py-3.5 rounded-full hover:bg-orange-600 transition-colors shadow-sm mt-6"
+              className="w-full flex items-center justify-center gap-2 bg-[#0b1f3a] disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold text-sm px-6 py-3.5 rounded-full hover:bg-[#0b1f3a]/90 transition-colors shadow-sm mt-6"
             >
               {isSubmitting ? (
                 <>
@@ -597,7 +597,7 @@ export function RepairBookingForm({ initialDeviceType = 'laptop' }: RepairBookin
                     {...register('pickupAddress', { 
                       required: pickupRequired ? 'Please enter your complete doorstep pickup address' : false 
                     })}
-                    className={`w-full text-sm border border-gray-200 rounded-lg px-4 py-3.5 bg-white focus:outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange transition-all resize-none ${
+                    className={`w-full text-sm border border-gray-200 rounded-lg px-4 py-3.5 bg-white focus:outline-none focus:border-[#0b1f3a] focus:ring-1 focus:ring-[#0b1f3a] transition-all resize-none ${
                       errors.pickupAddress ? 'border-rose-300 focus:border-rose-500 focus:ring-rose-500' : ''
                     }`}
                   />
@@ -611,7 +611,7 @@ export function RepairBookingForm({ initialDeviceType = 'laptop' }: RepairBookin
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full flex items-center justify-center gap-2 bg-brand-orange disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold text-sm px-6 py-3.5 rounded-full hover:bg-orange-600 transition-colors shadow-sm mt-6"
+              className="w-full flex items-center justify-center gap-2 bg-[#0b1f3a] disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold text-sm px-6 py-3.5 rounded-full hover:bg-[#0b1f3a]/90 transition-colors shadow-sm mt-6"
             >
               {isSubmitting ? (
                 <>
