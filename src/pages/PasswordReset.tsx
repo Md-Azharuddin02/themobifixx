@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { Mail, Lock, Loader2, ArrowRight, AlertCircle, CheckCircle2, Eye, EyeOff } from 'lucide-react';
-import logoImg from '../../assets/logo.png';
 
 export function ForgotPassword() {
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -38,7 +37,7 @@ export function ForgotPassword() {
             <div className="relative w-full max-w-md px-4 z-10">
                 <div className="text-center mb-8">
                     <Link to="/" className="inline-block mb-4">
-                        <img src={logoImg} alt="TheMobifixx" className="h-12 w-auto mx-auto" />
+                        <img src='https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783492584/logo_ixtnqx.jpg' alt="TheMobifixx" className="h-12 w-auto mx-auto" />
                     </Link>
                     <h2 className="text-2xl font-bold text-gray-800">Forgot Password</h2>
                     <p className="text-sm text-gray-500 mt-2">Enter your email to receive a password reset link.</p>

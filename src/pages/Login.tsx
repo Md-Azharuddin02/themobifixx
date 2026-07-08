@@ -3,7 +3,6 @@ import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, Loader2, ArrowRight, AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { setAuthToken, setAuthUser } from '../utils/auth';
-import logoImg from '../../assets/logo.png';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -62,7 +61,7 @@ export default function Login() {
         {/* Logo Rebranding */}
         <div className="text-center mb-8">
           <Link to="/" className="inline-block mb-4">
-            <img src={logoImg} alt="TheMobifixx" className="h-12 w-auto mx-auto" />
+            <img src='https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783492584/logo_ixtnqx.jpg' alt="TheMobifixx" className="h-12 w-auto mx-auto" />
           </Link>
           <h2 className="text-2xl font-bold text-gray-800">Welcome Back</h2>
           <p className="text-sm text-gray-500 mt-2">Log in to manage your repairs and bookings.</p>

@@ -29,13 +29,13 @@ const HERO_SLIDES = [
 ];
 
 const GALLERY_ITEMS = [
-  { type: 'video', src: "../assets/ss.mp4" },
-  { type: 'video', src: '../assets/battery.mp4' },
-  { type: 'video', src: '../assets/iphoneb.mp4'},
-  { type: 'video', src: '../assets/iphones.mp4' },
-  { type: 'video', src: '../assets/iphoness.mp4' },
-  { type: 'video', src: '../assets/mobilem.mp4' },
-  { type: 'video', src: '../assets/sss.mp4' },
+  { type: 'video', src: "https://res.cloudinary.com/dzhsxv2wq/video/upload/v1783496194/sss_umkve2.mp4" },
+  { type: 'video', src: 'https://res.cloudinary.com/dzhsxv2wq/video/upload/v1783496188/iphones_v68rqj.mp4' },
+  { type: 'video', src: 'https://res.cloudinary.com/dzhsxv2wq/video/upload/v1783496187/mobilem_gmprhd.mp4' },
+  { type: 'video', src: 'https://res.cloudinary.com/dzhsxv2wq/video/upload/v1783496187/iphoness_y4ezfk.mp4' },
+  { type: 'video', src: 'https://res.cloudinary.com/dzhsxv2wq/video/upload/v1783496186/battery_yinoig.mp4' },
+  { type: 'video', src: 'https://res.cloudinary.com/dzhsxv2wq/video/upload/v1783496186/ss_eju8jp.mp4' },
+  { type: 'video', src: 'https://res.cloudinary.com/dzhsxv2wq/video/upload/v1783496186/iphoneb_dpu1ot.mp4' },
 ];
 
 export default function Home() {
@@ -430,19 +430,21 @@ export default function Home() {
             { name: 'Samsung', logo: 'https://cdn.simpleicons.org/samsung/000' },
             { name: 'Xiaomi', logo: 'https://cdn.simpleicons.org/xiaomi/000' },
             { name: 'OnePlus', logo: 'https://cdn.simpleicons.org/oneplus/000' },
+            { name: 'Realme', logo: '/realme.avif' },
             { name: 'Google', logo: 'https://cdn.simpleicons.org/google/000' },
+            { name: 'Nothing', logo: '/nothing.avif' },
+            { name: 'Poco', logo: '/poco.avif' },
             { name: 'Oppo', logo: 'https://cdn.simpleicons.org/oppo/000' },
+            { name: 'iQOO', logo: '/iqoo.avif' },
             { name: 'Motorola', logo: 'https://cdn.simpleicons.org/motorola/000' },
             { name: 'Asus', logo: 'https://cdn.simpleicons.org/asus/000' },
-            { name: 'HP', logo: 'https://cdn.simpleicons.org/hp/000' },
-            { name: 'Dell', logo: 'https://cdn.simpleicons.org/dell/000' },
           ].map((brand, idx) => (
             <Link
               to={`/brand/${brand.name.toLowerCase()}`}
               key={idx}
               className="bg-white border border-gray-100 rounded-3xl p-6 shadow-sm flex flex-col items-center justify-center gap-4 font-bold text-gray-600 hover:shadow-md hover:-translate-y-1 hover:border-gray-200 cursor-pointer transition-all"
             >
-              <img src={brand.logo} alt={`${brand.name} logo`} className="h-8 w-auto" />
+              <img src={brand.logo} alt={`${brand.name} logo`} className="h-10 w-auto" />
               <span className="text-sm">{brand.name}</span>
             </Link>
           ))}

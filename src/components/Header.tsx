@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Search, MapPin, Menu, X, ChevronDown, Phone, MessageCircle, Instagram, Facebook, Twitter, Wrench, User as UserIcon, LogOut, LayoutDashboard } from 'lucide-react';
-import logoImg from '../../assets/logo.png';
 import { getAuthToken, getAuthUser, clearAuth } from '../utils/auth';
 
 export default function Header() {
@@ -116,7 +115,7 @@ export default function Header() {
                 <Menu className="h-6 w-6" />
               </button>
               <Link to="/" className="flex items-center">
-                <img src={logoImg} alt="TheMobifixx" className="h-14 sm:h-16 lg:h-20 w-auto object-contain" />
+                <img src='https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783492584/logo_ixtnqx.jpg' alt="TheMobifixx" className="h-16 sm:h-18 lg:h-24 w-auto object-contain" />
               </Link>
             </div>
 
@@ -241,7 +240,7 @@ export default function Header() {
             className="w-4/5 max-w-sm bg-white h-full shadow-2xl flex flex-col overflow-y-auto"
           >
             <div className="p-4 border-b border-gray-100 flex items-center justify-between">
-              <img src={logoImg} alt="TheMobifixx" className="h-10 w-auto" />
+              <img src='https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783492584/logo_ixtnqx.jpg' alt="TheMobifixx" className="h-16 w-auto" />
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="p-2 text-gray-500 hover:bg-gray-100 rounded-full transition-colors"

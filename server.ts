@@ -8,6 +8,7 @@ import crypto from 'crypto';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import { createServer as createViteServer } from 'vite';
+import { v2 as cloudinary } from 'cloudinary';
 import { Storage } from './server/storage';
 import { User } from './src/types';
 
@@ -27,8 +28,9 @@ async function bootstrap() {
         "script-src": ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://apis.google.com"],
         "style-src": ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
         "font-src": ["'self'", "https://fonts.gstatic.com"],
-        "img-src": ["'self'", "data:", "https://res.cloudinary.com", "https://images.unsplash.com", "https://cdn.simpleicons.org", "https://upload.wikimedia.org", "https://1000logos.net", "https://api.dicebear.com", "https://www.transparenttextures.com"],
-        "frame-src": ["'self'", "https://www.google.com", "https://maps.google.com"],
+        "img-src": ["'self'", "data:", "https://res.cloudinary.com", "https://images.unsplash.com", "https://cdn.simpleicons.org", "https://upload.wikimedia.org", "https://1000logos.net", "https://api.dicebear.com", "https://www.transparenttextures.com", "https://*.pexels.com"],
+        "media-src": ["'self'", "https://res.cloudinary.com", "https://videos.pexels.com"],
+        "frame-src": ["'self'", "https://www.google.com", "https://maps.google.com", "https://js.stripe.com"],
         "connect-src": ["'self'", "ws:", "wss:"],
       },
     },
@@ -46,6 +48,13 @@ async function bootstrap() {
       }),
   });
   app.use('/api/', apiLimiter);
+
+  // Configure Cloudinary SDK
+  cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+  });
 
   const toUserResponse = (user: any): User => ({
     id: user.id,
@@ -238,6 +247,26 @@ async function bootstrap() {
     } catch (error) {
       console.error('Error adding testimonial:', error);
       res.status(500).json({ error: 'Failed to submit testimonial' });
+    }
+  });
+
+  // API to fetch media from a Cloudinary folder
+  app.get('/api/media/:folder', async (req: Request, res: Response) => {
+    try {
+      const folder = req.params.folder;
+      if (!folder) {
+        return res.status(400).json({ error: 'Folder name is required.' });
+      }
+
+      const results = await cloudinary.search
+        .expression(`folder:${folder}`)
+        .sort_by('public_id', 'asc')
+        .max_results(30)
+        .execute();
+
+      res.json(results.resources);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to fetch media from Cloudinary.' });
     }
   });
 

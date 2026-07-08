@@ -1,67 +1,72 @@
-import React from 'react';
-import { useParams, Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ChevronRight, Phone, CheckCircle2 } from 'lucide-react';
-
-// Mock Data for Apple Devices to match the user's sample requirement.
-// In a real app, this would come from an API based on the brandId.
-const GENERIC_IMAGE = 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&q=80&w=200';
 
 const DEVICE_MODELS: Record<string, { id: string; name: string; image: string }[]> = {
   apple: [
-    { id: 'iphone-air', name: 'iPhone Air', image: '../assets/iphoneair.webp?auto=format&fit=crop&q=80&w=200' },
-    { id: 'iphone-17-pro-max', name: 'iPhone 17 Pro Max', image: '../assets/iphone17promax.avif?auto=format&fit=crop&q=80&w=200' },
-    { id: 'iphone-17-pro', name: 'iPhone 17 Pro', image: '../assets/iphone17pro.avif?auto=format&fit=crop&q=80&w=200' },
-    { id: 'iphone-17', name: 'iPhone 17', image: '../assets/iphone17.webp?auto=format&fit=crop&q=80&w=200' },
-    { id: 'iphone-16-pro-max', name: 'iPhone 16 Pro Max', image: '../assets/iphone16promax.webp?auto=format&fit=crop&q=80&w=200' },
-    { id: 'iphone-16-pro', name: 'iPhone 16 Pro', image: '../assets/iphone16pro.webp?auto=format&fit=crop&q=80&w=200' },
-    { id: 'iphone-16-plus', name: 'iPhone 16 Plus', image: '../assets/iphone16plus.webp?auto=format&fit=crop&q=80&w=200' },
-    { id: 'iphone-16', name: 'iPhone 16', image: '../assets/iphone16.webp?auto=format&fit=crop&q=80&w=200' },
-    { id: 'iphone-16-e', name: 'iPhone 16 e', image: '../assets/iphone16e.jpg?auto=format&fit=crop&q=80&w=200' },
-    { id: 'iphone-15-pro-max', name: 'iphone 15 Pro Max', image: '../assets/iphone15promax.webp?auto=format&fit=crop&q=80&w=200' },
-    { id: 'iphone-15-pro', name: 'iphone 15 Pro', image: '../assets/iphone15pro.webp?auto=format&fit=crop&q=80&w=200' },
-    { id: 'iphone-15-plus', name: 'iphone 15 Plus', image: '../assets/iphone15plus.jpg?auto=format&fit=crop&q=80&w=200' },
-    { id: 'iphone-15', name: 'iPhone 15', image: '../assets/iphone15.webp?auto=format&fit=crop&q=80&w=200' },
-    { id: 'iphone-14-pro-max', name: 'iPhone 14 Pro Max', image: '../assets/iphone14promax.jpg?auto=format&fit=crop&q=80&w=200' },
-    { id: 'iphone-14-pro', name: 'iPhone 14 Pro', image: '../assets/iphone14pro.webp?auto=format&fit=crop&q=80&w=200' },
-    { id: 'iphone-14-plus', name: 'iPhone 14 Plus', image: '../assets/iphone14plus.webp?auto=format&fit=crop&q=80&w=200' },
-    { id: 'iphone-14', name: 'iPhone 14', image: '../assets/iphone14.webp?auto=format&fit=crop&q=80&w=200' },
-    { id: 'iphone-13-pro-max', name: 'iPhone 13 Pro Max', image: '../assets/iphone13promax.jpg?auto=format&fit=crop&q=80&w=200' },
-    { id: 'iphone-13-pro', name: 'iPhone 13 Pro', image: '../assets/iphone13pro.webp?auto=format&fit=crop&q=80&w=200'},
-    { id: 'iphone-13-mini', name: 'iPhone 13 mini', image: '../assets/iphone13mini.webp?auto=format&fit=crop&q=80&w=200'},
-    { id: 'iphone-13', name: 'iPhone 13', image: '../assets/iphone13.jpg?auto=format&fit=crop&q=80&w=200'},
-    { id: 'iphone-12-pro-max',  name: 'iphone 12 Pro Max', image: '../assets/iphone12promax.jpeg?auto=format&fit=crop&q=80&w=200'},
-    { id: 'iphone-12-pro',  name: 'iPhone 12 Pro', image: '../assets/iphone12pro.jpg?auto=format&fit=crop&q=80&w=200'},
-    { id: 'iphone-12-mini', name: 'iphone 12 Mini', image: '../assets/iphone12mini.webp?auto=format&fit=crop&q=80&w=200'},
-    { id: 'iphone-12', name: 'iphone 12', image: '../assets/iphone12.jpg?auto=format&fit=crop&q=80&w=200'}
+    { id: 'iphone-air', name: 'iPhone Air', image: 'https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783494936/iphoneair_gidkjo.webp' },
+    { id: 'iphone-17-pro-max', name: 'iPhone 17 Pro Max', image: 'https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783494936/iphone17promax_ttccix.avif' },
+    { id: 'iphone-17-pro', name: 'iPhone 17 Pro', image: 'https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783494935/iphone17pro_x9wqxw.avif' },
+    { id: 'iphone-17', name: 'iPhone 17', image: 'https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783494935/iphone17_x1yorz.webp' },
+    { id: 'iphone-16-pro-max', name: 'iPhone 16 Pro Max', image: 'https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783494935/iphone16promax_bhhhpx.webp' },
+    { id: 'iphone-16-pro', name: 'iPhone 16 Pro', image: 'https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783494934/iphone16pro_hhzxi5.webp' },
+    { id: 'iphone-16-plus', name: 'iPhone 16 Plus', image: 'https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783494935/iphone16plus_uj3kho.webp' },
+    { id: 'iphone-16', name: 'iPhone 16', image: 'https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783494934/iphone16_biugih.webp' },
+    { id: 'iphone-16-e', name: 'iPhone 16 e', image: 'https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783494934/iphone16e_cw4x4q.jpg' },
+    { id: 'iphone-15-pro-max', name: 'iphone 15 Pro Max', image: 'https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783494933/iphone15promax_jjguv0.webp' },
+    { id: 'iphone-15-pro', name: 'iphone 15 Pro', image: 'https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783494933/iphone15pro_ixgkj3.webp' },
+    { id: 'iphone-15-plus', name: 'iphone 15 Plus', image: 'https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783494933/iphone15plus_zbqbr9.jpg' },
+    { id: 'iphone-15', name: 'iPhone 15', image: 'https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783494933/iphone15_dnqfmk.webp' },
+    { id: 'iphone-14-pro-max', name: 'iPhone 14 Pro Max', image: 'https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783494933/iphone14promax_okxjls.jpg' },
+    { id: 'iphone-14-pro', name: 'iPhone 14 Pro', image: 'https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783494932/iphone14pro_gs1ugx.webp' },
+    { id: 'iphone-14-plus', name: 'iPhone 14 Plus', image: 'https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783494932/iphone14plus_mkxowz.webp' },
+    { id: 'iphone-14', name: 'iPhone 14', image: 'https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783494932/iphone14_xgssr0.jpg' },
+    { id: 'iphone-13-pro-max', name: 'iPhone 13 Pro Max', image: 'https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783494932/iphone13promax_wesjve.jpg' },
+    { id: 'iphone-13-pro', name: 'iPhone 13 Pro', image: 'https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783494931/iphone13pro_ih4icx.webp' },
+    { id: 'iphone-13-mini', name: 'iPhone 13 mini', image: 'https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783494932/iphone13mini_grovcy.webp' },
+    { id: 'iphone-13', name: 'iPhone 13', image: 'https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783494932/iphone13_wj3hxq.jpg' },
+    { id: 'iphone-12-pro-max', name: 'iphone 12 Pro Max', image: 'https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783494931/iphone12promax_u7ewq2.jpg' },
+    { id: 'iphone-12-pro', name: 'iPhone 12 Pro', image: 'https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783494931/iphone12pro_hrnwg1.jpg' },
+    { id: 'iphone-12-mini', name: 'iphone 12 Mini', image: 'https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783494931/iphone12mini_xrx9fi.webp' },
+    { id: 'iphone-12', name: 'iphone 12', image: 'https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783494931/iphone12_wvdl7b.jpg' }
   ],
   samsung: [
-    { id: 'galaxy-s24-ultra', name: 'Galaxy S24 Ultra', image: GENERIC_IMAGE },
-    { id: 'galaxy-s24-plus', name: 'Galaxy S24+', image: GENERIC_IMAGE },
-    { id: 'galaxy-z-fold-5', name: 'Galaxy Z Fold 5', image: GENERIC_IMAGE },
-    { id: 'galaxy-z-flip-5', name: 'Galaxy Z Flip 5', image: GENERIC_IMAGE },
-    { id: 'galaxy-a55', name: 'Galaxy A55', image: GENERIC_IMAGE },
+    { id: 'galaxy-s24-ultra', name: 'Galaxy S24 Ultra', image: '' },
+    { id: 'galaxy-s24-plus', name: 'Galaxy S24+', image: '' },
+    { id: 'galaxy-z-fold-5', name: 'Galaxy Z Fold 5', image: '' },
+    { id: 'galaxy-z-flip-5', name: 'Galaxy Z Flip 5', image: '' },
+    { id: 'galaxy-a55', name: 'Galaxy A55', image: '' },
   ],
   oneplus: [
-    { id: 'oneplus-12', name: 'OnePlus 12', image: GENERIC_IMAGE },
-    { id: 'oneplus-11', name: 'OnePlus 11', image: GENERIC_IMAGE },
-    { id: 'oneplus-open', name: 'OnePlus Open', image: GENERIC_IMAGE },
-    { id: 'oneplus-nord-ce-4', name: 'OnePlus Nord CE 4', image: GENERIC_IMAGE },
+    { id: 'oneplus-12', name: 'OnePlus 12', image: '' },
+    { id: 'oneplus-11', name: 'OnePlus 11', image: '' },
+    { id: 'oneplus-open', name: 'OnePlus Open', image: '' },
+    { id: 'oneplus-nord-ce-4', name: 'OnePlus Nord CE 4', image: '' },
   ],
   // Add other brands here...
 };
 
 export default function BrandPage() {
   const { brandId } = useParams();
+  const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Format brand name for display
   const formattedBrand = brandId ? brandId.charAt(0).toUpperCase() + brandId.slice(1) : '';
 
   // Use mock apple data or generate generic mock data for other brands
-  const devices = DEVICE_MODELS[brandId?.toLowerCase() || ''] || Array.from({ length: 12 }).map((_, i) => ({
+  const allDevices = DEVICE_MODELS[brandId?.toLowerCase() || ''] || Array.from({ length: 12 }).map((_, i) => ({
     id: `${brandId}-model-${i + 1}`,
     name: `${formattedBrand} Model ${i + 1}`,
-    image: GENERIC_IMAGE
+    image: ''
   }));
+
+  const filteredDevices = allDevices.filter(device =>
+    device.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  // Redirect if brand doesn't exist
+  if (!DEVICE_MODELS[brandId?.toLowerCase() || '']) navigate('/');
 
   return (
     <div className="min-h-screen bg-gray-50 pt-20 pb-12">
@@ -85,7 +90,7 @@ export default function BrandPage() {
             <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-gray-100 flex flex-col sm:flex-row sm:items-start justify-between gap-6">
               <div>
                 <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
-                  {formattedBrand} Screen Repair at Home in 60 Minutes
+                  {formattedBrand} Screen Repair at Home in 90 Minutes
                 </h1>
                 <p className="text-sm text-gray-500 leading-relaxed max-w-xl">
                   Book your repair online, a Mobifixx expert comes to your home/office & repairs your {formattedBrand} device instantly! 100% data security guaranteed.
@@ -97,7 +102,7 @@ export default function BrandPage() {
                   </div>
                   <div className="flex items-center gap-1.5 text-xs font-bold text-gray-700 bg-gray-50 px-3 py-1.5 rounded-full border border-gray-100">
                     <CheckCircle2 className="w-4 h-4 text-green-500" />
-                    90 Day Warranty
+                    30 Day Warranty
                   </div>
                   <div className="flex items-center gap-1.5 text-xs font-bold text-gray-700 bg-gray-50 px-3 py-1.5 rounded-full border border-gray-100">
                     <CheckCircle2 className="w-4 h-4 text-green-500" />
@@ -111,7 +116,7 @@ export default function BrandPage() {
             <div>
               <h2 className="text-xl font-bold text-gray-900 mb-6 px-1">Select your {formattedBrand} Model</h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                {devices.map((device) => (
+                {filteredDevices.map((device) => (
                   <Link
                     to={`/repair/${brandId}/${device.id}`}
                     key={device.id}
@@ -132,6 +137,12 @@ export default function BrandPage() {
                     </span>
                   </Link>
                 ))}
+                {filteredDevices.length === 0 && (
+                  <div className="col-span-full text-center py-10 bg-gray-50 rounded-2xl">
+                    <h3 className="font-bold text-gray-700">No models found</h3>
+                    <p className="text-sm text-gray-500 mt-1">Try adjusting your search for "{searchQuery}".</p>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -172,6 +183,8 @@ export default function BrandPage() {
                   <input
                     type="text"
                     placeholder={`Search ${formattedBrand} models...`}
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
                     className="w-full bg-gray-50 border border-gray-200 text-sm rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-brand-orange/50 focus:border-brand-orange transition-colors"
                   />
                 </div>
@@ -187,14 +200,6 @@ export default function BrandPage() {
                 </div>
               </div>
 
-              {/* Promo Banner */}
-              <div className="bg-orange-50 rounded-3xl p-6 border border-orange-100">
-                <div className="text-brand-orange font-bold mb-2">₹200 OFF on First Repair!</div>
-                <p className="text-xs text-gray-600 mb-4">Use code <span className="font-bold bg-white px-2 py-1 rounded text-gray-900 border border-gray-200">NEW200</span> at checkout.</p>
-                <Link to="/contact" className="block w-full bg-brand-orange hover:bg-orange-600 text-white font-bold py-3 rounded-xl text-center text-sm transition-colors shadow-sm cursor-pointer">
-                  Contact Us Now
-                </Link>
-              </div>
             </div>
           </div>
 
