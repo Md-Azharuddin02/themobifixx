@@ -385,7 +385,7 @@ export default function AdminDashboard() {
             <h1 className="text-2xl md:text-3xl font-bold mt-1">TheMobifixx Operations Suite</h1>
             <p className="text-sm text-gray-500 mt-2">Manage diagnostics, user access, engineers, and verify feedback.</p>
           </div>
-          <div className="bg-slate-100 text-gray-800 border border-gray-200 px-5 py-2.5 rounded-full text-sm font-bold shadow-sm">
+          <div className="bg-slate-900 text-white border border-gray-200 px-5 py-2.5 rounded-full text-sm font-bold shadow-sm">
             Admin: {admin?.name}
           </div>
         </div>
@@ -401,7 +401,7 @@ export default function AdminDashboard() {
         <div className="flex flex-wrap gap-2 mb-8 border-b border-gray-200 pb-4">
           <button
             onClick={() => setActiveTab('orders')}
-            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold transition-colors ${activeTab === 'orders' ? 'bg-primary text-white shadow-sm' : 'bg-white text-gray-600 border border-gray-200 hover:text-primary hover:border-gray-300'
+            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold transition-colors ${activeTab === 'orders' ? 'bg-[#0b1f3a] text-white shadow-sm' : 'bg-white text-gray-600 border border-gray-200 hover:text-primary hover:border-gray-300'
               }`}
           >
             <Wrench className="w-4 h-4" />
@@ -410,7 +410,7 @@ export default function AdminDashboard() {
 
           <button
             onClick={() => setActiveTab('users')}
-            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold transition-colors ${activeTab === 'users' ? 'bg-primary text-white shadow-sm' : 'bg-white text-gray-600 border border-gray-200 hover:text-primary hover:border-gray-300'
+            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold transition-colors ${activeTab === 'users' ? 'bg-[#0b1f3a] text-white shadow-sm' : 'bg-white text-gray-600 border border-gray-200 hover:text-primary hover:border-gray-300'
               }`}
           >
             <Users className="w-4 h-4" />
@@ -419,7 +419,7 @@ export default function AdminDashboard() {
 
           <button
             onClick={() => setActiveTab('reviews')}
-            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold transition-colors ${activeTab === 'reviews' ? 'bg-primary text-white shadow-sm' : 'bg-white text-gray-600 border border-gray-200 hover:text-primary hover:border-gray-300'
+            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold transition-colors ${activeTab === 'reviews' ? 'bg-[#0b1f3a] text-white shadow-sm' : 'bg-white text-gray-600 border border-gray-200 hover:text-primary hover:border-gray-300'
               }`}
           >
             <MessageSquare className="w-4 h-4" />
@@ -428,7 +428,7 @@ export default function AdminDashboard() {
 
           <button
             onClick={() => setActiveTab('technicians')}
-            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold transition-colors ${activeTab === 'technicians' ? 'bg-primary text-white shadow-sm' : 'bg-white text-gray-600 border border-gray-200 hover:text-primary hover:border-gray-300'
+            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold transition-colors ${activeTab === 'technicians' ? 'bg-[#0b1f3a] text-white shadow-sm' : 'bg-white text-gray-600 border border-gray-200 hover:text-primary hover:border-gray-300'
               }`}
           >
             <UserCheck className="w-4 h-4" />
@@ -437,7 +437,7 @@ export default function AdminDashboard() {
 
           <button
             onClick={() => setActiveTab('inquiries')}
-            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold transition-colors ${activeTab === 'inquiries' ? 'bg-primary text-white shadow-sm' : 'bg-white text-gray-600 border border-gray-200 hover:text-primary hover:border-gray-300'
+            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold transition-colors ${activeTab === 'inquiries' ? 'bg-[#0b1f3a] text-white shadow-sm' : 'bg-white text-gray-600 border border-gray-200 hover:text-primary hover:border-gray-300'
               }`}
           >
             <Mail className="w-4 h-4" />

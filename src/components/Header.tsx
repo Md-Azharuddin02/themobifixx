@@ -2,7 +2,14 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Search, MapPin, Menu, X, ChevronDown, Phone, MessageCircle, Instagram, Facebook, Twitter, Wrench, User as UserIcon, LogOut, LayoutDashboard } from 'lucide-react';
 import { getAuthToken, getAuthUser, clearAuth } from '../utils/auth';
+import { DEVICE_MODELS } from '../components/devices';
 
+interface SearchResult {
+  id: string;
+  name: string;
+  brand: string;
+  image?: string;
+}
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -10,6 +17,9 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
 
   const menuRef = useRef<HTMLDivElement>(null);
+  const searchRef = useRef<HTMLDivElement>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
 
   useEffect(() => {
     function handleScroll() {
@@ -30,9 +40,42 @@ export default function Header() {
         setIsMobileMenuOpen(false);
       }
     }
+
+    function handleClickOutsideSearch(event: MouseEvent) {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setSearchQuery('');
+        setSearchResults([]);
+      }
+    }
+
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutsideSearch);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutsideSearch);
+    };
   }, []);
+
+  useEffect(() => {
+    if (searchQuery.trim().length > 1) {
+      const allDevices: SearchResult[] = [];
+      for (const brand in DEVICE_MODELS) {
+        DEVICE_MODELS[brand].forEach(device => {
+          if (device.name.toLowerCase().includes(searchQuery.toLowerCase())) {
+            allDevices.push({ ...device, brand });
+          }
+        });
+      }
+      setSearchResults(allDevices.slice(0, 10)); // Limit to 10 results
+    } else {
+      setSearchResults([]);
+    }
+  }, [searchQuery]);
+
+  const handleResultClick = () => {
+    setSearchQuery('');
+    setSearchResults([]);
+  };
 
   const user = getAuthUser();
   const token = getAuthToken();
@@ -123,25 +166,48 @@ export default function Header() {
             <div className="hidden lg:block flex-1"></div>
 
             {/* Right Actions: Search, Call & Book Now */}
-            <div className="flex items-center gap-4 shrink-0">
-              <div className="hidden md:flex relative w-72 lg:w-96">
+            <div ref={searchRef} className="flex items-center gap-4 shrink-0">
+              <div className="hidden md:flex relative w-72 lg:w-96" >
                 <input
                   type="text"
                   placeholder="Search phone model or service..."
-                  className="w-full bg-gray-50 border border-gray-200 text-gray-700 text-xs rounded-full pl-4 pr-10 py-3 focus:outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange transition-colors"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full bg-gray-100 border border-gray-200 text-gray-900 text-xs rounded-full pl-4 pr-10 py-3 focus:outline-none focus:border-[#0b1f3a] focus:ring-1 focus:ring-[#0b1f3a] transition-colors"
                 />
                 <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
-                  <Search className="h-4 w-4 text-gray-400" />
+                  <Search className="h-4 w-4 text-gray-900" />
                 </div>
+
+                {searchResults.length > 0 && (
+                  <div className="absolute top-full mt-2 w-full bg-white border border-gray-100 rounded-2xl shadow-lg overflow-hidden z-50">
+                    <ul className="divide-y divide-gray-100 max-h-80 overflow-y-auto">
+                      {searchResults.map(result => (
+                        <li key={`${result.brand}-${result.id}`}>
+                          <Link
+                            to={`/repair/${result.brand}/${result.id}`}
+                            onClick={handleResultClick}
+                            className="flex items-center gap-4 p-3 hover:bg-gray-50 transition-colors"
+                          >
+                            <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden">
+                              {result.image ? <img src={result.image} alt={result.name} className="w-full h-full object-cover" /> : <Wrench className="w-5 h-5 text-gray-400" />}
+                            </div>
+                            <span className="text-sm font-bold text-gray-800">{result.name}</span>
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
 
               <div className="flex items-center gap-2">
                 {token && user ? (
                   <div className="hidden lg:flex items-center gap-3 border-r border-gray-200 pr-4 mr-2 group relative">
                     <div className="flex items-center gap-2 cursor-pointer">
-                      <UserIcon className="w-5 h-5 text-gray-600" />
-                      <span className="text-sm font-bold text-gray-700 max-w-[100px] truncate">{user.name}</span>
-                      <ChevronDown className="w-4 h-4 text-gray-500 group-hover:rotate-180 transition-transform" />
+                      <UserIcon className="w-5 h-5 text-gray-900" />
+                      <span className="text-sm font-bold text-gray-900 max-w-[100px] truncate">{user.name}</span>
+                      <ChevronDown className="w-4 h-4 text-gray-900 group-hover:rotate-180 transition-transform" />
                     </div>
                     <div className="absolute top-full right-0 mt-2 w-48 bg-white border border-gray-100 rounded-xl shadow-lg p-2 opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-200">
                       <Link to={user.role === 'admin' ? '/admin' : '/dashboard'} className="flex items-center gap-2 px-3 py-2 text-sm font-bold text-gray-700 hover:bg-gray-50 hover:text-brand-orange rounded-lg">
@@ -155,27 +221,27 @@ export default function Header() {
                     </div>
                   </div>
                 ) : (
-                  <div className="hidden lg:flex items-center gap-3 border-r border-gray-200 pr-4 mr-2">
-                    <Link to="/login" className="text-sm font-bold text-gray-700 hover:text-brand-orange transition-colors">
+                  <div className="hidden lg:flex items-center gap-3 border-r border-gray-900 pr-4 mr-2">
+                    <Link to="/login" className="text-sm font-bold text-gray-900 hover:text-[#4b5563] transition-colors">
                       Login
                     </Link>
-                    <Link to="/signup" className="text-sm font-bold bg-gray-100 text-gray-800 px-4 py-2 rounded-full hover:bg-gray-200 transition-colors shadow-sm">
+                    <Link to="/signup" className="text-sm font-bold bg-[#f8fafc] text-gray-900 px-4 py-2 rounded-full hover:bg-gray-200 transition-colors shadow-sm">
                       Sign Up
                     </Link>
                   </div>
                 )}
                 <a
                   href="tel:+919818409122"
-                  className="bg-white border-2 border-brand-orange text-brand-orange text-xs sm:text-sm font-bold px-4 sm:px-6 py-2.5 rounded-full hover:bg-orange-50 transition-colors shadow-sm flex items-center gap-2"
+                  className="bg-white border-1 border-[#0b1f3a] text-[#0b1f3a] text-xs sm:text-sm font-bold px-4 sm:px-6 py-2.5 rounded-full hover:bg-[#f8fafc] transition-colors shadow-sm flex items-center gap-2"
                 >
                   <Phone className="w-4 h-4 hidden sm:block" /> Call
                 </a>
 
                 <Link
                   to="/contact?tab=booking"
-                  className="bg-brand-orange text-white text-xs sm:text-sm font-bold px-5 sm:px-6 py-3 rounded-full hover:bg-orange-600 transition-colors shadow-sm flex items-center gap-2"
+                  className="bg-[#0b1f3a] text-white text-xs sm:text-sm font-bold px-5 sm:px-6 py-3 rounded-full hover:bg-[#4b5563] transition-colors shadow-sm flex items-center gap-2"
                 >
-                  <Wrench className="w-4 h-4 hidden sm:block" /> Book
+                  <Wrench className="w-4 h-4 hidden sm:block" /> Book Repair
                 </Link>
               </div>
             </div>
@@ -211,7 +277,7 @@ export default function Header() {
       </div>
 
       {/* Thin Orange Notification Bar */}
-      <div className={`bg-brand-orange hidden md:block transition-all duration-300 overflow-hidden ${isScrolled ? 'max-h-0' : 'max-h-12'}`}>
+      <div className={`bg-[#0b1f3a] hidden md:block transition-all duration-300 overflow-hidden ${isScrolled ? 'max-h-0' : 'max-h-12'}`}>
         <div className="py-2 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white/95 text-xs font-semibold flex items-center justify-center gap-x-4">
           <span>* Technician arrives in 90 minutes</span>
           <span className="hidden sm:inline">|</span>
@@ -219,7 +285,7 @@ export default function Header() {
             +91 9818409122
           </a>
           <span className="hidden sm:inline">|</span>
-          <span className="hidden sm:inline">30 Day Warranty</span>
+          <span className="hidden sm:inline">90 Day Warranty</span>
           <span className="hidden sm:inline">|</span>
           <div className="flex items-center gap-4">
             <a href="https://www.instagram.com/themobifixx" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
@@ -243,7 +309,7 @@ export default function Header() {
               <img src='https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783492584/logo_ixtnqx.jpg' alt="TheMobifixx" className="h-16 w-auto" />
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="p-2 text-gray-500 hover:bg-gray-100 rounded-full transition-colors"
+                className="p-2 text-gray-900 hover:bg-gray-900 rounded-full transition-colors"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -256,7 +322,7 @@ export default function Header() {
                   placeholder="Search device..."
                   className="w-full bg-gray-50 border border-gray-200 text-gray-800 text-sm rounded-lg pl-10 pr-4 py-2.5 focus:outline-none"
                 />
-                <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                <Search className="absolute left-3 top-3 h-4 w-4 text-gray-900" />
               </div>
             </div>
 
@@ -272,16 +338,16 @@ export default function Header() {
                 </Link>
               ))}
 
-              <div className="mt-4 pt-4 border-t border-gray-100 px-4 space-y-3">
+              <div className="mt-4 pt-4 border-t border-gray-900 px-4 space-y-3">
                 {token && user ? (
                   <>
-                    <Link to={user.role === 'admin' ? '/admin' : '/dashboard'} onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-center py-3 text-sm font-bold text-gray-800 border border-gray-200 rounded-xl hover:bg-gray-50">Dashboard</Link>
+                    <Link to={user.role === 'admin' ? '/admin' : '/dashboard'} onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-center py-3 text-sm font-bold text-gray-800 border border-gray-900 rounded-xl hover:bg-gray-100">Dashboard</Link>
                     <button onClick={() => { handleLogout(); setIsMobileMenuOpen(false); }} className="block w-full text-center py-3 text-sm font-bold bg-rose-500 text-white rounded-xl shadow-sm hover:bg-rose-600">Logout</button>
                   </>
                 ) : (
                   <>
-                    <Link to="/login" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-center py-3 text-sm font-bold text-gray-800 border border-gray-200 rounded-xl hover:bg-gray-50">Login</Link>
-                    <Link to="/signup" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-center py-3 text-sm font-bold bg-brand-orange text-white rounded-xl shadow-sm hover:bg-orange-600">Sign Up</Link>
+                    <Link to="/login" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-center py-3 text-sm font-bold text-gray-800 border border-gray-200 rounded-xl hover:bg-gray-100">Login</Link>
+                    <Link to="/signup" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-center py-3 text-sm font-bold bg-[#0b1f3a] text-white rounded-xl shadow-sm hover:bg-rose-600">Sign Up</Link>
                   </>
                 )}
               </div>

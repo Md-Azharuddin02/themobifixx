@@ -209,24 +209,24 @@ export default function Home() {
       </section>
 
       {/* 3. Trust Stats Band */}
-      <section className="bg-orange-50 border-y border-orange-100 py-8 my-8">
+      <section className="bg-[#0b1f3a] border-y border-[#0b1f3a] py-8 my-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-orange-200/50">
             <div>
-              <div className="text-3xl font-bold text-brand-orange mb-1">10,000+</div>
-              <div className="text-xs text-gray-600 font-bold uppercase tracking-wider">Devices Fixed</div>
+              <div className="text-3xl font-bold text-white mb-1">10,000+</div>
+              <div className="text-xs text-white font-bold uppercase tracking-wider">Devices Fixed</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-brand-orange mb-1">4.5+</div>
-              <div className="text-xs text-gray-600 font-bold uppercase tracking-wider">Google Rating</div>
+              <div className="text-3xl font-bold text-white mb-1">4.5+</div>
+              <div className="text-xs text-white font-bold uppercase tracking-wider">Google Rating</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-brand-orange mb-1">30 Mins</div>
-              <div className="text-xs text-gray-600 font-bold uppercase tracking-wider">Avg Repair Time</div>
+              <div className="text-3xl font-bold text-white mb-1">30 Mins</div>
+              <div className="text-xs text-white font-bold uppercase tracking-wider">Avg Repair Time</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-brand-orange mb-1">6+</div>
-              <div className="text-xs text-gray-600 font-bold uppercase tracking-wider">Years Experience</div>
+              <div className="text-3xl font-bold text-white mb-1">6+</div>
+              <div className="text-xs text-white font-bold uppercase tracking-wider">Years Experience</div>
             </div>
           </div>
         </div>
@@ -309,7 +309,6 @@ export default function Home() {
               >
                 <div className="mb-4 bg-slate-50 p-4 rounded-2xl">{feature.icon}</div>
                 <h3 className="font-bold text-slate-900 text-lg">{feature.title}</h3>
-                <p className="text-sm text-slate-500 mt-2 leading-relaxed">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
               </motion.div>
             ))}
           </div>
@@ -423,7 +422,7 @@ export default function Home() {
         <TextScramble as="h2" className="text-2xl font-bold mb-4">
           Brands we Repair
         </TextScramble>
-        <p className="text-sm text-gray-500 mb-12">We repair out of warranty devices of all major brands</p>
+        <p className="text-sm text-gray-900 mb-12">We repair out of warranty devices of all major brands</p>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6 max-w-5xl mx-auto">
           {[
             { name: 'Apple', logo: 'https://cdn.simpleicons.org/apple/000' },
@@ -490,7 +489,7 @@ export default function Home() {
       <PriceEstimator />
 
       {/* 10. Common Problems We Fix */}
-      <section className="bg-gray-50 py-20 border-y border-gray-100">
+      <section className="bg-gray-100 py-20 border-y border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-4">
             {"Common Phone Problems We Fix".split(" ").map((word, i) => (
@@ -507,18 +506,18 @@ export default function Home() {
               >{word}</motion.span>
             ))}
           </h2>
-          <p className="text-sm text-gray-500 mb-12">We handle a variety of issues with genuine spare parts.</p>
+          <p className="text-sm text-gray-900 mb-12">We handle a variety of issues with genuine spare parts.</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto">
             {commonProblems.map((prob, i) => (
               <div key={i} className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden text-center flex flex-col group relative hover:shadow-md transition-shadow">
-                <div className={`h-1.5 w-full bg-brand-orange`}></div>
+                <div className={`h-1.5 w-full bg-[#0b1f3a]`}></div>
                 <div className="p-8 flex-1 flex flex-col items-center">
-                  <div className="w-16 h-16 bg-orange-50 rounded-full flex items-center justify-center mb-6">
+                  <div className="w-16 h-16 bg-[#0b1f3a]/10 rounded-full flex items-center justify-center mb-6">
                     {prob.icon}
                   </div>
                   <h3 className="font-bold text-gray-900 mb-2">{prob.title}</h3>
-                  <p className="text-sm text-brand-orange font-bold mb-8">Starting from {prob.price}</p>
-                  <button className="mt-auto bg-gray-900 text-white text-sm font-bold px-6 py-3 rounded-full w-full hover:bg-brand-orange transition-colors">
+                  <p className="text-sm text-[#0b1f3a] font-bold mb-8">Starting from {prob.price}</p>
+                  <button className="mt-auto bg-[#0b1f3a] text-white text-sm font-bold px-6 py-3 rounded-full w-full hover:bg-[#0f2a4f]/90 transition-colors">
                     Book Now
                   </button>
                 </div>
@@ -595,12 +594,12 @@ export default function Home() {
       </section>
 
       {/* 13. Serviceable Locations */}
-      <section className="py-16 bg-gray-50 border-t border-gray-100">
+      <section className="py-16 bg-gray-100 border-t border-gray-100">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-xl font-bold mb-8">Serviceable Locations in Delhi NCR</h2>
           <div className="flex flex-wrap justify-center gap-3">
             {['Delhi', 'Noida', 'Gurugram', 'Faridabad', 'Ghaziabad', 'Greater Noida', 'Dwarka', 'South Extension', 'Rohini'].map((loc, idx) => (
-              <div key={idx} className="bg-white border border-gray-200 text-gray-700 text-sm font-bold px-6 py-2.5 rounded-full hover:border-brand-orange hover:text-brand-orange cursor-pointer transition-colors shadow-sm">
+              <div key={idx} className="bg-white border border-gray-900 text-gray-900 text-sm font-bold px-6 py-2.5 rounded-full hover:border-[#1faf3e] hover:bg-[#0b1f3a] hover:text-white cursor-pointer transition-colors shadow-sm">
                 {loc}
               </div>
             ))}
@@ -611,23 +610,23 @@ export default function Home() {
       {/* 14. Technician Section */}
       <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center bg-gray-50 border-t border-gray-100">
         <h2 className="text-3xl font-bold mb-4">Meet Our Expert Technicians</h2>
-        <p className="text-sm text-gray-500 mb-12">Certified professionals dedicated to restoring your devices.</p>
+        <p className="text-sm text-gray-900 mb-12">Certified professionals dedicated to restoring your devices.</p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           {technicians.slice(0, 3).map((tech, i) => (
             <div key={i} className="bg-white border border-gray-100 rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col justify-between">
               <div>
                 <div className="relative h-48 bg-gray-100">
                   <img src={tech.profileImage} className="w-full h-full object-cover object-top" alt={tech.name} />
-                  <span className="absolute bottom-3 left-3 bg-white/90 backdrop-blur-sm text-brand-orange text-xs font-bold px-3 py-1 rounded-full shadow-sm">
+                  <span className="absolute bottom-3 left-3 bg-white/90 backdrop-blur-sm text-grey-900 text-xs font-bold px-3 py-1 rounded-full shadow-sm">
                     {tech.designation}
                   </span>
                 </div>
                 <div className="p-5 space-y-3 text-left">
                   <div>
                     <h3 className="font-bold text-gray-900 text-lg">{tech.name}</h3>
-                    <p className="text-sm text-gray-500 mt-0.5">{tech.specialization}</p>
+                    <p className="text-sm text-gray-900 mt-0.5">{tech.specialization}</p>
                   </div>
-                  <div className="grid grid-cols-2 gap-2 text-xs font-bold text-gray-600 bg-gray-50 p-3 rounded-xl border border-gray-100">
+                  <div className="grid grid-cols-2 gap-2 text-xs font-bold text-gray-900 bg-gray-50 p-3 rounded-xl border border-gray-100">
                     <div>EXP: {tech.experience} Years</div>
                     <div className="text-right">REPAIRS: {tech.repairsCompleted}+</div>
                   </div>
@@ -636,7 +635,7 @@ export default function Home() {
               <div className="p-5 pt-0 flex justify-center">
                 <Link
                   to={`/contact?tab=booking&tech=${encodeURIComponent(tech.name)}`}
-                  className="w-full flex items-center justify-center gap-2 bg-brand-orange text-white font-bold text-sm py-3 rounded-full shadow-sm hover:bg-orange-600 transition-colors"
+                  className="w-full flex items-center justify-center gap-2 bg-[#0b1f3a] text-white font-bold text-sm py-3 rounded-full shadow-sm hover:bg-gray-600 transition-colors"
                 >
                   <UserCheck className="w-4 h-4" />
                   <span>Request {tech.name}</span>
@@ -645,14 +644,14 @@ export default function Home() {
             </div>
           ))}
         </div>
-        <Link to="/technicians" className="mt-12 inline-flex items-center gap-2 text-sm font-bold text-brand-orange hover:text-orange-600 transition-colors">
+        <Link to="/technicians" className="mt-12 inline-flex items-center gap-2 text-sm font-bold text-gray-900 hover:text-gray-600 transition-colors">
           <span>View All Technicians</span>
           <ArrowRight className="w-4 h-4" />
         </Link>
       </section>
 
       {/* 15. Bottom CTA Banner (now 16) */}
-      <section className="bg-brand-orange py-20 text-center text-white relative overflow-hidden">
+      <section className="bg-[#0b1f3a] py-20 text-center text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
         <div className="relative z-10 max-w-2xl mx-auto px-4">
           <div className="inline-block bg-white/20 px-5 py-1.5 rounded-full text-xs font-bold mb-8 backdrop-blur-sm shadow-sm tracking-widest uppercase">
