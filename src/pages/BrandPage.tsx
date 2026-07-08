@@ -107,7 +107,7 @@ export default function BrandPage() {
                   >
                     <div className="w-20 h-24 sm:w-24 sm:h-28 relative overflow-hidden rounded-lg bg-gray-50 flex items-center justify-center p-2 group-hover:-translate-y-1 transition-transform">
                       <div className="relative w-full h-full flex items-center justify-center">
-                        <DeviceImage src={device.id} alt={device.name} />
+                        <DeviceImage src={device.image} alt={device.name} />
                       </div>
                     </div>
                     <span className="text-xs font-bold text-gray-700 text-center group-hover:text-brand-orange transition-colors">
