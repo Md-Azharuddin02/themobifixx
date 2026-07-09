@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 
+const isTouchDevice = () => 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 export default function CursorFollower() {
     const [position, setPosition] = useState({ x: -100, y: -100 });
     const [isHovering, setIsHovering] = useState(false);
@@ -21,6 +22,10 @@ export default function CursorFollower() {
             window.removeEventListener('mousemove', handleMouseMove);
         };
     }, []);
+
+    if (isTouchDevice()) {
+        return null;
+    }
 
     return (
         <motion.div

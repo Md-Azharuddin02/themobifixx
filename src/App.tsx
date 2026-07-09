@@ -6,7 +6,6 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import Home from './pages/Home';
 import RepairTracker from './pages/RepairTracker';
-import CursorFollower from './pages/CursorFollower';
 import Contact from './pages/Contact';
 import { PrivacyPolicy, TermsAndConditions } from './pages/Legal'; // This will now resolve correctly
 import { ForgotPassword, ResetPassword } from './pages/PasswordReset';
@@ -118,7 +117,6 @@ export default function App() {
     <BrowserRouter>
       <SEOManager />
       <ScrollToTop />
-      <CursorFollower />
       <div className="min-h-screen flex flex-col justify-between font-sans bg-slate-50 text-slate-800 antialiased">
         {/* Navigation Sticky Bar */}
         <Header />

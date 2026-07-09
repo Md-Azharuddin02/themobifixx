@@ -458,7 +458,7 @@ export default function AdminDashboard() {
                 </span>
               </div>
 
-              <div className="overflow-x-auto">
+              <div className="overflow-x-auto -mx-6 md:-mx-8 px-6 md:px-8">
                 <table className="w-full text-left border-collapse min-w-[700px]">
                   <thead>
                     <tr className="border-b border-gray-200 text-xs font-bold text-gray-500 uppercase tracking-wider">
@@ -531,7 +531,7 @@ export default function AdminDashboard() {
                 </span>
               </div>
 
-              <div className="overflow-x-auto">
+              <div className="overflow-x-auto -mx-6 md:-mx-8 px-6 md:px-8">
                 <table className="w-full text-left border-collapse min-w-[600px]">
                   <thead>
                     <tr className="border-b border-gray-200 text-xs font-bold text-gray-500 uppercase tracking-wider">

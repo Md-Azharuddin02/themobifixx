@@ -110,23 +110,23 @@ export default function UserDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen pt-32 pb-16 flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen pt-32 pb-16 flex items-center justify-center bg-gray-100">
         <div className="text-center space-y-3">
-          <Loader2 className="w-8 h-8 text-brand-orange animate-spin mx-auto" />
-          <p className="text-sm text-gray-500 font-bold uppercase tracking-wider">Loading dashboard...</p>
+          <Loader2 className="w-8 h-8 text-[#0b1f3a] animate-spin mx-auto" />
+          <p className="text-sm text-gray-900 font-bold uppercase tracking-wider">Loading dashboard...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="pt-24 md:pt-32 pb-20 min-h-screen bg-gray-50 font-sans text-gray-800">
+    <div className="pt-24 md:pt-32 pb-20 min-h-screen bg-gray-50 font-sans text-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Dashboard Header Banner */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white border border-gray-100 rounded-2xl p-6 md:p-8 shadow-sm mb-8">
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 bg-orange-50 text-brand-orange rounded-xl flex items-center justify-center">
+            <div className="w-14 h-14 bg-[#0b1f3a]/10 text-[#0b1f3a] rounded-xl flex items-center justify-center">
               <User className="w-6 h-6" />
             </div>
             <div>
@@ -136,7 +136,7 @@ export default function UserDashboard() {
                   Verified
                 </span>
               </div>
-              <p className="text-sm text-gray-500 flex items-center gap-1.5 mt-1">
+              <p className="text-sm text-gray-900 flex items-center gap-1.5 mt-1">
                 <Mail className="w-4 h-4" />
                 <span>{user?.email}</span>
               </p>
@@ -146,7 +146,7 @@ export default function UserDashboard() {
             {user?.role === 'admin' && (
               <Link
                 to="/admin"
-                className="inline-flex items-center gap-2 text-sm font-bold text-brand-orange bg-orange-50 px-5 py-2.5 rounded-full hover:bg-orange-100 transition-colors"
+                className="inline-flex items-center gap-2 text-sm font-bold text-[#0b1f3a] bg-[#0b1f3a]/10 px-5 py-2.5 rounded-full hover:bg-[#0b1f3a]/10 transition-colors"
               >
                 <span>Admin Suite</span>
                 <ArrowRight className="w-4 h-4" />
@@ -167,12 +167,12 @@ export default function UserDashboard() {
           {/* Left panel: Active orders (8-cols) */}
           <div className="lg:col-span-8 space-y-6">
             <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-              <Wrench className="w-5 h-5 text-brand-orange" />
+              <Wrench className="w-5 h-5 text-[#0b1f3a]" />
               <span>Your Active Repair Orders ({bookings.length})</span>
             </h2>
 
             {error && (
-              <div className="flex items-center space-x-2 bg-rose-50 border border-rose-200 text-rose-600 p-4 rounded-xl text-sm font-medium">
+              <div className="flex items-center space-x-2 bg-[#0b1f3a]/10 border border-rose-200 text-rose-600 p-4 rounded-xl text-sm font-medium">
                 <AlertCircle className="w-5 h-5 shrink-0" />
                 <span>{error}</span>
               </div>
@@ -184,10 +184,10 @@ export default function UserDashboard() {
                   <Clock className="w-6 h-6" />
                 </div>
                 <h3 className="font-bold text-gray-900 text-base">No Bookings Found</h3>
-                <p className="text-sm text-gray-500 max-w-sm mx-auto">You haven't scheduled any doorstep pickups or repair requests under this account yet.</p>
+                <p className="text-sm text-gray-900 max-w-sm mx-auto">You haven't scheduled any doorstep pickups or repair requests under this account yet.</p>
                 <Link
                   to="/contact?tab=booking"
-                  className="inline-flex items-center gap-2 text-sm font-bold text-white bg-brand-orange px-6 py-3 rounded-full hover:bg-orange-600 transition-colors shadow-sm"
+                  className="inline-flex items-center gap-2 text-sm font-bold text-white bg-[#0b1f3a] px-6 py-3 rounded-full hover:bg-[#0b1f3a]/60 transition-colors shadow-sm"
                 >
                   <span>Book Repair Service</span>
                   <ArrowRight className="w-4 h-4" />
@@ -201,7 +201,7 @@ export default function UserDashboard() {
                     <div key={booking.id} className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-gray-100">
                         <div>
-                          <span className="text-xs text-gray-400 block mb-0.5">Order ID</span>
+                          <span className="text-xs text-gray-900 block mb-0.5">Order ID</span>
                           <span className="font-bold text-gray-900 font-mono tracking-wider">{booking.id}</span>
                         </div>
                         <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold ${meta.color}`}>
@@ -211,19 +211,19 @@ export default function UserDashboard() {
 
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 py-5">
                         <div>
-                          <span className="text-xs text-gray-400 block mb-1">Device Details</span>
+                          <span className="text-xs text-gray-900 block mb-1">Device Details</span>
                           <p className="text-sm text-gray-900 font-bold">{booking.brand} {booking.model}</p>
-                          <p className="text-xs text-gray-500 mt-0.5 capitalize">{booking.deviceType}</p>
+                          <p className="text-xs text-gray-900 mt-0.5 capitalize">{booking.deviceType}</p>
                         </div>
                         <div>
-                          <span className="text-xs text-gray-400 block mb-1">Pickup Date</span>
+                          <span className="text-xs text-gray-900 block mb-1">Pickup Date</span>
                           <p className="text-sm text-gray-900 font-bold flex items-center gap-1.5">
                             <Calendar className="w-4 h-4 text-gray-400" />
                             <span>{booking.preferredDate}</span>
                           </p>
                         </div>
                         <div>
-                          <span className="text-xs text-gray-400 block mb-1">Address</span>
+                          <span className="text-xs text-gray-900 block mb-1">Address</span>
                           <p className="text-sm text-gray-700 line-clamp-2">
                             {booking.pickupRequired ? booking.pickupAddress : 'Counter Drop-in'}
                           </p>
@@ -231,15 +231,15 @@ export default function UserDashboard() {
                       </div>
 
                       <div className="bg-gray-50 rounded-xl p-4 mb-5 border border-gray-100">
-                        <span className="text-xs text-gray-500 font-bold block mb-1">Issue Description</span>
-                        <p className="text-sm text-gray-700 leading-relaxed">{booking.issueDescription}</p>
+                        <span className="text-xs text-gray-900 font-bold block mb-1">Issue Description</span>
+                        <p className="text-sm text-gray-900 leading-relaxed">{booking.issueDescription}</p>
                       </div>
 
                       <div className="flex justify-between items-center pt-4 border-t border-gray-100">
-                        <span className="text-xs text-gray-400">Created on {new Date(booking.createdAt).toLocaleDateString()}</span>
+                        <span className="text-xs text-gray-900">Created on {new Date(booking.createdAt).toLocaleDateString()}</span>
                         <Link
                           to={`/tracker?id=${booking.id}`}
-                          className="inline-flex items-center gap-1 text-sm font-bold text-brand-orange hover:text-orange-600 transition-colors"
+                          className="inline-flex items-center gap-1 text-sm font-bold text-[#0b1f3a] hover:text-[#0b1f3a]/60 transition-colors"
                         >
                           <span>Track Order</span>
                           <ArrowRight className="w-4 h-4" />
@@ -258,12 +258,12 @@ export default function UserDashboard() {
 
             {/* Guarantee support panel */}
             <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm space-y-4">
-              <div className="w-10 h-10 bg-green-50 text-green-500 rounded-xl flex items-center justify-center">
+              <div className="w-10 h-10 bg-[#0b1f3a] text-white rounded-xl flex items-center justify-center">
                 <ShieldCheck className="w-5 h-5" />
               </div>
               <div className="space-y-2">
                 <h3 className="font-bold text-gray-900 text-base">Security & Warranty Guarantee</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">
+                <p className="text-sm text-gray-900 leading-relaxed">
                   Every replacement part installed is covered by our standard 90-day warranty. We prioritize data security and part authenticity.
                 </p>
               </div>
@@ -271,12 +271,12 @@ export default function UserDashboard() {
 
             {/* Step diagnostics panel */}
             <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm space-y-4">
-              <div className="w-10 h-10 bg-blue-50 text-blue-500 rounded-xl flex items-center justify-center">
+              <div className="w-10 h-10 bg-[#0b1f3a] text-white rounded-xl flex items-center justify-center">
                 <CheckCircle2 className="w-5 h-5" />
               </div>
               <div className="space-y-2">
                 <h3 className="font-bold text-gray-900 text-base">Quick Tracking Steps</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">
+                <p className="text-sm text-gray-900 leading-relaxed">
                   Use the live tracker panel to monitor your order in real-time. If you require immediate updates, directly chat with our helpdesk.
                 </p>
               </div>
@@ -292,7 +292,7 @@ export default function UserDashboard() {
                   </div>
                 )}
                 <div>
-                  <label className="block text-xs font-bold text-gray-700 mb-1">Rating</label>
+                  <label className="block text-xs font-bold text-gray-900 mb-1">Rating</label>
                   <select
                     value={reviewRating}
                     onChange={e => setReviewRating(Number(e.target.value))}

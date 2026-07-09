@@ -360,6 +360,13 @@ export interface UserDbRecord {
   createdAt: string;
 }
 
+export interface PasswordResetToken {
+  token: string;
+  userId: string;
+  expiresAt: string;
+  createdAt: string;
+}
+
 // SQL Mapping Helpers
 const mapUser = (row: any): UserDbRecord => ({
   id: row.id,
@@ -600,6 +607,16 @@ export const Storage = {
         )
       `);
 
+      // Password Reset Tokens Table
+      await pgPool.query(`
+        CREATE TABLE IF NOT EXISTS password_reset_tokens (
+          token VARCHAR(255) PRIMARY KEY,
+          user_id VARCHAR(255) NOT NULL,
+          expires_at VARCHAR(100) NOT NULL,
+          created_at VARCHAR(100) NOT NULL,
+          FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        )
+      `);
       console.log('Database migrations completed successfully.');
     } catch (err) {
       console.error('Error running migrations:', err);
@@ -1079,5 +1096,66 @@ export const Storage = {
 
   hashPassword(password: string, salt: string): string {
     return crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex');
+  },
+
+  async addPasswordResetToken(token: string, userId: string, expiresAt: string): Promise<void> {
+    if (pgPool) {
+      await pgPool.query(
+        `INSERT INTO password_reset_tokens (token, user_id, expires_at, created_at)
+         VALUES ($1, $2, $3, $4)`,
+        [token, userId, expiresAt, new Date().toISOString()]
+      );
+      return;
+    }
+    // For file-based storage, we'd need a new file or integrate into existing.
+    // For simplicity in this example, we'll assume this is primarily for PG.
+    // If file-based is critical, a new JSON file for reset tokens would be needed.
+    console.warn('Password reset tokens are not persistently stored in file mode.');
+  },
+
+  async getPasswordResetToken(token: string): Promise<PasswordResetToken | undefined> {
+    if (pgPool) {
+      const res = await pgPool.query('SELECT * FROM password_reset_tokens WHERE token = $1', [token]);
+      if (res.rows.length > 0) {
+        const row = res.rows[0];
+        return {
+          token: row.token,
+          userId: row.user_id,
+          expiresAt: row.expires_at,
+          createdAt: row.created_at
+        };
+      }
+      return undefined;
+    }
+    console.warn('Password reset tokens cannot be retrieved in file mode.');
+    return undefined;
+  },
+
+  async deletePasswordResetToken(token: string): Promise<boolean> {
+    if (pgPool) {
+      const res = await pgPool.query('DELETE FROM password_reset_tokens WHERE token = $1', [token]);
+      return (res.rowCount ?? 0) > 0;
+    }
+    console.warn('Password reset tokens cannot be deleted in file mode.');
+    return false;
+  },
+
+  async updateUserPassword(userId: string, passwordHash: string, salt: string): Promise<boolean> {
+    if (pgPool) {
+      const res = await pgPool.query(
+        `UPDATE users
+         SET password_hash = $1, salt = $2
+         WHERE id = $3`,
+        [passwordHash, salt, userId]
+      );
+      return (res.rowCount ?? 0) > 0;
+    }
+    const list = await this.getUsers();
+    const idx = list.findIndex(u => u.id === userId);
+    if (idx === -1) return false;
+    list[idx].passwordHash = passwordHash;
+    list[idx].salt = salt;
+    writeJsonFile(USERS_PATH, list);
+    return true;
   }
 };

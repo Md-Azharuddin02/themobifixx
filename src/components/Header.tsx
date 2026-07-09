@@ -166,7 +166,14 @@ export default function Header() {
             <div className="hidden lg:block flex-1"></div>
 
             {/* Right Actions: Search, Call & Book Now */}
-            <div ref={searchRef} className="flex items-center gap-4 shrink-0">
+            <div ref={searchRef} className="flex items-center gap-2 sm:gap-4 shrink-0">
+              {/* Search Icon for Mobile/Tablet */}
+              <div className="md:hidden">
+                <button onClick={() => setSearchQuery(searchQuery ? '' : ' ')} className="p-2 text-gray-600 hover:text-brand-orange">
+                  <Search className="h-5 w-5" />
+                </button>
+              </div>
+
               <div className="hidden md:flex relative w-72 lg:w-96" >
                 <input
                   type="text"
@@ -179,7 +186,7 @@ export default function Header() {
                   <Search className="h-4 w-4 text-gray-900" />
                 </div>
 
-                {searchResults.length > 0 && (
+                {searchQuery.trim() && searchResults.length > 0 && (
                   <div className="absolute top-full mt-2 w-full bg-white border border-gray-100 rounded-2xl shadow-lg overflow-hidden z-50">
                     <ul className="divide-y divide-gray-100 max-h-80 overflow-y-auto">
                       {searchResults.map(result => (
@@ -315,16 +322,38 @@ export default function Header() {
               </button>
             </div>
 
-            <div className="p-4 border-b border-gray-100">
-              <div className="relative w-full">
-                <input
-                  type="text"
-                  placeholder="Search device..."
-                  className="w-full bg-gray-50 border border-gray-200 text-gray-800 text-sm rounded-lg pl-10 pr-4 py-2.5 focus:outline-none"
-                />
-                <Search className="absolute left-3 top-3 h-4 w-4 text-gray-900" />
+            {/* Mobile Search - now integrated with main search state */}
+            {searchQuery.trim() && (
+              <div className="p-4 border-b border-gray-100">
+                <div className="relative w-full">
+                  <input
+                    type="text"
+                    placeholder="Search device..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full bg-gray-50 border border-gray-200 text-gray-800 text-sm rounded-lg pl-4 pr-4 py-2.5 focus:outline-none"
+                  />
+                </div>
+                {searchResults.length > 0 && (
+                  <ul className="mt-2 divide-y divide-gray-100 max-h-60 overflow-y-auto">
+                    {searchResults.map(result => (
+                      <li key={`${result.brand}-${result.id}`}>
+                        <Link
+                          to={`/repair/${result.brand}/${result.id}`}
+                          onClick={() => { handleResultClick(); setIsMobileMenuOpen(false); }}
+                          className="flex items-center gap-3 py-3"
+                        >
+                          <div className="w-8 h-8 bg-gray-100 rounded-md flex items-center justify-center overflow-hidden shrink-0">
+                            {result.image ? <img src={result.image} alt={result.name} className="w-full h-full object-cover" /> : <Wrench className="w-4 h-4 text-gray-400" />}
+                          </div>
+                          <span className="text-xs font-bold text-gray-700">{result.name}</span>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
-            </div>
+            )}
 
             <nav className="flex-1 p-2">
               {mainNavLinks.map((link) => (

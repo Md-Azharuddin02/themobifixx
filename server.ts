@@ -10,6 +10,7 @@ import rateLimit from 'express-rate-limit';
 import { createServer as createViteServer } from 'vite';
 import { v2 as cloudinary } from 'cloudinary';
 import { Storage } from './server/storage';
+import { sendEmail } from './server/email';
 import { User } from './src/types';
 
 async function bootstrap() {
@@ -171,6 +172,75 @@ async function bootstrap() {
       await Storage.deleteSession(token);
     }
     res.json({ success: true, message: 'Logged out successfully' });
+  });
+
+  app.post('/api/auth/forgot-password', async (req: Request, res: Response) => {
+    try {
+      const { email } = req.body;
+      if (!email) {
+        return res.status(400).json({ error: 'Email is required.' });
+      }
+
+      const userRecord = await Storage.getUserByEmail(email);
+      if (!userRecord) {
+        // For security, always send a generic success message even if email not found
+        return res.json({ success: true, message: 'If an account with that email exists, a password reset link has been sent.' });
+      }
+
+      const resetToken = crypto.randomBytes(32).toString('hex');
+      const expiresAt = new Date(Date.now() + 3600000).toISOString(); // Token valid for 1 hour
+      await Storage.addPasswordResetToken(resetToken, userRecord.id, expiresAt);
+
+      // Construct the reset link using the frontend URL from environment variables
+      const clientUrl = process.env.CLIENT_URL || `${req.protocol}://${req.get('host')}`;
+      const resetLink = `${clientUrl}/reset-password?token=${resetToken}`;
+
+      await sendEmail({
+        to: userRecord.email,
+        subject: 'Your Password Reset Link for TheMobifixx',
+        html: `<p>Hello ${userRecord.name},</p><p>You requested a password reset. Please click the link below to set a new password:</p><p><a href="${resetLink}" target="_blank">${resetLink}</a></p><p>This link will expire in 1 hour. If you did not request this, please ignore this email.</p><p>Thanks,<br/>TheMobifixx Team</p>`
+      });
+
+      res.json({ success: true, message: 'If an account with that email exists, a password reset link has been sent.' });
+    } catch (error) {
+      console.error('Forgot password error:', error);
+      res.status(500).json({ error: 'Failed to process request. Please try again.' });
+    }
+  });
+
+  app.post('/api/auth/reset-password', async (req: Request, res: Response) => {
+    try {
+      const { token, password } = req.body;
+      if (!token || !password) {
+        return res.status(400).json({ error: 'Token and new password are required.' });
+      }
+
+      const resetTokenRecord = await Storage.getPasswordResetToken(token);
+      if (!resetTokenRecord) {
+        return res.status(400).json({ error: 'Invalid or expired password reset token.' });
+      }
+
+      if (new Date(resetTokenRecord.expiresAt) < new Date()) {
+        await Storage.deletePasswordResetToken(token); // Clean up expired token
+        return res.status(400).json({ error: 'Password reset token has expired. Please request a new one.' });
+      }
+
+      const userRecord = await Storage.getUserById(resetTokenRecord.userId);
+      if (!userRecord) {
+        return res.status(404).json({ error: 'User not found.' });
+      }
+
+      const salt = crypto.randomBytes(16).toString('hex');
+      const passwordHash = Storage.hashPassword(password, salt);
+
+      await Storage.updateUserPassword(userRecord.id, passwordHash, salt);
+      await Storage.deletePasswordResetToken(token); // Invalidate token after use
+
+      res.json({ success: true, message: 'Your password has been reset successfully.' });
+    } catch (error) {
+      console.error('Reset password error:', error);
+      res.status(500).json({ error: 'Failed to reset password. Please try again.' });
+    }
   });
 
   app.get('/api/auth/me', async (req: Request, res: Response) => {

@@ -6,6 +6,7 @@ import { TextScramble } from '../pages/TextScramble';
 import { SparklesText } from '../pages/SparklesText';
 import PriceEstimator from '../components/PriceEstimator';
 import { Testimonial } from '../types';
+import { section } from 'motion/react-client';
 
 const HERO_SLIDES = [
   {
@@ -187,29 +188,45 @@ export default function Home() {
         </h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 md:gap-8 max-w-4xl mx-auto">
           {categories.map((cat, idx) => (
-            <motion.div
-              key={idx}
-              whileHover={{
-                y: -8,
-                boxShadow: "0px 15px 25px -5px rgba(0, 0, 0, 0.1), 0px 10px 10px -5px rgba(0, 0, 0, 0.04)",
-                rotate: idx % 2 === 0 ? 1.5 : -1.5
-              }}
-              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-              className="bg-white border border-gray-100 shadow-sm rounded-3xl w-full aspect-square"
-            >
-              <Link to={cat.path} className="flex flex-col items-center group cursor-pointer">
-                <div className="p-4 w-full h-full flex flex-col items-center justify-center">
-                  {cat.icon}
-                  <span className="text-xs font-semibold text-gray-700">{cat.title}</span>
+            <Link to={cat.path} key={idx} className="relative w-full aspect-square" style={{ perspective: '1000px' }}>
+              <motion.div
+                className="relative w-full h-full"
+                style={{ transformStyle: 'preserve-3d' }}
+                whileHover={{ rotateY: 180 }}
+                transition={{ duration: 0.6, ease: 'easeInOut' }}
+              >
+                {/* Front of the card */}
+                <div
+                  className="absolute w-full h-full bg-white border border-gray-100 shadow-sm rounded-3xl flex flex-col items-center justify-center p-4"
+                  style={{ backfaceVisibility: 'hidden' }}
+                >
+                  <div className="p-4 w-full h-full flex flex-col items-center justify-center">
+                    {cat.icon}
+                    <span className="text-xs font-semibold text-gray-700">{cat.title}</span>
+                  </div>
                 </div>
-              </Link>
-            </motion.div>
+
+                {/* Back of the card */}
+                <div
+                  className="absolute w-full h-full bg-gray-900 border border-gray-800 shadow-lg rounded-3xl flex flex-col items-center justify-center p-4"
+                  style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
+                >
+                  <Wrench className="w-6 h-6 text-white mb-3" />
+                  <span className="text-xs font-bold text-white text-center">
+                    Book Repair
+                  </span>
+                  <span className="text-[10px] text-white mt-1">
+                    for {cat.title}
+                  </span>
+                </div>
+              </motion.div>
+            </Link>
           ))}
         </div>
-      </section>
+      </section >
 
       {/* 3. Trust Stats Band */}
-      <section className="bg-[#0b1f3a] border-y border-[#0b1f3a] py-8 my-8">
+      < section className="bg-[#0b1f3a] border-y border-[#0b1f3a] py-8 my-8" >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-orange-200/50">
             <div>
@@ -230,10 +247,10 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </section>
+      </section >
 
       {/* 4. SEO / About Text */}
-      <section className="max-w-4xl mx-auto px-4 py-8 text-center">
+      < section className="max-w-4xl mx-auto px-4 py-8 text-center" >
         <h2 className="text-xl font-bold mb-4">
           {"Expert Mobile & Laptop Repair Services in Delhi / NCR".split(" ").map((word, i) => (
             <motion.span
@@ -270,10 +287,10 @@ export default function Home() {
             </motion.span>
           ))}
         </p>
-      </section>
+      </section >
 
       {/* 6. Why Choose Us Grid */}
-      <section className="bg-gray-50 py-20 border-y border-gray-100">
+      < section className="bg-gray-50 py-20 border-y border-gray-100" >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-center mb-12">
             {"Why Choose TheMobifixx?".split(" ").map((word, i) => (
@@ -313,10 +330,10 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </section >
 
       {/* 7. Gallery Section */}
-      <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      < section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" >
         <motion.div
           className="text-center mb-12"
           initial={{ opacity: 0, y: 20 }}
@@ -369,56 +386,58 @@ export default function Home() {
             </motion.div>
           ))}
         </div>
-      </section>
+      </section >
 
       {/* Lightbox Modal */}
       <AnimatePresence>
-        {lightboxIndex !== null && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm"
-            onClick={() => setLightboxIndex(null)}
-          >
-            <button className="absolute top-4 right-4 text-white/70 hover:text-white transition-colors z-[52]" onClick={() => setLightboxIndex(null)}><X className="w-8 h-8" /></button>
-
-            <button
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white bg-black/20 hover:bg-black/40 p-2 rounded-full transition-all z-[52]"
-              onClick={(e) => { e.stopPropagation(); handlePrev(); }}
+        {
+          lightboxIndex !== null && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm"
+              onClick={() => setLightboxIndex(null)}
             >
-              <ChevronLeft className="w-8 h-8" />
-            </button>
-            <button
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white bg-black/20 hover:bg-black/40 p-2 rounded-full transition-all z-[52]"
-              onClick={(e) => { e.stopPropagation(); handleNext(); }}
-            >
-              <ChevronRightIcon className="w-8 h-8" />
-            </button>
+              <button className="absolute top-4 right-4 text-white/70 hover:text-white transition-colors z-[52]" onClick={() => setLightboxIndex(null)}><X className="w-8 h-8" /></button>
 
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={lightboxIndex}
-                initial={{ opacity: 0.5, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0.5, scale: 0.95 }}
-                transition={{ duration: 0.2, ease: 'easeInOut' }}
-                className="relative max-w-4xl max-h-[90vh] w-full p-4"
-                onClick={(e) => e.stopPropagation()}
+              <button
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white bg-black/20 hover:bg-black/40 p-2 rounded-full transition-all z-[52]"
+                onClick={(e) => { e.stopPropagation(); handlePrev(); }}
               >
-                {GALLERY_ITEMS[lightboxIndex].type === 'image' ? (
-                  <img src={GALLERY_ITEMS[lightboxIndex].src} alt="Enlarged gallery view" className="w-full h-full object-contain" />
-                ) : (
-                  <video src={GALLERY_ITEMS[lightboxIndex].src} controls autoPlay className="w-full h-full object-contain" />
-                )}
-              </motion.div>
-            </AnimatePresence>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                <ChevronLeft className="w-8 h-8" />
+              </button>
+              <button
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white bg-black/20 hover:bg-black/40 p-2 rounded-full transition-all z-[52]"
+                onClick={(e) => { e.stopPropagation(); handleNext(); }}
+              >
+                <ChevronRightIcon className="w-8 h-8" />
+              </button>
+
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={lightboxIndex}
+                  initial={{ opacity: 0.5, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0.5, scale: 0.95 }}
+                  transition={{ duration: 0.2, ease: 'easeInOut' }}
+                  className="relative max-w-4xl max-h-[90vh] w-full p-4"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {GALLERY_ITEMS[lightboxIndex].type === 'image' ? (
+                    <img src={GALLERY_ITEMS[lightboxIndex].src} alt="Enlarged gallery view" className="w-full h-full object-contain" />
+                  ) : (
+                    <video src={GALLERY_ITEMS[lightboxIndex].src} controls autoPlay className="w-full h-full object-contain" />
+                  )}
+                </motion.div>
+              </AnimatePresence>
+            </motion.div>
+          )
+        }
+      </AnimatePresence >
 
       {/* 8. Brands We Repair */}
-      <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center border-t border-gray-100">
+      < section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center border-t border-gray-100" >
         <TextScramble as="h2" className="text-2xl font-bold mb-4">
           Brands we Repair
         </TextScramble>
@@ -448,10 +467,10 @@ export default function Home() {
             </Link>
           ))}
         </div>
-      </section>
+      </section >
 
       {/* 9. How It Works */}
-      <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center bg-white border-t border-gray-100">
+      < section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center bg-white border-t border-gray-100" >
         <SparklesText
           className="text-3xl font-bold mb-16"
           text="How it Works?"
@@ -483,13 +502,13 @@ export default function Home() {
             </motion.div>
           ))}
         </div>
-      </section>
+      </section >
 
       {/* 9.5 Price Estimator Integration */}
-      <PriceEstimator />
+      < PriceEstimator />
 
       {/* 10. Common Problems We Fix */}
-      <section className="bg-gray-100 py-20 border-y border-gray-100">
+      < section className="bg-gray-100 py-20 border-y border-gray-100" >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-4">
             {"Common Phone Problems We Fix".split(" ").map((word, i) => (
@@ -525,10 +544,10 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </section >
 
       {/* 11. Testimonials */}
-      <section className="bg-gray-900 text-white py-20 relative overflow-hidden">
+      < section className="bg-gray-900 text-white py-20 relative overflow-hidden" >
         <div className="absolute inset-0 bg-brand-orange/5 pointer-events-none" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <h2 className="text-3xl font-bold mb-2">What Our Customers Say</h2>
@@ -568,10 +587,10 @@ export default function Home() {
             </div>
           )}
         </div>
-      </section>
+      </section >
 
       {/* 12. FAQ Section */}
-      <section className="py-20 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      < section className="py-20 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8" >
         <h2 className="text-3xl font-bold text-center mb-12">Frequently Asked Questions</h2>
         <div className="space-y-4">
           {faqs.map((faq, i) => (
@@ -591,10 +610,10 @@ export default function Home() {
             </div>
           ))}
         </div>
-      </section>
+      </section >
 
       {/* 13. Serviceable Locations */}
-      <section className="py-16 bg-gray-100 border-t border-gray-100">
+      < section className="py-16 bg-gray-100 border-t border-gray-100" >
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-xl font-bold mb-8">Serviceable Locations in Delhi NCR</h2>
           <div className="flex flex-wrap justify-center gap-3">
@@ -605,10 +624,10 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </section >
 
       {/* 14. Technician Section */}
-      <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center bg-gray-50 border-t border-gray-100">
+      < section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center bg-gray-50 border-t border-gray-100" >
         <h2 className="text-3xl font-bold mb-4">Meet Our Expert Technicians</h2>
         <p className="text-sm text-gray-900 mb-12">Certified professionals dedicated to restoring your devices.</p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
@@ -648,10 +667,10 @@ export default function Home() {
           <span>View All Technicians</span>
           <ArrowRight className="w-4 h-4" />
         </Link>
-      </section>
+      </section >
 
       {/* 15. Bottom CTA Banner (now 16) */}
-      <section className="bg-[#0b1f3a] py-20 text-center text-white relative overflow-hidden">
+      < section className="bg-[#0b1f3a] py-20 text-center text-white relative overflow-hidden" >
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
         <div className="relative z-10 max-w-2xl mx-auto px-4">
           <div className="inline-block bg-white/20 px-5 py-1.5 rounded-full text-xs font-bold mb-8 backdrop-blur-sm shadow-sm tracking-widest uppercase">
@@ -672,8 +691,8 @@ export default function Home() {
             </Link>
           </div>
         </div>
-      </section>
+      </section >
 
-    </div>
+    </div >
   );
 }

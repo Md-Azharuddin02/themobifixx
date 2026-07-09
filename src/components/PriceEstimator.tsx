@@ -279,7 +279,7 @@ export default function PriceEstimator() {
 
         {/* Dynamic Estimation Container */}
         <div className="max-w-6xl mx-auto relative group">
-          <div className="relative z-10 bg-white border border-gray-100 rounded-[2.5rem] p-6 lg:p-10 shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+          <div className="relative z-10 bg-white border border-gray-100 rounded-[2.5rem] p-6 lg:p-10 shadow-sm grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12">
 
             {/* Inputs Panel (Left Side - 7 Cols) */}
             <div className="lg:col-span-7 space-y-8 text-left">
@@ -299,8 +299,8 @@ export default function PriceEstimator() {
                         key={dev.id}
                         onClick={() => setSelectedDevice(selectedDevice === dev.id ? null : dev.id)}
                         className={`flex flex-col items-center justify-center p-4 rounded-2xl border text-center transition-all duration-200 cursor-pointer ${isSelected
-                            ? 'border-brand-orange bg-orange-50 text-brand-orange shadow-sm'
-                            : 'border-gray-200 bg-white text-gray-600 hover:border-orange-200 hover:bg-orange-50 hover:text-brand-orange shadow-sm'
+                          ? 'border-brand-orange bg-orange-50 text-brand-orange shadow-sm'
+                          : 'border-gray-200 bg-white text-gray-600 hover:border-orange-200 hover:bg-orange-50 hover:text-brand-orange shadow-sm'
                           }`}
                       >
                         <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 ${isSelected ? 'bg-white text-brand-orange' : 'bg-gray-50 text-gray-500 group-hover:text-brand-orange'
@@ -330,8 +330,8 @@ export default function PriceEstimator() {
                         key={brand}
                         onClick={() => setSelectedBrand(selectedBrand === brand ? null : brand)}
                         className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all duration-200 border cursor-pointer shadow-sm ${isSelected
-                            ? 'bg-gray-900 text-white border-gray-900'
-                            : 'bg-white text-gray-600 border-gray-200 hover:border-gray-900 hover:text-gray-900'
+                          ? 'bg-gray-900 text-white border-gray-900'
+                          : 'bg-white text-gray-600 border-gray-200 hover:border-gray-900 hover:text-gray-900'
                           }`}
                       >
                         {brand}
@@ -362,8 +362,8 @@ export default function PriceEstimator() {
                         key={issue.id}
                         onClick={() => toggleIssue(issue.id)}
                         className={`w-full flex items-start gap-3 p-4 rounded-2xl border text-left transition-all duration-200 cursor-pointer shadow-sm ${isChecked
-                            ? 'bg-orange-50 border-orange-200'
-                            : 'bg-white border-gray-100 hover:border-gray-300'
+                          ? 'bg-orange-50 border-orange-200'
+                          : 'bg-white border-gray-100 hover:border-gray-300'
                           }`}
                       >
                         <div className="mt-0.5 shrink-0">
@@ -391,7 +391,7 @@ export default function PriceEstimator() {
             </div>
 
             {/* Live Invoice Results Panel (Right Side - 5 Cols) */}
-            <div className="relative lg:col-span-5 flex flex-col justify-between h-full">
+            <div className="relative md:col-span-5 flex flex-col justify-between h-full">
               <div className="relative z-10 bg-gray-900 text-white rounded-[2rem] p-6 lg:p-8 flex flex-col justify-between h-full overflow-hidden shadow-lg">
                 {/* Ambient visual glowing light */}
                 <div className="absolute -bottom-16 -right-16 w-52 h-52 bg-brand-orange/20 rounded-full blur-3xl pointer-events-none"></div>
