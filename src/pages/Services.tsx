@@ -52,28 +52,28 @@ export default function Services() {
     ];
 
     return (
-        <div className="bg-white min-h-screen font-sans text-gray-800 pb-20">
+        <div className="bg-[#050B18] min-h-screen font-sans text-slate-200 pb-20">
 
             {/* ─── HERO HEADER ─────────────────────────────────────────── */}
-            <section className="bg-gray-50 py-16 sm:py-20" id="services-header">
+            <section className="bg-[#030712]/50 py-16 sm:py-20 border-b border-slate-800/80" id="services-header">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
 
-                    <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 tracking-tight leading-tight">
+                    <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight">
                         Our Professional Catalog
                     </h1>
-                    <p className="text-sm sm:text-base text-gray-500 max-w-2xl mx-auto leading-relaxed">
+                    <p className="text-sm sm:text-base text-slate-400 max-w-2xl mx-auto leading-relaxed">
                         Discover our complete list of premium diagnostics, chip-level logic board repairs, and speed optimizations in Delhi NCR.
                     </p>
 
                     {/* Search bar */}
                     <div className="max-w-lg mx-auto relative mt-4">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 pointer-events-none" />
                         <input
                             type="text"
                             placeholder="Search services... (e.g., Motherboard, Battery, Screen)"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full pl-12 pr-4 py-3.5 border border-gray-200 rounded-full bg-white text-sm focus:outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange shadow-sm transition-all"
+                            className="w-full pl-12 pr-4 py-3.5 border border-slate-800 rounded-full bg-[#0A1329] text-slate-100 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 shadow-lg transition-all placeholder-slate-500"
                         />
                     </div>
                 </div>
@@ -88,9 +88,9 @@ export default function Services() {
                         <button
                             key={f.id}
                             onClick={() => setSelectedFilter(f.id as any)}
-                            className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-colors ${selectedFilter === f.id
-                                    ? 'bg-brand-orange text-white shadow-sm'
-                                    : 'bg-white text-gray-600 border border-gray-200 hover:border-brand-orange hover:text-brand-orange'
+                            className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-colors cursor-pointer ${selectedFilter === f.id
+                                    ? 'bg-blue-600 text-white shadow-md'
+                                    : 'bg-[#0A1329] text-slate-350 border border-slate-800 hover:border-blue-500 hover:text-white'
                                 }`}
                         >
                             {f.name}

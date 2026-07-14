@@ -29,7 +29,7 @@ export function PrivacyPolicy() {
               <ul className="list-disc pl-6 space-y-2">
                 <li><strong>Personal Coordinates:</strong> Your full name, Indian phone number, email address, and home or corporate physical address for pickup/delivery mapping.</li>
                 <li><strong>Device Specifications:</strong> System type (laptop, MacBook, smartphone, etc.), brand, model serials, and user-provided fault logs.</li>
-                <li><strong>Diagnostic Logs:</strong> Performance files and hardware errors logged by our laboratory machines during initial testing.</li>
+                <li><strong>Diagnostic Logs:</strong> Performance files and hardware errors logged by our testing tools during initial checkups.</li>
               </ul>
             </div>
 
