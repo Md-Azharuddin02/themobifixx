@@ -111,46 +111,6 @@ export default function DeviceRepairPage() {
                 })}
               </div>
             </div>
-
-            {/* Device Info & SEO Text block */}
-            <div className="bg-[#0A1329] rounded-3xl p-6 shadow-lg border border-slate-800 mt-12 flex flex-col sm:flex-row gap-6 items-center sm:items-start">
-              <div className="w-32 h-32 shrink-0 bg-slate-900 rounded-2xl p-2 border border-slate-800">
-                <img
-                  src="https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&q=80&w=200"
-                  alt={formattedModel}
-                  className="w-full h-full object-cover rounded-xl opacity-80"
-                />
-              </div>
-              <div className="space-y-3">
-                <h2 className="text-xl font-bold text-white">{formattedModel} Repair Services</h2>
-                <p className="text-sm text-slate-450 leading-relaxed">
-                  Get your {formattedModel} fixed at your home or office. We use premium quality parts and our expert technicians can complete most repairs in under 60 minutes. Every repair is backed by our comprehensive service warranty for your peace of mind.
-                </p>
-                <div className="flex items-center gap-4 text-xs font-semibold text-slate-400">
-                  <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-400" /> Premium Parts</span>
-                  <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-400" /> Data Privacy</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Why Choose Us & Repair Process */}
-            <div className="bg-[#0A1329] rounded-3xl p-6 shadow-lg border border-slate-800">
-              <h2 className="text-lg font-bold text-white mb-4">Why Choose TheMobifixx for {formattedModel} Repair?</h2>
-              <ul className="space-y-3 text-sm text-slate-450">
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
-                  <span><strong>Doorstep Service:</strong> We come to your location (home/office/cafe) and repair your device right in front of you.</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
-                  <span><strong>Expert Technicians:</strong> Our professionals are highly trained and verified to handle complex motherboard repairs and screen replacements.</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
-                  <span><strong>Warranty Protection:</strong> Rest easy with our service warranty on all parts replaced by TheMobifixx.</span>
-                </li>
-              </ul>
-            </div>
           </div>
 
           {/* Right Sidebar - Sticky Booking Panel */}
