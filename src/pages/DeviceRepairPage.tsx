@@ -1,9 +1,22 @@
 import { useState } from 'react';
 import { useParams, Link, useSearchParams } from 'react-router-dom';
-import { ChevronRight, Battery, Maximize, CircleDashed, Mic, Speaker, Wifi, Smartphone, ShieldCheck, Clock, MessageSquare, CheckCircle2, AlertTriangle } from 'lucide-react';
+import { ChevronRight, Battery, Maximize, CircleDashed, Mic, Speaker, Wifi, Smartphone, ShieldCheck, Clock, MessageSquare, CheckCircle2, AlertTriangle, Cpu, HardDrive, Monitor, Keyboard, BatteryCharging, Settings, HelpCircle, Database } from 'lucide-react';
 
-// Mock Repair Data
-const REPAIR_SERVICES = [
+// Laptop Specific Repair Options
+const LAPTOP_SERVICES = [
+  { id: 'laptop-screen', name: 'Screen Replacement', icon: Monitor },
+  { id: 'ram-upgrade', name: 'RAM Upgrade', icon: Cpu },
+  { id: 'ssd-installation', name: 'SSD Upgrade / Installation', icon: HardDrive },
+  { id: 'keyboard-repair', name: 'Keyboard / Trackpad Repair', icon: Keyboard },
+  { id: 'laptop-battery', name: 'Battery Replacement', icon: Battery },
+  { id: 'laptop-charging', name: 'Charging Port & Jack Repair', icon: BatteryCharging },
+  { id: 'software-installation', name: 'Software & OS Installation', icon: Settings },
+  { id: 'data-recovery', name: 'Data Backup & Recovery', icon: Database },
+  { id: 'laptop-other', name: 'Other Issues (Body/Hinges/Overheating)', icon: HelpCircle },
+];
+
+// Mobile Specific Repair Options
+const MOBILE_SERVICES = [
   { id: 'screen-replacement', name: 'Screen Replacement', icon: Maximize },
   { id: 'back-glass', name: 'Back Glass Replacement', icon: CircleDashed },
   { id: 'battery', name: 'Battery Replacement', icon: Battery },
@@ -12,19 +25,42 @@ const REPAIR_SERVICES = [
   { id: 'speaker', name: 'Speaker Repair', icon: Speaker },
   { id: 'mic', name: 'Mic Repair', icon: Mic },
   { id: 'wifi', name: 'Wifi/Bluetooth Issue', icon: Wifi },
+  { id: 'mobile-other', name: 'Other Issue / Upgrades', icon: HelpCircle },
 ];
+
+// Device Categorisation Helper
+const getDeviceType = (brand: string, model: string, queryCategory: string | null): 'laptop' | 'mobile' => {
+  if (queryCategory) {
+    if (queryCategory === 'macbook' || queryCategory === 'laptop') return 'laptop';
+    return 'mobile';
+  }
+  const b = brand.toLowerCase();
+  const m = model.toLowerCase();
+  if (b === 'apple') {
+    if (m.startsWith('macbook')) return 'laptop';
+    return 'mobile';
+  }
+  if (['hp', 'dell', 'lenovo', 'asus', 'acer', 'msi', 'intel', 'nvidia', 'microsoft'].includes(b)) {
+    return 'laptop';
+  }
+  return 'mobile';
+};
 
 export default function DeviceRepairPage() {
   const { brandId, modelId } = useParams();
   const [searchParams] = useSearchParams();
   const category = searchParams.get('category');
   const [selectedRepairs, setSelectedRepairs] = useState<string[]>([]);
+  
+  const deviceType = getDeviceType(brandId || '', modelId || '', category);
+  const activeServices = deviceType === 'laptop' ? LAPTOP_SERVICES : MOBILE_SERVICES;
+
   // Formatting names from URL slugs
   const formattedBrand = brandId ? brandId.charAt(0).toUpperCase() + brandId.slice(1) : '';
   const formattedModel = modelId ? modelId.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') : 'Device';
 
   const getWhatsAppLink = () => {
-    const selectedIssuesNames = selectedRepairs.map(id => REPAIR_SERVICES.find(s => s.id === id)?.name).join(', ');
+    const selectedIssuesNames = selectedRepairs.map(id => activeServices.find(s => s.id === id)?.name).join(', ');
     const text = `Hi, I want to repair my ${formattedBrand} ${formattedModel}. Issues: ${selectedIssuesNames || 'None selected'}`;
     return `https://wa.me/919310112994?text=${encodeURIComponent(text)}`;
   };
@@ -73,7 +109,7 @@ export default function DeviceRepairPage() {
 
               {/* Repair Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {REPAIR_SERVICES.map(service => {
+                {activeServices.map(service => {
                   const Icon = service.icon;
                   const isSelected = selectedRepairs.includes(service.id);
                   return (
@@ -135,7 +171,7 @@ export default function DeviceRepairPage() {
                   </div>
                 ) : (
                   selectedRepairs.map(id => {
-                    const service = REPAIR_SERVICES.find(s => s.id === id);
+                    const service = activeServices.find(s => s.id === id);
                     if (!service) return null;
                     return (
                       <div key={id} className="flex justify-between items-start gap-4 text-sm bg-[#0E1B38] p-3 rounded-xl border border-slate-800">
