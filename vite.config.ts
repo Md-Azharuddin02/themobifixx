@@ -10,4 +10,16 @@ export default defineConfig({
       '@': path.resolve(__dirname, '.'),
     },
   },
+  preview: {
+    // Allow requests from the custom domain and Render's subdomain
+    allowedHosts: [
+      'themobifixx.com',
+      'www.themobifixx.com',
+      'themobifixx.onrender.com',
+      'all',         // catch-all for any Render preview URLs
+    ],
+    host: '0.0.0.0',
+    port: 4173,
+    strictPort: false,
+  },
 });
