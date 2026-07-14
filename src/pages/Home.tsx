@@ -438,7 +438,7 @@ export default function Home() {
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
             {[
-              { title: 'No Fix, No Fee', icon: <Settings className="text-blue-400 w-8 h-8" /> },
+              { title: 'No Fix, Service Charge Rs.499', icon: <Settings className="text-blue-400 w-8 h-8" /> },
               { title: 'Data Security', icon: <Smartphone className="text-blue-400 w-8 h-8" /> },
               { title: 'Expert Technicians', icon: <Wrench className="text-blue-400 w-8 h-8" /> },
               { title: '8+ years of Professional Experience', icon: <Settings className="text-blue-400 w-8 h-8" /> },
