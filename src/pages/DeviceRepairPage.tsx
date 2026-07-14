@@ -160,7 +160,7 @@ export default function DeviceRepairPage() {
               <div className="pb-4 border-b border-slate-800 shrink-0">
                 <h3 className="font-bold text-white flex items-center gap-2">
                   <AlertTriangle className="w-5 h-5 text-blue-400" />
-                  Your Repair Summary
+                  Your List of Issues
                 </h3>
                 <p className="text-xs text-slate-450 mt-1 capitalize">{formattedBrand} • {formattedModel}</p>
               </div>
@@ -189,14 +189,14 @@ export default function DeviceRepairPage() {
 
               {/* Footer / Checkout */}
               <div className="pt-4 border-t border-slate-800 shrink-0 space-y-4">
-                <div className="flex items-center justify-between">
+                {/* <div className="flex items-center justify-between">
                   <span className="text-sm font-bold text-slate-400">Doorstep Diagnostics</span>
                   <span className="text-2xl font-bold text-emerald-450">
                     FREE
                   </span>
-                </div>
+                </div> */}
 
-                <div className="text-[10px] text-slate-500 font-semibold space-y-1.5 pt-2 border-t border-slate-800/60">
+                {/* <div className="text-[10px] text-slate-500 font-semibold space-y-1.5 pt-2 border-t border-slate-800/60">
                   <div className="flex items-center justify-between">
                     <span>Inspection Fee</span>
                     <span className="text-emerald-400">FREE</span>
@@ -205,7 +205,7 @@ export default function DeviceRepairPage() {
                     <span>Transit & Pickup</span>
                     <span className="text-emerald-400">FREE</span>
                   </div>
-                </div>
+                </div> */}
 
                 <a
                   href={getWhatsAppLink()}

@@ -206,66 +206,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 2. Service Categories Grid
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center" id="services">
-        <h2 className="text-xl md:text-2xl font-bold mb-8 text-white">
-          {"Doorstep Mobile Repair Services in Delhi / NCR".split(" ").map((word, i) => (
-            <motion.span
-              key={i}
-              animate={{ y: [0, -4, 0] }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                repeatType: 'loop',
-                delay: i * 0.1,
-                ease: 'easeInOut',
-              }}
-              className="inline-block mr-2"
-            >
-              {word}
-            </motion.span>
-          ))}
-        </h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 md:gap-8 max-w-4xl mx-auto">
-          {categories.map((cat, idx) => (
-            <Link to={cat.path} key={idx} className="relative w-full aspect-square" style={{ perspective: '1000px' }}>
-              <motion.div
-                className="relative w-full h-full"
-                style={{ transformStyle: 'preserve-3d' }}
-                whileHover={{ rotateY: 180 }}
-                transition={{ duration: 0.6, ease: 'easeInOut' }}
-              >
-      //           {/* Front of the card 
-      //           <div
-      //             className="absolute w-full h-full bg-[#0A1329] border border-slate-800 shadow-md rounded-3xl flex flex-col items-center justify-center p-4"
-      //             style={{ backfaceVisibility: 'hidden' }}
-      //           >
-      //             <div className="p-2 w-full h-full flex flex-col items-center justify-center">
-      //               {cat.icon}
-      //               <span className="text-xs font-semibold text-slate-300 mt-2">{cat.title}</span>
-      //             </div>
-      //           </div>
-
-      //           {/* Back of the card 
-      //           <div
-      //             className="absolute w-full h-full bg-[#0E1B38] border border-slate-700 shadow-lg rounded-3xl flex flex-col items-center justify-center p-4"
-      //             style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
-      //           >
-      //             <Wrench className="w-6 h-6 text-blue-400 mb-3" />
-      //             <span className="text-xs font-bold text-white text-center">
-      //               Book Repair
-      //             </span>
-      //             <span className="text-[10px] text-slate-400 mt-1">
-      //               for {cat.title}
-      //             </span>
-      //           </div>
-      //         </motion.div>
-      //       </Link>
-      //     ))}
-      //   </div>
-      // </section > */}
-
-      {/* 3. Trust Stats Band */}
+       {/* 3. Trust Stats Band */}
       <section className="bg-[#0A1329] border-y border-slate-800/80 py-8 my-8" >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-slate-800">
@@ -328,6 +269,154 @@ export default function Home() {
           ))}
         </p>
       </section >
+
+      {/* 8. Brands We Repair */}
+      <section id="brands" className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center border-t border-slate-800/80" >
+        <TextScramble as="h2" className="text-2xl font-bold mb-4 text-white">
+          Mobile Brands we Repair
+        </TextScramble>
+        <p className="text-sm text-slate-400 mb-12">We repair out of warranty devices of all major brands</p>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6 max-w-5xl mx-auto">
+          {[
+            { name: 'Apple', logo: 'https://cdn.simpleicons.org/apple/fff', path: '/brand/apple?category=mobile' },
+            { name: 'Samsung', logo: 'https://cdn.simpleicons.org/samsung/fff', path: '/brand/samsung?category=mobile' },
+            { name: 'Xiaomi', logo: 'https://cdn.simpleicons.org/xiaomi/fff', path: '/brand/xiaomi?category=mobile' },
+            { name: 'OnePlus', logo: 'https://cdn.simpleicons.org/oneplus/fff', path: '/brand/oneplus?category=mobile' },
+            { name: 'Vivo', logo: 'https://cdn.simpleicons.org/vivo/fff', path: '/brand/vivo?category=mobile' },
+            { name: 'Oppo', logo: 'https://cdn.simpleicons.org/oppo/fff', path: '/brand/oppo?category=mobile' },
+            { name: 'Realme', logo: '/realme.avif', path: '/brand/realme?category=mobile' },
+            { name: 'Motorola', logo: 'https://cdn.simpleicons.org/motorola/fff', path: '/brand/motorola?category=mobile' },
+            { name: 'Lenovo', logo: 'https://cdn.simpleicons.org/lenovo/fff', path: '/brand/lenovo?category=mobile' },
+          ].map((brand, idx) => (
+            <Link 
+              to={brand.path} 
+              key={idx} 
+              className="bg-[#0A1329] border border-slate-800 p-6 rounded-3xl flex flex-col items-center justify-center gap-3 hover:border-slate-700 hover:shadow-2xl hover:scale-[1.03] transition-all duration-300 shadow-lg cursor-pointer block"
+            >
+              <img src={brand.logo} alt={brand.name} className="h-8 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
+              <span className="text-xs font-bold text-slate-300">{brand.name}</span>
+            </Link>
+          ))}
+        </div>
+      </section >
+
+      {/* 8.1. Laptop Brands We Repair */}
+      <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center border-t border-slate-800/80" >
+        <TextScramble as="h2" className="text-2xl font-bold mb-4 text-white">
+          Laptop Brands we Repair
+        </TextScramble>
+        <p className="text-sm text-slate-400 mb-12">We repair out of warranty devices of all major brands</p>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6 max-w-5xl mx-auto">
+          {[
+            { name: 'Macbook', logo: 'https://cdn.simpleicons.org/apple/fff', path: '/brand/apple?category=laptop' },
+            { name: 'HP', logo: 'https://cdn.simpleicons.org/hp/fff', path: '/brand/hp?category=laptop' },
+            { name: 'Intel', logo: 'https://cdn.simpleicons.org/intel/fff', path: '/brand/intel?category=laptop' },
+            { name: 'Dell', logo: 'https://cdn.simpleicons.org/dell/fff', path: '/brand/dell?category=laptop' },
+            { name: 'MSI', logo: 'https://cdn.simpleicons.org/msi/fff', path: '/brand/msi?category=laptop' },
+            { name: 'Lenovo', logo: 'https://cdn.simpleicons.org/lenovo/fff', path: '/brand/lenovo?category=laptop' },
+            { name: 'Microsoft', logo: 'https://cdn.simpleicons.org/microsoft/fff', path: '/brand/microsoft?category=laptop' },
+            { name: 'Samsung', logo: 'https://cdn.simpleicons.org/samsung/fff', path: '/brand/samsung?category=laptop' },
+            { name: 'Nvidia', logo: 'https://cdn.simpleicons.org/nvidia/fff', path: '/brand/nvidia?category=laptop' },
+            { name: 'Asus', logo: 'https://cdn.simpleicons.org/asus/fff', path: '/brand/asus?category=laptop' },
+            { name: 'Acer', logo: 'https://cdn.simpleicons.org/acer/fff', path: '/brand/acer?category=laptop' },
+          ].map((brand, idx) => (
+            <Link 
+              to={brand.path} 
+              key={idx} 
+              className="bg-[#0A1329] border border-slate-800 p-6 rounded-3xl flex flex-col items-center justify-center gap-3 hover:border-slate-700 hover:shadow-2xl hover:scale-[1.03] transition-all duration-300 shadow-lg cursor-pointer block"
+            >
+              <img src={brand.logo} alt={brand.name} className="h-8 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
+              <span className="text-xs font-bold text-slate-300">{brand.name}</span>
+            </Link>
+          ))}
+        </div>
+      </section >
+
+      {/* 8.2. Tablet Brands We Repair */}
+      <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center border-t border-slate-800/80" >
+        <TextScramble as="h2" className="text-2xl font-bold mb-4 text-white">
+          Tablet Brands we Repair
+        </TextScramble>
+        <p className="text-sm text-slate-400 mb-12">We repair out of warranty devices of all major brands</p>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6 max-w-5xl mx-auto">
+          {[
+            { name: 'Ipads', logo: 'https://cdn.simpleicons.org/apple/fff', path: '/brand/apple?category=tablet' },
+            { name: 'Lenovo', logo: 'https://cdn.simpleicons.org/lenovo/fff', path: '/brand/lenovo?category=tablet' },
+            { name: 'Xiaomi', logo: 'https://cdn.simpleicons.org/xiaomi/fff', path: '/brand/xiaomi?category=tablet' },
+            { name: 'Realme', logo: '/realme.avif', path: '/brand/realme?category=tablet' },
+            { name: 'Samsung', logo: 'https://cdn.simpleicons.org/samsung/fff', path: '/brand/samsung?category=tablet' },
+          ].map((brand, idx) => (
+            <Link 
+              to={brand.path} 
+              key={idx} 
+              className="bg-[#0A1329] border border-slate-800 p-6 rounded-3xl flex flex-col items-center justify-center gap-3 hover:border-slate-700 hover:shadow-2xl hover:scale-[1.03] transition-all duration-300 shadow-lg cursor-pointer block"
+            >
+              <img src={brand.logo} alt={brand.name} className="h-8 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
+              <span className="text-xs font-bold text-slate-300">{brand.name}</span>
+            </Link>
+          ))}
+        </div>
+      </section >
+
+
+      {/* 2. Service Categories Grid
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center" id="services">
+        <h2 className="text-xl md:text-2xl font-bold mb-8 text-white">
+          {"Doorstep Mobile Repair Services in Delhi / NCR".split(" ").map((word, i) => (
+            <motion.span
+              key={i}
+              animate={{ y: [0, -4, 0] }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                repeatType: 'loop',
+                delay: i * 0.1,
+                ease: 'easeInOut',
+              }}
+              className="inline-block mr-2"
+            >
+              {word}
+            </motion.span>
+          ))}
+        </h2>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 md:gap-8 max-w-4xl mx-auto">
+          {categories.map((cat, idx) => (
+            <Link to={cat.path} key={idx} className="relative w-full aspect-square" style={{ perspective: '1000px' }}>
+              <motion.div
+                className="relative w-full h-full"
+                style={{ transformStyle: 'preserve-3d' }}
+                whileHover={{ rotateY: 180 }}
+                transition={{ duration: 0.6, ease: 'easeInOut' }}
+              >
+      //           {/* Front of the card 
+      //           <div
+      //             className="absolute w-full h-full bg-[#0A1329] border border-slate-800 shadow-md rounded-3xl flex flex-col items-center justify-center p-4"
+      //             style={{ backfaceVisibility: 'hidden' }}
+      //           >
+      //             <div className="p-2 w-full h-full flex flex-col items-center justify-center">
+      //               {cat.icon}
+      //               <span className="text-xs font-semibold text-slate-300 mt-2">{cat.title}</span>
+      //             </div>
+      //           </div>
+
+      //           {/* Back of the card 
+      //           <div
+      //             className="absolute w-full h-full bg-[#0E1B38] border border-slate-700 shadow-lg rounded-3xl flex flex-col items-center justify-center p-4"
+      //             style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
+      //           >
+      //             <Wrench className="w-6 h-6 text-blue-400 mb-3" />
+      //             <span className="text-xs font-bold text-white text-center">
+      //               Book Repair
+      //             </span>
+      //             <span className="text-[10px] text-slate-400 mt-1">
+      //               for {cat.title}
+      //             </span>
+      //           </div>
+      //         </motion.div>
+      //       </Link>
+      //     ))}
+      //   </div>
+      // </section > */}
 
       {/* 6. Why Choose Us Grid */}
       <section className="bg-[#030712]/40 py-20 border-y border-slate-800/80" id="about-us">
@@ -546,94 +635,6 @@ export default function Home() {
           )
         }
       </AnimatePresence>
-
-      {/* 8. Brands We Repair */}
-      <section id="brands" className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center border-t border-slate-800/80" >
-        <TextScramble as="h2" className="text-2xl font-bold mb-4 text-white">
-          Mobile Brands we Repair
-        </TextScramble>
-        <p className="text-sm text-slate-400 mb-12">We repair out of warranty devices of all major brands</p>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6 max-w-5xl mx-auto">
-          {[
-            { name: 'Apple', logo: 'https://cdn.simpleicons.org/apple/fff', path: '/brand/apple?category=mobile' },
-            { name: 'Samsung', logo: 'https://cdn.simpleicons.org/samsung/fff', path: '/brand/samsung?category=mobile' },
-            { name: 'Xiaomi', logo: 'https://cdn.simpleicons.org/xiaomi/fff', path: '/brand/xiaomi?category=mobile' },
-            { name: 'OnePlus', logo: 'https://cdn.simpleicons.org/oneplus/fff', path: '/brand/oneplus?category=mobile' },
-            { name: 'Vivo', logo: 'https://cdn.simpleicons.org/vivo/fff', path: '/brand/vivo?category=mobile' },
-            { name: 'Oppo', logo: 'https://cdn.simpleicons.org/oppo/fff', path: '/brand/oppo?category=mobile' },
-            { name: 'Realme', logo: '/realme.avif', path: '/brand/realme?category=mobile' },
-            { name: 'Motorola', logo: 'https://cdn.simpleicons.org/motorola/fff', path: '/brand/motorola?category=mobile' },
-            { name: 'Lenovo', logo: 'https://cdn.simpleicons.org/lenovo/fff', path: '/brand/lenovo?category=mobile' },
-          ].map((brand, idx) => (
-            <Link 
-              to={brand.path} 
-              key={idx} 
-              className="bg-[#0A1329] border border-slate-800 p-6 rounded-3xl flex flex-col items-center justify-center gap-3 hover:border-slate-700 hover:shadow-2xl hover:scale-[1.03] transition-all duration-300 shadow-lg cursor-pointer block"
-            >
-              <img src={brand.logo} alt={brand.name} className="h-8 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
-              <span className="text-xs font-bold text-slate-300">{brand.name}</span>
-            </Link>
-          ))}
-        </div>
-      </section >
-
-      {/* 8.1. Laptop Brands We Repair */}
-      <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center border-t border-slate-800/80" >
-        <TextScramble as="h2" className="text-2xl font-bold mb-4 text-white">
-          Laptop Brands we Repair
-        </TextScramble>
-        <p className="text-sm text-slate-400 mb-12">We repair out of warranty devices of all major brands</p>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6 max-w-5xl mx-auto">
-          {[
-            { name: 'Macbook', logo: 'https://cdn.simpleicons.org/apple/fff', path: '/brand/apple?category=laptop' },
-            { name: 'HP', logo: 'https://cdn.simpleicons.org/hp/fff', path: '/brand/hp?category=laptop' },
-            { name: 'Intel', logo: 'https://cdn.simpleicons.org/intel/fff', path: '/brand/intel?category=laptop' },
-            { name: 'Dell', logo: 'https://cdn.simpleicons.org/dell/fff', path: '/brand/dell?category=laptop' },
-            { name: 'MSI', logo: 'https://cdn.simpleicons.org/msi/fff', path: '/brand/msi?category=laptop' },
-            { name: 'Lenovo', logo: 'https://cdn.simpleicons.org/lenovo/fff', path: '/brand/lenovo?category=laptop' },
-            { name: 'Microsoft', logo: 'https://cdn.simpleicons.org/microsoft/fff', path: '/brand/microsoft?category=laptop' },
-            { name: 'Samsung', logo: 'https://cdn.simpleicons.org/samsung/fff', path: '/brand/samsung?category=laptop' },
-            { name: 'Nvidia', logo: 'https://cdn.simpleicons.org/nvidia/fff', path: '/brand/nvidia?category=laptop' },
-            { name: 'Asus', logo: 'https://cdn.simpleicons.org/asus/fff', path: '/brand/asus?category=laptop' },
-            { name: 'Acer', logo: 'https://cdn.simpleicons.org/acer/fff', path: '/brand/acer?category=laptop' },
-          ].map((brand, idx) => (
-            <Link 
-              to={brand.path} 
-              key={idx} 
-              className="bg-[#0A1329] border border-slate-800 p-6 rounded-3xl flex flex-col items-center justify-center gap-3 hover:border-slate-700 hover:shadow-2xl hover:scale-[1.03] transition-all duration-300 shadow-lg cursor-pointer block"
-            >
-              <img src={brand.logo} alt={brand.name} className="h-8 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
-              <span className="text-xs font-bold text-slate-300">{brand.name}</span>
-            </Link>
-          ))}
-        </div>
-      </section >
-
-      {/* 8.2. Tablet Brands We Repair */}
-      <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center border-t border-slate-800/80" >
-        <TextScramble as="h2" className="text-2xl font-bold mb-4 text-white">
-          Tablet Brands we Repair
-        </TextScramble>
-        <p className="text-sm text-slate-400 mb-12">We repair out of warranty devices of all major brands</p>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6 max-w-5xl mx-auto">
-          {[
-            { name: 'Ipads', logo: 'https://cdn.simpleicons.org/apple/fff', path: '/brand/apple?category=tablet' },
-            { name: 'Lenovo', logo: 'https://cdn.simpleicons.org/lenovo/fff', path: '/brand/lenovo?category=tablet' },
-            { name: 'Xiaomi', logo: 'https://cdn.simpleicons.org/xiaomi/fff', path: '/brand/xiaomi?category=tablet' },
-            { name: 'Realme', logo: '/realme.avif', path: '/brand/realme?category=tablet' },
-            { name: 'Samsung', logo: 'https://cdn.simpleicons.org/samsung/fff', path: '/brand/samsung?category=tablet' },
-          ].map((brand, idx) => (
-            <Link 
-              to={brand.path} 
-              key={idx} 
-              className="bg-[#0A1329] border border-slate-800 p-6 rounded-3xl flex flex-col items-center justify-center gap-3 hover:border-slate-700 hover:shadow-2xl hover:scale-[1.03] transition-all duration-300 shadow-lg cursor-pointer block"
-            >
-              <img src={brand.logo} alt={brand.name} className="h-8 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
-              <span className="text-xs font-bold text-slate-300">{brand.name}</span>
-            </Link>
-          ))}
-        </div>
-      </section >
 
       {/* 9. How It Works */}
       <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center border-t border-slate-800/80">
