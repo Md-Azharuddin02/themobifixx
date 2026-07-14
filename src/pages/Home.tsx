@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { Smartphone, Laptop, Tablet, Watch, ChevronDown, CheckCircle2, Shield, Wrench, Settings, MapPin, Search, Plus, Minus, ArrowRight, Star, Heart, Calendar, Phone, Camera, UserCheck, Video, X, ChevronLeft, ChevronRight as ChevronRightIcon } from 'lucide-react';
+import { Smartphone, Laptop, Tablet, Watch, ChevronDown, CheckCircle2, Shield, Wrench, Settings, MapPin, Search, Plus, Minus, ArrowRight, Star, Heart, Calendar, Phone, Camera, UserCheck, Video, X, ChevronLeft, ChevronRight as ChevronRightIcon, IndianRupee, Lock, Award, Monitor, BatteryFull, Cpu, Droplets, Clock, Users } from 'lucide-react';
 import { TextScramble } from '../pages/TextScramble';
 import { SparklesText } from '../pages/SparklesText';
 import { Testimonial } from '../types';
@@ -438,18 +438,18 @@ export default function Home() {
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
             {[
-              { title: 'No Fix, Service Charge Rs.499', icon: <Settings className="text-blue-400 w-8 h-8" /> },
-              { title: 'Data Security', icon: <Smartphone className="text-blue-400 w-8 h-8" /> },
+              { title: 'No Fix, Service Charge Rs.499', icon: <IndianRupee className="text-blue-400 w-8 h-8" /> },
+              { title: 'Data Security', icon: <Lock className="text-blue-400 w-8 h-8" /> },
               { title: 'Expert Technicians', icon: <Wrench className="text-blue-400 w-8 h-8" /> },
-              { title: '8+ years of Professional Experience', icon: <Settings className="text-blue-400 w-8 h-8" /> },
-              { title: '22,000+ Mobile Repairs Completed', icon: <Settings className="text-blue-400 w-8 h-8" /> },
-              { title: 'Expert Display & Glass Replacement', icon: <Settings className="text-blue-400 w-8 h-8" /> },
-              { title: 'Battery Replacement', icon: <Settings className="text-blue-400 w-8 h-8" /> },
-              { title: 'Advanced MotherBoard Repair', icon: <Settings className="text-blue-400 w-8 h-8" /> },
-              { title: 'Water Damage Solutions', icon: <Settings className="text-blue-400 w-8 h-8" /> },
-              { title: 'Doorstep Repair Service', icon: <Settings className="text-blue-400 w-8 h-8" /> },
-              { title: 'Quick Turnaround Time', icon: <Settings className="text-blue-400 w-8 h-8" /> },
-              { title: 'Trusted By Thousands of Customers', icon: <Settings className="text-blue-400 w-8 h-8" /> },
+              { title: '8+ years of Professional Experience', icon: <Award className="text-blue-400 w-8 h-8" /> },
+              { title: '22,000+ Mobile Repairs Completed', icon: <Smartphone className="text-blue-400 w-8 h-8" /> },
+              { title: 'Expert Display & Glass Replacement', icon: <Monitor className="text-blue-400 w-8 h-8" /> },
+              { title: 'Battery Replacement', icon: <BatteryFull className="text-blue-400 w-8 h-8" /> },
+              { title: 'Advanced MotherBoard Repair', icon: <Cpu className="text-blue-400 w-8 h-8" /> },
+              { title: 'Water Damage Solutions', icon: <Droplets className="text-blue-400 w-8 h-8" /> },
+              { title: 'Doorstep Repair Service', icon: <MapPin className="text-blue-400 w-8 h-8" /> },
+              { title: 'Quick Turnaround Time', icon: <Clock className="text-blue-400 w-8 h-8" /> },
+              { title: 'Trusted By Thousands of Customers', icon: <Users className="text-blue-400 w-8 h-8" /> },
             ].map((feature, i) => (
               <motion.div
                 key={i}
