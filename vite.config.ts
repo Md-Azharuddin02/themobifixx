@@ -10,13 +10,25 @@ export default defineConfig({
       '@': path.resolve(__dirname, '.'),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-react':  ['react', 'react-dom'],
+          'vendor-router': ['react-router-dom'],
+          'vendor-motion': ['motion'],
+          'vendor-icons':  ['lucide-react'],
+        },
+      },
+    },
+    chunkSizeWarningLimit: 800,
+  },
   preview: {
-    // Allow requests from the custom domain and Render's subdomain
     allowedHosts: [
       'themobifixx.com',
       'www.themobifixx.com',
       'themobifixx.onrender.com',
-      'all',         // catch-all for any Render preview URLs
+      'all',
     ],
     host: '0.0.0.0',
     port: 4173,
