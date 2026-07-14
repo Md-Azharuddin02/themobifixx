@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { Smartphone, Laptop, Tablet, Watch, ChevronDown, CheckCircle2, Shield, Wrench, Settings, MapPin, Search, Plus, Minus, ArrowRight, Star, Heart, Calendar, Phone, Camera, UserCheck, Video, X, ChevronLeft, ChevronRight as ChevronRightIcon, IndianRupee, Lock, Award, Monitor, BatteryFull, Cpu, Droplets, Clock, Users } from 'lucide-react';
@@ -34,23 +34,27 @@ const GALLERY_ITEMS = [
 const TECHNICIANS = [
   {
     name: "Prince Singh",
-    profileImage: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783000124/WhatsApp_Image_2026-07-01_at_5.52.22_PM_1_aiynf3.jpg?w=400&auto=format&fit=crop&q=60"
+    profileImage: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783000124/WhatsApp_Image_2026-07-01_at_5.52.22_PM_1_aiynf3.jpg?w=400&auto=format&q=60"
   },
   {
     name: "Shoaib Malik",
-    profileImage: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783000124/WhatsApp_Image_2026-07-01_at_5.52.22_PM_jtrlcf.jpg?w=400&auto=format&fit=crop&q=60"
+    profileImage: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783000124/WhatsApp_Image_2026-07-01_at_5.52.22_PM_jtrlcf.jpg?w=400&auto=format&q=60"
   },
   {
     name: "Nikhil Chandel",
-    profileImage: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783000124/WhatsApp_Image_2026-07-01_at_3.27.54_PM_sgcynd.jpg?w=400&auto=format&fit=crop&q=60"
+    profileImage: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783000124/WhatsApp_Image_2026-07-01_at_3.27.54_PM_sgcynd.jpg?w=400&auto=format&q=60"
   },
   {
     name: "Arif Sheikh",
-    profileImage: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783976762/WhatsApp_Image_2026-07-13_at_6.57.03_PM_uwkuip.jpg?w=400&auto=format&fit=crop&q=60"
+    profileImage: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783976762/WhatsApp_Image_2026-07-13_at_6.57.03_PM_uwkuip.jpg?w=400&auto=format&q=60"
   },
   {
     name: "Rishabh Singh Rajput",
-    profileImage: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783976762/WhatsApp_Image_2026-07-13_at_6.57.21_PM_khakxv.jpg?w=400&auto=format&fit=crop&q=60"
+    profileImage: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783976762/WhatsApp_Image_2026-07-13_at_6.57.21_PM_khakxv.jpg?w=400&auto=format&q=60"
+  },
+  {
+    name: "Sunny Sharma",
+    profileImage: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1784055120/WhatsApp_Image_2026-07-15_at_12.21.46_AM_n2jpdx.jpg?w=400&auto=format&q=60"
   }
 ];
 
@@ -59,6 +63,46 @@ export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
+  const techScrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeftTech, setCanScrollLeftTech] = useState(false);
+  const [canScrollRightTech, setCanScrollRightTech] = useState(true);
+
+  const checkTechScroll = () => {
+    if (techScrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = techScrollRef.current;
+      setCanScrollLeftTech(scrollLeft > 10);
+      setCanScrollRightTech(scrollLeft + clientWidth < scrollWidth - 10);
+    }
+  };
+
+  const scrollTech = (direction: 'left' | 'right') => {
+    if (techScrollRef.current) {
+      const { scrollLeft, clientWidth } = techScrollRef.current;
+      const scrollAmount = direction === 'left' ? -320 : 320;
+      techScrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  };
+
+  useEffect(() => {
+    const scroller = techScrollRef.current;
+    if (scroller) {
+      scroller.addEventListener('scroll', checkTechScroll);
+      // Run once initially
+      checkTechScroll();
+      
+      const observer = new ResizeObserver(() => {
+        checkTechScroll();
+      });
+      observer.observe(scroller);
+
+      return () => {
+        scroller.removeEventListener('scroll', checkTechScroll);
+        observer.disconnect();
+      };
+    }
+  }, []);
+
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -745,21 +789,54 @@ export default function Home() {
       <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center bg-[#030712]/40 border-t border-slate-800/80" id="contact-us">
         <h2 className="text-3xl font-bold mb-4 text-white">Meet Our Expert Technicians</h2>
         <p className="text-sm text-slate-400 mb-12">Certified professionals dedicated to restoring your devices.</p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8 max-w-5xl mx-auto justify-center">
-          {TECHNICIANS.map((tech, i) => (
-            <div key={i} className="bg-[#0A1329] border border-slate-800 rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group">
-              <div className="relative h-72 bg-slate-900 overflow-hidden">
-                <img 
-                  src={tech.profileImage} 
-                  className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105" 
-                  alt={tech.name} 
-                />
+        <div className="relative max-w-6xl mx-auto group/slider">
+          {/* Left Arrow Button */}
+          <button 
+            onClick={() => scrollTech('left')}
+            className={`absolute left-0 top-1/2 -translate-y-1/2 z-25 bg-[#0A1329]/95 hover:bg-blue-600 text-white p-3.5 rounded-full border border-slate-800 shadow-2xl transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer backdrop-blur-md md:group-hover/slider:translate-x-0 md:-translate-x-4 ${canScrollLeftTech ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}
+            aria-label="Scroll left"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+
+          {/* Right Arrow Button */}
+          <button 
+            onClick={() => scrollTech('right')}
+            className={`absolute right-0 top-1/2 -translate-y-1/2 z-25 bg-[#0A1329]/95 hover:bg-blue-600 text-white p-3.5 rounded-full border border-slate-800 shadow-2xl transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer backdrop-blur-md md:group-hover/slider:translate-x-0 md:translate-x-4 ${canScrollRightTech ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}
+            aria-label="Scroll right"
+          >
+            <ChevronRightIcon className="w-5 h-5" />
+          </button>
+
+          {/* Gradient Affordance Overlays */}
+          <div className={`absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-[#050B18] via-[#050B18]/40 to-transparent pointer-events-none z-10 transition-opacity duration-300 ${canScrollLeftTech ? 'opacity-100' : 'opacity-0'}`} />
+          <div className={`absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-[#050B18] via-[#050B18]/40 to-transparent pointer-events-none z-10 transition-opacity duration-300 ${canScrollRightTech ? 'opacity-100' : 'opacity-0'}`} />
+
+          {/* Scrollable Container */}
+          <div 
+            ref={techScrollRef}
+            className="flex overflow-x-auto gap-6 pb-8 pt-4 px-4 scrollbar-none snap-x snap-mandatory scroll-smooth"
+          >
+            {TECHNICIANS.map((tech, i) => (
+              <div 
+                key={i} 
+                className="w-64 sm:w-72 shrink-0 snap-center bg-[#0A1329] border border-slate-800/80 hover:border-blue-500/30 rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-blue-500/5 transition-all duration-300 group"
+              >
+                <div className="relative h-72 bg-[#0A1329] overflow-hidden">
+                  <img 
+                    src={tech.profileImage} 
+                    className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105" 
+                    alt={tech.name} 
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0A1329]/80 via-transparent to-transparent opacity-60"></div>
+                </div>
+                <div className="py-6 px-4">
+                  <h3 className="font-bold text-slate-200 text-lg group-hover:text-blue-400 transition-colors">{tech.name}</h3>
+                  <p className="text-xs text-blue-400/80 mt-1 uppercase tracking-wider font-semibold">Expert Technician</p>
+                </div>
               </div>
-              <div className="py-6 px-4">
-                <h3 className="font-bold text-slate-200 text-lg group-hover:text-blue-400 transition-colors">{tech.name}</h3>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section >
 

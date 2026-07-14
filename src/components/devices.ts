@@ -191,6 +191,20 @@ export const DEVICE_MODELS: Record<string, { id: string; name: string; image?: s
         { id: 'oppo-a55', name: 'Oppo A55' },
         { id: 'oppo-f19-pro-plus', name: 'Oppo F19 Pro+' },
     ],
+    vivo: [
+        { id: 'vivo-v40-pro', name: 'Vivo V40 Pro', image: 'https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783519131/iqooneo9pro_jnnxiu.jpg' },
+        { id: 'vivo-v40', name: 'Vivo V40' },
+        { id: 'vivo-v30-pro', name: 'Vivo V30 Pro' },
+        { id: 'vivo-v30', name: 'Vivo V30' },
+        { id: 'vivo-v29-pro', name: 'Vivo V29 Pro' },
+        { id: 'vivo-v29', name: 'Vivo V29' },
+        { id: 'vivo-t3-5g', name: 'Vivo T3 5G' },
+        { id: 'vivo-t3-ultra', name: 'Vivo T3 Ultra' },
+        { id: 'vivo-x100-pro', name: 'Vivo X100 Pro' },
+        { id: 'vivo-x100', name: 'Vivo X100' },
+        { id: 'vivo-y200', name: 'Vivo Y200 5G' },
+        { id: 'vivo-y56', name: 'Vivo Y56 5G' }
+    ],
     nothing: [
         { id: 'phone-2a', name: 'Phone (2a)', image: 'https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783518174/np2a_n1pehj.jpg' },
         { id: 'phone-2', name: 'Phone (2)', image: 'https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783518176/np2_kjgi3h.webp' },
