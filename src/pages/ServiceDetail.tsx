@@ -43,12 +43,11 @@ export default function ServiceDetail() {
         <div className="bg-[#050B18] min-h-screen font-sans pb-20 text-slate-200">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
-                {/* Breadcrumbs */}
-                <div className="flex items-center text-xs text-slate-450 mb-6">
+                <div className="flex items-center text-xs text-slate-450 mb-6 overflow-x-auto whitespace-nowrap">
                     <Link to="/" className="hover:text-blue-450">Home</Link>
-                    <ChevronRight className="w-3 h-3 mx-1" />
+                    <ChevronRight className="w-3 h-3 mx-1 shrink-0" />
                     <Link to="/services" className="hover:text-blue-450">Mobile Repair</Link>
-                    <ChevronRight className="w-3 h-3 mx-1" />
+                    <ChevronRight className="w-3 h-3 mx-1 shrink-0" />
                     <span className="text-slate-300 font-medium">{service?.title || 'Repair Services'}</span>
                 </div>
 

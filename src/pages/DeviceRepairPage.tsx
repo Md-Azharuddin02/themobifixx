@@ -155,7 +155,7 @@ export default function DeviceRepairPage() {
 
           {/* Right Sidebar - Sticky Booking Panel */}
           <div className="lg:col-span-4">
-            <div className="bg-[#0A1329] rounded-3xl p-6 shadow-2xl border border-slate-800 sticky top-28 flex flex-col h-[calc(100vh-160px)] min-h-[400px] max-h-[600px]">
+            <div className="bg-[#0A1329] rounded-3xl p-6 shadow-2xl border border-slate-800 sticky top-28 flex flex-col h-auto lg:h-[calc(100vh-160px)] lg:min-h-[400px] lg:max-h-[600px]">
 
               <div className="pb-4 border-b border-slate-800 shrink-0">
                 <h3 className="font-bold text-white flex items-center gap-2">

@@ -8,22 +8,16 @@ import { Testimonial } from '../types';
 
 const HERO_SLIDES = [
   {
-    title: "LAPTOP\nREPAIR",
-    subtitle: "FREE DOORSTEP SERVICE",
-    image: "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&q=80&w=1920",
-    overlayColor: "bg-[#030712]/80"
+    image: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1784027051/WhatsApp_Image_2026-07-14_at_4.33.25_PM_kljweh.jpg?auto=format&fit=crop&q=80&w=1920",
   },
   {
-    title: "MACBOOK\nRESTORATION",
-    subtitle: "CHIP-LEVEL EXPERTS",
-    image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&q=80&w=1920",
-    overlayColor: "bg-[#030712]/80"
+    image: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1784027052/WhatsApp_Image_2026-07-14_at_4.33.25_PM_2_vtddcw.jpg?auto=format&fit=crop&q=80&w=1920",
   },
   {
-    title: "IPHONE\nSCREEN FIX",
-    subtitle: "GENUINE PARTS ONLY",
-    image: "https://images.unsplash.com/photo-1603898037225-83280053a4e9?auto=format&fit=crop&q=80&w=1920",
-    overlayColor: "bg-[#030712]/80"
+    image: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1784027052/WhatsApp_Image_2026-07-14_at_4.33.25_PM_1_ijgjo8.jpg?auto=format&fit=crop&q=80&w=1920",
+  },
+  {
+    image: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1784027051/WhatsApp_Image_2026-07-14_at_4.33.26_PM_by4qus.jpg?auto=format&fit=crop&q=80&w=1920",
   }
 ];
 
@@ -107,16 +101,6 @@ export default function Home() {
     setLightboxIndex((prevIndex) => (prevIndex === GALLERY_ITEMS.length - 1 ? 0 : prevIndex! + 1));
   };
 
-  useEffect(() => {
-    fetch('/api/testimonials')
-      .then(res => res.json())
-      .then(data => {
-        if (Array.isArray(data)) {
-          setTestimonials(data);
-        }
-      })
-      .catch(err => console.error('Error fetching testimonials:', err));
-  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -160,17 +144,14 @@ export default function Home() {
 
       {/* 1. Hero Banner Slideshow */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative">
-        <div className="relative rounded-[2.5rem] overflow-hidden shadow-2xl border border-slate-800/80 h-80 md:h-[28rem] bg-slate-950">
+        <div className="relative rounded-[2.5rem] overflow-hidden shadow-2xl border border-slate-800/80 h-[32rem] md:h-[40rem] bg-slate-950">
           {HERO_SLIDES.map((slide, idx) => (
             <div
               key={idx}
-              className={`absolute inset-0 transition-opacity duration-1000 flex items-center ${currentSlide === idx ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
+              className={`absolute inset-0 transition-opacity duration-1000 flex items-end pb-16 md:pb-20 ${currentSlide === idx ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
             >
-              <img src={slide.image} alt={slide.subtitle} className="absolute inset-0 w-full h-full object-cover opacity-60" />
-              <div className={`absolute inset-0 ${slide.overlayColor} mix-blend-multiply`}></div>
-              <div className="z-20 px-8 md:px-16 md:w-1/2">
-                <div className="inline-block bg-blue-600 text-white font-bold text-xs px-4 py-1.5 rounded-full mb-6 shadow-md">{slide.subtitle}</div>
-                <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-8 leading-tight whitespace-pre-line">{slide.title}</h1>
+              <img src={slide.image} className="absolute inset-0 w-full h-full object-cover" />
+              <div className="z-20 px-8 md:px-16 w-full md:w-2/3 lg:w-1/2">
                 <div className="flex flex-wrap items-center gap-4">
                   <a
                     href={`https://wa.me/919310112994?text=${encodeURIComponent("Hi! 👋 I'd like to get my device repaired. Can you help me book a service?")}`}
@@ -183,7 +164,7 @@ export default function Home() {
                     </svg>
                     <span>Book on WhatsApp</span>
                   </a>
-                  <a href="tel:+919310112994" className="bg-transparent border border-blue-500 hover:bg-blue-600/10 text-white font-bold py-3.5 px-8 rounded-full transition-all shadow-lg inline-flex items-center justify-center gap-2 whitespace-nowrap">
+                  <a href="tel:+919310112994" className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 px-8 rounded-full transition-all shadow-lg inline-flex items-center justify-center gap-2 whitespace-nowrap">
                     <Phone className="w-4 h-4 text-blue-400" />
                     <span>Call 9310112994</span>
                   </a>
@@ -724,7 +705,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-blue-600/5 pointer-events-none" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <h2 className="text-3xl font-bold mb-2">What Our Customers Say</h2>
-          <p className="text-sm text-slate-400 mb-12">4.8 Average Rating on Google Reviews</p>
+          <p className="text-sm text-slate-400 mb-12">4.5 Average Rating on Google Reviews</p>
 
           {testimonials.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
@@ -753,11 +734,8 @@ export default function Home() {
               ))}
             </div>
           ) : (
-            <div className="text-center bg-[#0A1329] max-w-xl mx-auto p-12 rounded-3xl border border-slate-800 shadow-xl">
-              <p className="text-slate-300 text-base font-medium mb-6">No feedback. Be first to give feedback.</p>
-              <button onClick={(e) => e.preventDefault()} className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-full transition-all inline-block shadow-md cursor-default">
-                Give Feedback
-              </button>
+            <div className="text-center bg-[#0A1329] max-w-xl mx-auto p-8 rounded-3xl border border-slate-800 shadow-xl">
+              <p className="text-slate-450 text-sm font-medium">No reviews yet.</p>
             </div>
           )}
         </div>

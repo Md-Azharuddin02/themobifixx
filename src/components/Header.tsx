@@ -91,7 +91,7 @@ export default function Header() {
   };
 
   return (
-    <header className={`w-full font-sans sticky top-0 z-50 bg-[#050B18]/90 backdrop-blur-md border-b border-slate-800/80 transition-all duration-300 ease-in-out ${isScrolled ? 'shadow-lg' : ''}`}>
+    <header className={`w-full font-sans sticky top-0 z-50 border-b border-slate-800/80 transition-all duration-100 ease-in-out ${isMobileMenuOpen ? 'bg-[#050B18]' : 'bg-[#050B18]/90 backdrop-blur-md'} ${isScrolled ? 'shadow-lg' : ''}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between py-3 gap-4">
           
@@ -105,7 +105,7 @@ export default function Header() {
               <Menu className="h-6 w-6" />
             </button>
             <Link to="/" className="flex items-center">
-              <img src='https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783980827/logo_fvomi7.png' alt="TheMobifixx" className="h-12 sm:h-14 lg:h-16 w-auto object-contain rounded-xl" />
+              <img src='https://res.cloudinary.com/dzhsxv2wq/image/upload/v1784028396/WhatsApp_Image_2026-07-14_at_4.48.50_PM_1_rfu6xy.jpg' alt="TheMobifixx" className="h-12 sm:h-14 lg:h-16 w-auto object-contain rounded-xl" />
             </Link>
           </div>
 
@@ -272,7 +272,7 @@ export default function Header() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] lg:hidden bg-black/60 backdrop-blur-sm flex justify-start"
+            className="fixed inset-0 z-[100] lg:hidden flex justify-start mobile-overlay-solid-bg"
           >
             <motion.div
               initial={{ translateX: '-100%' }}
@@ -280,10 +280,11 @@ export default function Header() {
               exit={{ translateX: '-100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
               ref={menuRef}
-              className="w-4/5 max-w-sm bg-[#050B18] h-full shadow-2xl flex flex-col border-r border-slate-850"
+              className="w-4/5 max-w-sm h-full shadow-2xl flex flex-col border-r border-slate-800 mobile-sidebar-solid-bg"
+              style={{ backgroundColor: '#050B18' }}
             >
               <div className="p-4 border-b border-slate-800/80 flex items-center justify-between">
-                <img src='https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783980827/logo_fvomi7.png' alt="TheMobifixx" className="h-12 w-auto rounded-lg" />
+                <img src='https://res.cloudinary.com/dzhsxv2wq/image/upload/v1784028396/WhatsApp_Image_2026-07-14_at_4.48.50_PM_1_rfu6xy.jpg' alt="TheMobifixx" className="h-12 w-auto rounded-lg" />
                 <button
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="p-2 text-slate-400 hover:text-white rounded-full transition-colors"

@@ -13,7 +13,7 @@ export default function Footer() {
           {/* Brand & About + Quick Links */}
           <div className="space-y-6">
             <Link to="/">
-              <img src='https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783492584/logo_ixtnqx.jpg' alt="TheMobifixx" className="h-16 w-auto rounded-xl" />
+              <img src='https://res.cloudinary.com/dzhsxv2wq/image/upload/v1784028396/WhatsApp_Image_2026-07-14_at_4.48.50_PM_1_rfu6xy.jpg' alt="TheMobifixx" className="h-16 w-auto rounded-xl" />
             </Link>
             <p className="text-sm leading-relaxed text-slate-300">
               India's most trusted doorstep repair service for smartphones, tablets, laptops, and smartwatches. We bring the repair center to you.

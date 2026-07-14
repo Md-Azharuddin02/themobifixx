@@ -103,18 +103,18 @@ export default function BrandPage() {
   return (
     <div className="min-h-screen bg-[#050B18] pt-20 pb-12 text-slate-200">
       {/* Breadcrumb Navigation */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-xs font-medium text-slate-450 flex items-center gap-2">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-xs font-medium text-slate-450 flex items-center gap-2 overflow-x-auto whitespace-nowrap">
         <Link to="/" className="hover:text-blue-450 transition-colors">Home</Link>
-        <ChevronRight className="w-3 h-3" />
+        <ChevronRight className="w-3 h-3 shrink-0" />
         {category ? (
           <>
             <Link to={`/category/${category}`} className="hover:text-blue-450 transition-colors capitalize">{category}</Link>
-            <ChevronRight className="w-3 h-3" />
+            <ChevronRight className="w-3 h-3 shrink-0" />
           </>
         ) : (
           <>
             <Link to="/#brands" className="hover:text-blue-450 transition-colors">Brands We Repair</Link>
-            <ChevronRight className="w-3 h-3" />
+            <ChevronRight className="w-3 h-3 shrink-0" />
           </>
         )}
         <span className="text-slate-300">{formattedBrand}</span>

@@ -88,9 +88,9 @@ export default function CategoryPage() {
 
     return (
         <div className="min-h-screen bg-[#050B18] pt-24 pb-20 text-slate-200">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-xs font-medium text-slate-450 flex items-center gap-2">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-xs font-medium text-slate-450 flex items-center gap-2 overflow-x-auto whitespace-nowrap">
                 <Link to="/" className="hover:text-blue-400 transition-colors">Home</Link>
-                <ChevronRight className="w-3 h-3 text-slate-650" />
+                <ChevronRight className="w-3 h-3 text-slate-650 shrink-0" />
                 <span className="text-slate-300">Select Brand</span>
             </div>
 
