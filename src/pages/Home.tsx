@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { Smartphone, Laptop, Tablet, Watch, ChevronDown, CheckCircle2, Shield, Wrench, Settings, MapPin, Search, Plus, Minus, ArrowRight, Star, Heart, Calendar, Phone, Camera, UserCheck, Video, X, ChevronLeft, ChevronRight as ChevronRightIcon, IndianRupee, Lock, Award, Monitor, BatteryFull, Cpu, Droplets, Clock, Users } from 'lucide-react';
+import { Smartphone, Laptop, Tablet, Watch, ChevronDown, CheckCircle2, Shield, Wrench, Settings, MapPin, Search, Plus, Minus, ArrowRight, Star, Heart, Calendar, Phone, Camera, UserCheck, Video, X, ChevronLeft, ChevronRight as ChevronRightIcon, IndianRupee, Lock, Award, Monitor, BatteryFull, Cpu, Droplets, Clock, Users, Fingerprint } from 'lucide-react';
 import { TextScramble } from '../pages/TextScramble';
 import { SparklesText } from '../pages/SparklesText';
 import { Testimonial } from '../types';
@@ -15,7 +15,7 @@ const HERO_SLIDES = [
   },
   {
     image: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1784192930/WhatsApp_Image_2026-07-16_at_2.38.16_PM_wpczmy.jpg?auto=format&fit=crop&q=80&w=1920",
-  
+
   },
   {
     image: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1784027052/WhatsApp_Image_2026-07-14_at_4.33.25_PM_1_ijgjo8.jpg?auto=format&fit=crop&q=80&w=1920",
@@ -102,7 +102,7 @@ const DEFAULT_TESTIMONIALS: Testimonial[] = [
 export default function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [currentSlide, setCurrentSlide] = useState(0);
-  
+
   const [testimonials, setTestimonials] = useState<Testimonial[]>(() => {
     const saved = localStorage.getItem('themobifixx_reviews');
     if (saved) {
@@ -142,14 +142,14 @@ export default function Home() {
       deviceType: newReviewDevice.trim() || "Repaired Device",
       createdAt: new Date().toISOString().split('T')[0]
     };
-    
+
     setTestimonials(prev => [newTestimonial, ...prev]);
     setReviewSuccess(true);
     setNewReviewName('');
     setNewReviewDevice('');
     setNewReviewComment('');
     setNewReviewRating(5);
-    
+
     setTimeout(() => {
       setReviewSuccess(false);
     }, 4000);
@@ -183,7 +183,7 @@ export default function Home() {
       scroller.addEventListener('scroll', checkTechScroll);
       // Run once initially
       checkTechScroll();
-      
+
       const observer = new ResizeObserver(() => {
         checkTechScroll();
       });
@@ -274,6 +274,7 @@ export default function Home() {
     { title: 'Water Damage', image: '/water_dam.webp' },
     { title: 'Face ID Problems', image: '/face_id_issue.webp' },
     { title: 'Speaker Issues', image: '/speaker_issue.webp' },
+    { title: 'Fingerprint & Power Button', image: '/fingerprint_issue.png' },
   ];
 
   return (
@@ -324,7 +325,7 @@ export default function Home() {
         </div>
       </section>
 
-       {/* 3. Trust Stats Band */}
+      {/* 3. Trust Stats Band */}
       <section className="bg-[#0A1329] border-y border-slate-800/80 py-8 my-8" >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-slate-800">
@@ -413,9 +414,9 @@ export default function Home() {
             { name: 'Nokia', logo: 'https://cdn.simpleicons.org/nokia/fff', path: '/brand/nokia?category=mobile'},
             { name: 'Other', logo: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%233b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>', path: '/brand/other?category=mobile'}
           ].map((brand, idx) => (
-            <Link 
-              to={brand.path} 
-              key={idx} 
+            <Link
+              to={brand.path}
+              key={idx}
               className="bg-[#0A1329] border border-slate-800 p-6 rounded-3xl flex flex-col items-center justify-center gap-3 hover:border-slate-700 hover:shadow-2xl hover:scale-[1.03] transition-all duration-300 shadow-lg cursor-pointer block"
             >
               <img src={brand.logo} alt={brand.name} className="h-8 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
@@ -446,9 +447,9 @@ export default function Home() {
             { name: 'Acer', logo: 'https://cdn.simpleicons.org/acer/fff', path: '/brand/acer?category=laptop' },
             { name: 'Other', logo: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%233b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>', path: '/brand/other?category=laptop' },
           ].map((brand, idx) => (
-            <Link 
-              to={brand.path} 
-              key={idx} 
+            <Link
+              to={brand.path}
+              key={idx}
               className="bg-[#0A1329] border border-slate-800 p-6 rounded-3xl flex flex-col items-center justify-center gap-3 hover:border-slate-700 hover:shadow-2xl hover:scale-[1.03] transition-all duration-300 shadow-lg cursor-pointer block"
             >
               <img src={brand.logo} alt={brand.name} className="h-8 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
@@ -474,9 +475,9 @@ export default function Home() {
             { name: 'Redmi Pad', logo: 'https://cdn.simpleicons.org/xiaomi/fff', path: '/brand/redmipad?category=tablet' },
             { name: 'Other', logo: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%233b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>', path: '/brand/other?category=tablet' },
           ].map((brand, idx) => (
-            <Link 
-              to={brand.path} 
-              key={idx} 
+            <Link
+              to={brand.path}
+              key={idx}
               className="bg-[#0A1329] border border-slate-800 p-6 rounded-3xl flex flex-col items-center justify-center gap-3 hover:border-slate-700 hover:shadow-2xl hover:scale-[1.03] transition-all duration-300 shadow-lg cursor-pointer block"
             >
               <img src={brand.logo} alt={brand.name} className="h-8 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
@@ -498,9 +499,9 @@ export default function Home() {
             { name: 'Samsung Watch', logo: 'https://cdn.simpleicons.org/samsung/fff', path: '/brand/samsung?category=watch' },
             { name: 'Other', logo: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%233b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>', path: '/brand/other?category=watch' },
           ].map((brand, idx) => (
-            <Link 
-              to={brand.path} 
-              key={idx} 
+            <Link
+              to={brand.path}
+              key={idx}
               className="bg-[#0A1329] border border-slate-800 p-6 rounded-3xl flex flex-col items-center justify-center gap-3 hover:border-slate-700 hover:shadow-2xl hover:scale-[1.03] transition-all duration-300 shadow-lg cursor-pointer block"
             >
               <img src={brand.logo} alt={brand.name} className="h-8 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
@@ -601,7 +602,6 @@ export default function Home() {
               { title: 'Doorstep Repair Service', icon: <MapPin className="text-blue-400 w-8 h-8" /> },
               { title: 'Quick Turnaround Time', icon: <Clock className="text-blue-400 w-8 h-8" /> },
               { title: 'Trusted By Thousands of Customers', icon: <Users className="text-blue-400 w-8 h-8" /> },
-              { title: 'No Service 499 Visiting Charge', icon: <IndianRupee className="text-blue-400 w-8 h-8" /> },
 
             ].map((feature, i) => (
               <motion.div
@@ -660,14 +660,14 @@ export default function Home() {
             >
               {/* Thumbnail Area */}
               <div className="relative aspect-video bg-black/80 overflow-hidden">
-                <video 
-                  src={item.src} 
+                <video
+                  src={item.src}
                   className="w-full h-full object-cover opacity-85 group-hover:opacity-100 transition-opacity duration-300"
                   muted
                   preload="metadata"
                   playsInline
                 />
-                
+
                 {/* Play Button Overlay */}
                 <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
                   <div className="w-11 h-11 bg-red-600 rounded-full flex items-center justify-center text-white shadow-lg transition-transform duration-300 group-hover:scale-110">
@@ -737,7 +737,7 @@ export default function Home() {
                   <span className="text-xs text-slate-450 font-bold bg-[#0A1329] border border-slate-800 px-3 py-1.5 rounded-full">
                     {lightboxIndex + 1} / {GALLERY_ITEMS.length}
                   </span>
-                  <button 
+                  <button
                     className="bg-[#0A1329] border border-slate-800 hover:bg-slate-800 text-white p-2.5 rounded-full transition-all cursor-pointer"
                     onClick={() => setLightboxIndex(null)}
                   >
@@ -757,16 +757,16 @@ export default function Home() {
                 </button>
 
                 {/* Styled Video Frame with margin, padding, double borders and glow */}
-                <div 
+                <div
                   className="flex-1 bg-[#0A1329] border border-slate-800 p-2 md:p-3.5 rounded-[2rem] shadow-[0_0_50px_rgba(37,99,235,0.18)] max-h-[60vh] flex items-center justify-center overflow-hidden"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <div className="w-full h-full overflow-hidden rounded-[1.5rem] bg-black/60 aspect-video flex items-center justify-center">
-                    <video 
+                    <video
                       key={lightboxIndex}
-                      src={GALLERY_ITEMS[lightboxIndex].src} 
-                      controls 
-                      className="w-full h-full max-h-[55vh] object-contain rounded-[1.5rem]" 
+                      src={GALLERY_ITEMS[lightboxIndex].src}
+                      controls
+                      className="w-full h-full max-h-[55vh] object-contain rounded-[1.5rem]"
                     />
                   </div>
                 </div>
@@ -827,7 +827,7 @@ export default function Home() {
         <SparklesText
           className="text-3xl font-bold mb-16 text-white"
           text="How it Works?"
-          colors={{ first: "#3b82f6", second: "#60a5fa" }} 
+          colors={{ first: "#3b82f6", second: "#60a5fa" }}
         />
         <div className="flex flex-col md:flex-row items-center justify-center gap-8 relative max-w-4xl mx-auto">
           {/* Dotted Line connector (Desktop only) */}
@@ -879,17 +879,17 @@ export default function Home() {
           <p className="text-sm text-slate-400 mb-12">We handle a variety of issues with genuine spare parts.</p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-6xl mx-auto">
             {commonProblems.map((prob, i) => (
-              <div 
-                key={i} 
+              <div
+                key={i}
                 className="relative rounded-3xl overflow-hidden aspect-[4/3] bg-[#0A1329] border border-slate-800 shadow-xl transition-all block"
               >
                 {/* Background repair image */}
-                <img 
-                  src={prob.image} 
-                  alt={prob.title} 
-                  className="w-full h-full object-cover" 
+                <img
+                  src={prob.image}
+                  alt={prob.title}
+                  className="w-full h-full object-cover"
                 />
-                
+
                 {/* Visual dark overlay gradient at the bottom */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/35 to-transparent flex flex-col justify-end p-6" />
 
@@ -909,7 +909,7 @@ export default function Home() {
       <section className="bg-[#050B18] text-white py-20 relative overflow-hidden" id="reviews">
         <div className="absolute inset-0 bg-blue-600/5 pointer-events-none" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          
+
           <div className="text-center mb-16">
             <span className="text-[10px] font-bold uppercase tracking-widest text-blue-400">Customer Testimonials</span>
             <h2 className="text-3xl font-bold mt-1 mb-2">What Our Customers Say</h2>
@@ -918,7 +918,7 @@ export default function Home() {
 
           {/* Rating Summary and Feedback Form */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 max-w-6xl mx-auto mb-16 items-start">
-            
+
             {/* Rating Summary Card (4 cols) */}
             <div className="lg:col-span-4 bg-[#0A1329] border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
               <h3 className="font-bold text-lg text-white mb-6">Review Summary</h3>
@@ -928,15 +928,15 @@ export default function Home() {
                 </span>
                 <span className="text-slate-400 text-sm">/ 5.0</span>
               </div>
-              
+
               {/* Star Rating Display */}
               <div className="flex text-amber-400 gap-1 mb-4">
                 {Array.from({ length: 5 }).map((_, idx) => {
                   const avg = totalReviews > 0 ? (testimonials.reduce((acc, curr) => acc + curr.rating, 0) / totalReviews) : 0;
                   return (
-                    <Star 
-                      key={idx} 
-                      className={`w-5 h-5 ${idx < Math.round(avg) ? 'fill-current' : 'text-slate-700'}`} 
+                    <Star
+                      key={idx}
+                      className={`w-5 h-5 ${idx < Math.round(avg) ? 'fill-current' : 'text-slate-700'}`}
                     />
                   );
                 })}
@@ -952,7 +952,7 @@ export default function Home() {
                     <div key={stars} className="flex items-center gap-3 text-xs text-slate-300">
                       <span className="w-3 font-semibold">{stars}★</span>
                       <div className="flex-1 h-2 bg-slate-800 rounded-full overflow-hidden">
-                        <div 
+                        <div
                           className="h-full bg-amber-400 rounded-full transition-all duration-500"
                           style={{ width: `${pct}%` }}
                         />
@@ -973,7 +973,7 @@ export default function Home() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1.5 text-left">
                     <label className="text-xs font-semibold text-slate-350 block">Your Name *</label>
-                    <input 
+                    <input
                       type="text"
                       required
                       placeholder="E.g., Hamza Khan"
@@ -984,7 +984,7 @@ export default function Home() {
                   </div>
                   <div className="space-y-1.5 text-left">
                     <label className="text-xs font-semibold text-slate-350 block">Device Repaired *</label>
-                    <input 
+                    <input
                       type="text"
                       required
                       placeholder="E.g., iPhone 15 Pro, Dell Laptop"
@@ -1007,12 +1007,12 @@ export default function Home() {
                         onMouseLeave={() => setNewReviewHoverRating(null)}
                         className="cursor-pointer transition-transform duration-150 active:scale-90"
                       >
-                        <Star 
+                        <Star
                           className={`w-7 h-7 transition-colors ${
                             star <= (newReviewHoverRating ?? newReviewRating) 
-                              ? 'fill-amber-400 text-amber-400' 
-                              : 'text-slate-700'
-                          }`} 
+                            ? 'fill-amber-400 text-amber-400'
+                            : 'text-slate-700'
+                            }`}
                         />
                       </button>
                     ))}
@@ -1021,7 +1021,7 @@ export default function Home() {
 
                 <div className="space-y-1.5 text-left">
                   <label className="text-xs font-semibold text-slate-350 block">Your Feedback *</label>
-                  <textarea 
+                  <textarea
                     required
                     rows={3}
                     placeholder="Write details of your experience..."
@@ -1034,7 +1034,7 @@ export default function Home() {
                 <div className="flex justify-between items-center pt-2">
                   <AnimatePresence>
                     {reviewSuccess && (
-                      <motion.span 
+                      <motion.span
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: -10 }}
@@ -1045,7 +1045,7 @@ export default function Home() {
                     )}
                   </AnimatePresence>
 
-                  <button 
+                  <button
                     type="submit"
                     className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-6 rounded-xl transition-all cursor-pointer shadow-lg hover:shadow-blue-500/10 text-xs ml-auto"
                   >
@@ -1059,7 +1059,7 @@ export default function Home() {
           {/* Customer Reviews Grid */}
           <div className="border-t border-slate-800/80 pt-16 max-w-6xl mx-auto">
             <h3 className="font-bold text-xl text-white text-left mb-8 px-1">Latest Customer Reviews ({testimonials.length})</h3>
-            
+
             {testimonials.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {testimonials.map((review, i) => (
@@ -1073,9 +1073,9 @@ export default function Home() {
                   >
                     <div className="flex text-amber-400 gap-0.5 mb-4">
                       {Array.from({ length: 5 }).map((_, j) => (
-                        <Star 
-                          key={j} 
-                          className={`w-4 h-4 ${j < review.rating ? 'fill-current' : 'text-slate-800'}`} 
+                        <Star
+                          key={j}
+                          className={`w-4 h-4 ${j < review.rating ? 'fill-current' : 'text-slate-800'}`}
                         />
                       ))}
                     </div>
@@ -1084,10 +1084,10 @@ export default function Home() {
                     </p>
                     <div className="flex items-center gap-3 pt-4 border-t border-slate-800/60 mt-auto">
                       {review.image ? (
-                        <img 
-                          src={review.image} 
-                          className="w-10 h-10 rounded-full object-cover border border-slate-700 shrink-0" 
-                          alt={review.customerName} 
+                        <img
+                          src={review.image}
+                          className="w-10 h-10 rounded-full object-cover border border-slate-700 shrink-0"
+                          alt={review.customerName}
                         />
                       ) : (
                         <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-650 flex items-center justify-center text-white text-sm font-bold shadow-md border border-slate-855 shrink-0">
@@ -1118,7 +1118,7 @@ export default function Home() {
         <p className="text-sm text-slate-400 mb-12">Certified professionals dedicated to restoring your devices.</p>
         <div className="relative max-w-6xl mx-auto group/slider">
           {/* Left Arrow Button */}
-          <button 
+          <button
             onClick={() => scrollTech('left')}
             className={`absolute left-0 top-1/2 -translate-y-1/2 z-25 bg-[#0A1329]/95 hover:bg-blue-600 text-white p-3.5 rounded-full border border-slate-800 shadow-2xl transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer backdrop-blur-md md:group-hover/slider:translate-x-0 md:-translate-x-4 ${canScrollLeftTech ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}
             aria-label="Scroll left"
@@ -1127,7 +1127,7 @@ export default function Home() {
           </button>
 
           {/* Right Arrow Button */}
-          <button 
+          <button
             onClick={() => scrollTech('right')}
             className={`absolute right-0 top-1/2 -translate-y-1/2 z-25 bg-[#0A1329]/95 hover:bg-blue-600 text-white p-3.5 rounded-full border border-slate-800 shadow-2xl transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer backdrop-blur-md md:group-hover/slider:translate-x-0 md:translate-x-4 ${canScrollRightTech ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}
             aria-label="Scroll right"
@@ -1140,20 +1140,20 @@ export default function Home() {
           <div className={`absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-[#050B18] via-[#050B18]/40 to-transparent pointer-events-none z-10 transition-opacity duration-300 ${canScrollRightTech ? 'opacity-100' : 'opacity-0'}`} />
 
           {/* Scrollable Container */}
-          <div 
+          <div
             ref={techScrollRef}
             className="flex overflow-x-auto gap-6 pb-8 pt-4 px-4 scrollbar-none snap-x snap-mandatory scroll-smooth"
           >
             {TECHNICIANS.map((tech, i) => (
-              <div 
-                key={i} 
+              <div
+                key={i}
                 className="w-64 sm:w-72 shrink-0 snap-center bg-[#0A1329] border border-slate-800/80 hover:border-blue-500/30 rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-blue-500/5 transition-all duration-300 group"
               >
                 <div className="relative h-72 bg-[#0A1329] overflow-hidden">
-                  <img 
-                    src={tech.profileImage} 
-                    className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105" 
-                    alt={tech.name} 
+                  <img
+                    src={tech.profileImage}
+                    className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
+                    alt={tech.name}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0A1329]/80 via-transparent to-transparent opacity-60"></div>
                 </div>
@@ -1240,12 +1240,15 @@ export default function Home() {
           {/* City Cards Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-10">
             {[
-              { city: 'Delhi', sub: 'Nehru Place Hub', color: 'blue' },
-              { city: 'Noida', sub: 'Sector 18 & 62', color: 'indigo' },
-              { city: 'Gurugram', sub: 'Cyber City & MG Rd', color: 'violet' },
-              { city: 'Faridabad', sub: 'Sector 15 & 21', color: 'sky' },
+              { city: 'South Delhi', sub: 'Nehru Place', color: 'blue' },
+              { city: 'West Delhi', sub: 'Connaught Place (CP)', color: 'indigo' },
+              { city: 'East Delhi', sub: 'Laxmi Nagar', color: 'violet' },
+              { city: 'North Delhi', sub: 'Model Town', color: 'orange'},
+              { city: 'Noida', sub: 'Sector 137', color: 'sky' },
               { city: 'Ghaziabad', sub: 'Indirapuram & Raj Nagar', color: 'cyan' },
               { city: 'Greater Noida', sub: 'Knowledge Park', color: 'teal' },
+              { city: 'Faridabad', sub: 'Greenfield Colony', color: 'red'},
+              { city: 'Gurugram', sub: 'Golf Course Road', color: 'pink'}
             ].map((item, idx) => (
               <motion.div
                 key={item.city}
