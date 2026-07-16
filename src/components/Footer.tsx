@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Facebook, Instagram, Phone, Mail } from 'lucide-react';
+import { Facebook, Instagram, Phone, Mail, Youtube } from 'lucide-react';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -32,6 +32,12 @@ export default function Footer() {
                   <a href="https://www.instagram.com/themobifixx" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition-colors flex items-center gap-2">
                     <Instagram className="w-4 h-4 text-pink-500" />
                     <span>Instagram</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.youtube.com/@themobifixx" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition-colors flex items-center gap-2">
+                    <Youtube className="w-4 h-4 text-red-500" />
+                    <span>YouTube</span>
                   </a>
                 </li>
                 <li>

@@ -33,35 +33,124 @@ const GALLERY_ITEMS = [
 
 const TECHNICIANS = [
   {
-    name: "Prince Singh",
-    profileImage: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783000124/WhatsApp_Image_2026-07-01_at_5.52.22_PM_1_aiynf3.jpg?w=400&auto=format&q=60"
+    name: "Tusar Singh",
+    profileImage: " https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783000124/WhatsApp_Image_2026-07-01_at_5.52.22_PM_1_aiynf3.jpg?w=400&auto=format&q=60",
+    experience: "12 Years Experience",
+    isOwner: true
   },
   {
-    name: "Shoaib Malik",
-    profileImage: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783000124/WhatsApp_Image_2026-07-01_at_5.52.22_PM_jtrlcf.jpg?w=400&auto=format&q=60"
+    name: "Suhail Malik",
+    profileImage: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783000124/WhatsApp_Image_2026-07-01_at_5.52.22_PM_jtrlcf.jpg?w=400&auto=format&q=60",
+    experience: "10 Years Experience"
   },
   {
     name: "Nikhil Chandel",
-    profileImage: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783000124/WhatsApp_Image_2026-07-01_at_3.27.54_PM_sgcynd.jpg?w=400&auto=format&q=60"
+    profileImage: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783000124/WhatsApp_Image_2026-07-01_at_3.27.54_PM_sgcynd.jpg?w=400&auto=format&q=60",
+    experience: "9 Years Experience"
   },
   {
     name: "Arif Sheikh",
-    profileImage: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783976762/WhatsApp_Image_2026-07-13_at_6.57.03_PM_uwkuip.jpg?w=400&auto=format&q=60"
+    profileImage: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783976762/WhatsApp_Image_2026-07-13_at_6.57.03_PM_uwkuip.jpg?w=400&auto=format&q=60",
+    experience: "10 Years Experience"
   },
   {
     name: "Rishabh Singh Rajput",
-    profileImage: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783976762/WhatsApp_Image_2026-07-13_at_6.57.21_PM_khakxv.jpg?w=400&auto=format&q=60"
+    profileImage: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783976762/WhatsApp_Image_2026-07-13_at_6.57.21_PM_khakxv.jpg?w=400&auto=format&q=60",
+    experience: "10 Years Experience"
   },
   {
     name: "Sunny Sharma",
-    profileImage: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1784055120/WhatsApp_Image_2026-07-15_at_12.21.46_AM_n2jpdx.jpg?w=400&auto=format&q=60"
+    profileImage: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1784055120/WhatsApp_Image_2026-07-15_at_12.21.46_AM_n2jpdx.jpg?w=400&auto=format&q=60",
+    experience: "9 Years Experience"
+  }
+];
+
+const DEFAULT_TESTIMONIALS: Testimonial[] = [
+  {
+    id: "review-1",
+    customerName: "Amit Sharma",
+    rating: 5,
+    review: "Excellent doorstep service! The technician Prince repaired my iPhone screen in just 30 minutes right in front of me. Highly recommended!",
+    image: "",
+    deviceType: "iPhone 15 Pro Max",
+    createdAt: "2026-07-10"
+  },
+  {
+    id: "review-2",
+    customerName: "Sneha Reddy",
+    rating: 5,
+    review: "Super convenient laptop logic board repair. Picked up and delivered back within 24 hours. Very professional and transparent pricing.",
+    image: "",
+    deviceType: "MacBook Pro M2",
+    createdAt: "2026-07-08"
+  },
+  {
+    id: "review-3",
+    customerName: "Rohan Verma",
+    rating: 4,
+    review: "Excellent response time. Booked a service online and the technician arrived within the scheduled slot. The watch battery replacement works great.",
+    image: "",
+    deviceType: "Samsung Watch 6",
+    createdAt: "2026-07-05"
   }
 ];
 
 export default function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  
+  const [testimonials, setTestimonials] = useState<Testimonial[]>(() => {
+    const saved = localStorage.getItem('themobifixx_reviews');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    return DEFAULT_TESTIMONIALS;
+  });
+
+  useEffect(() => {
+    localStorage.setItem('themobifixx_reviews', JSON.stringify(testimonials));
+  }, [testimonials]);
+
+  // Review form states
+  const [newReviewName, setNewReviewName] = useState('');
+  const [newReviewDevice, setNewReviewDevice] = useState('');
+  const [newReviewComment, setNewReviewComment] = useState('');
+  const [newReviewRating, setNewReviewRating] = useState(5);
+  const [newReviewHoverRating, setNewReviewHoverRating] = useState<number | null>(null);
+  const [reviewSuccess, setReviewSuccess] = useState(false);
+
+  const handleReviewSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newReviewName.trim() || !newReviewComment.trim()) {
+      alert("Please fill in your name and comment.");
+      return;
+    }
+    const newTestimonial: Testimonial = {
+      id: `review-${Date.now()}`,
+      customerName: newReviewName.trim(),
+      rating: newReviewRating,
+      review: newReviewComment.trim(),
+      image: "",
+      deviceType: newReviewDevice.trim() || "Repaired Device",
+      createdAt: new Date().toISOString().split('T')[0]
+    };
+    
+    setTestimonials(prev => [newTestimonial, ...prev]);
+    setReviewSuccess(true);
+    setNewReviewName('');
+    setNewReviewDevice('');
+    setNewReviewComment('');
+    setNewReviewRating(5);
+    
+    setTimeout(() => {
+      setReviewSuccess(false);
+    }, 4000);
+  };
+  const totalReviews = testimonials.length;
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   const techScrollRef = useRef<HTMLDivElement>(null);
@@ -236,7 +325,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-slate-800">
             <div>
-              <div className="text-3xl font-bold text-white mb-1">22,000+</div>
+              <div className="text-3xl font-bold text-white mb-1">69,000+</div>
               <div className="text-xs text-slate-400 font-bold uppercase tracking-wider">Devices Fixed</div>
             </div>
             <div>
@@ -244,11 +333,11 @@ export default function Home() {
               <div className="text-xs text-slate-400 font-bold uppercase tracking-wider">Google Rating</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-white mb-1">8+ year </div>
+              <div className="text-3xl font-bold text-white mb-1">15+ year </div>
               <div className="text-xs text-slate-400 font-bold uppercase tracking-wider">of experience</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-white mb-1">8000+</div>
+              <div className="text-3xl font-bold text-white mb-1">32000+</div>
               <div className="text-xs text-slate-400 font-bold uppercase tracking-wider">Laptop Repairs</div>
             </div>
           </div>
@@ -276,7 +365,7 @@ export default function Home() {
           ))}
         </h2>
         <p className="text-sm text-slate-400 leading-relaxed max-w-3xl mx-auto">
-          {"Expert Laptop Repair Services you can Trust with 8+ years of experience and 15,000+ successful laptop repairs, Our laptop repair expertise Laptop Display Replacement Keyboard Replacement & Repair MotherBoard Repair Specialist Water Damage Deep Cleaning & Repair Laptop body & Hinge repair Battery Replacement SSD & RAM upgrade Charging Port Repair Speaker, Camera & Mic Repair Fan Cleaning & Overheating Solutions. Software Installation & Windows Recovery Data Backup & Recovery.".split(" ").map((word, i) => (
+          {"Expert Laptop Repair Services you can Trust with 15+ years of experience and 69,000+ successful laptop repairs, Our laptop repair expertise Laptop Display Replacement Keyboard Replacement & Repair MotherBoard Repair Specialist Water Damage Deep Cleaning & Repair Laptop body & Hinge repair Battery Replacement SSD & RAM upgrade Charging Port Repair Speaker, Camera & Mic Repair Fan Cleaning & Overheating Solutions. Software Installation & Windows Recovery Data Backup & Recovery.".split(" ").map((word, i) => (
             <motion.span
               key={i}
               initial={{ opacity: 0, y: 15 }}
@@ -300,7 +389,7 @@ export default function Home() {
         <TextScramble as="h2" className="text-2xl font-bold mb-4 text-white">
           Mobile Brands we Repair
         </TextScramble>
-        <p className="text-sm text-slate-400 mb-12">We repair out of warranty devices of all major brands</p>
+        <p className="text-sm text-slate-400 mb-12">We repair/fix 36,000+ Mobiles in warranty and out of warranty.</p>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6 max-w-5xl mx-auto">
           {[
             { name: 'Apple', logo: 'https://cdn.simpleicons.org/apple/fff', path: '/brand/apple?category=mobile' },
@@ -311,7 +400,14 @@ export default function Home() {
             { name: 'Oppo', logo: 'https://cdn.simpleicons.org/oppo/fff', path: '/brand/oppo?category=mobile' },
             { name: 'Realme', logo: '/realme.avif', path: '/brand/realme?category=mobile' },
             { name: 'Motorola', logo: 'https://cdn.simpleicons.org/motorola/fff', path: '/brand/motorola?category=mobile' },
-            { name: 'Lenovo', logo: 'https://cdn.simpleicons.org/lenovo/fff', path: '/brand/lenovo?category=mobile' },
+            { name: 'Redmi', logo: 'https://cdn.simpleicons.org/redmi/fff', path: '/brand/redmi?category=mobile'},
+            { name: 'Poco', logo: 'https://cdn.simpleicons.org.poco/fff', path: '/brand/poco?category=mobile'},
+            { name: 'Google Pixel', logo: 'https://cdn.simpleicons.org/google/fff', path: '/brand/google?category=mobile'},
+            { name: 'Nothing', logo: 'https://cdn.simpleicons.org/nothing/fff', path: '/brand/nothing?category=mobile'},
+            { name: 'Iqoo', logo: 'https://cdn.simpleicons.org/iqoo/fff', path: '/brand/iqoo?category=mobile'},
+            { name: 'Infinix', logo: 'https://cdn.simpleicons.org/infinix/fff', path: '/brand/infinix?category=mobile'},
+            { name: 'Nokia', logo: 'https://cdn.simpleicons.org/nokia/fff', path: '/brand/nokia?category=mobile'},
+            { name: 'Other', logo: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%233b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>', path: '/brand/other?category=mobile'}
           ].map((brand, idx) => (
             <Link 
               to={brand.path} 
@@ -341,9 +437,10 @@ export default function Home() {
             { name: 'Lenovo', logo: 'https://cdn.simpleicons.org/lenovo/fff', path: '/brand/lenovo?category=laptop' },
             { name: 'Microsoft', logo: 'https://cdn.simpleicons.org/microsoft/fff', path: '/brand/microsoft?category=laptop' },
             { name: 'Samsung', logo: 'https://cdn.simpleicons.org/samsung/fff', path: '/brand/samsung?category=laptop' },
-            { name: 'Nvidia', logo: 'https://cdn.simpleicons.org/nvidia/fff', path: '/brand/nvidia?category=laptop' },
+            { name: 'Alienware', logo: 'https://cdn.simpleicons.org/alienware/fff', path: '/brand/alienware?category=laptop' },
             { name: 'Asus', logo: 'https://cdn.simpleicons.org/asus/fff', path: '/brand/asus?category=laptop' },
             { name: 'Acer', logo: 'https://cdn.simpleicons.org/acer/fff', path: '/brand/acer?category=laptop' },
+            { name: 'Other', logo: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%233b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>', path: '/brand/other?category=laptop' },
           ].map((brand, idx) => (
             <Link 
               to={brand.path} 
@@ -370,6 +467,32 @@ export default function Home() {
             { name: 'Xiaomi', logo: 'https://cdn.simpleicons.org/xiaomi/fff', path: '/brand/xiaomi?category=tablet' },
             { name: 'Realme', logo: '/realme.avif', path: '/brand/realme?category=tablet' },
             { name: 'Samsung', logo: 'https://cdn.simpleicons.org/samsung/fff', path: '/brand/samsung?category=tablet' },
+            { name: 'Redmi Pad', logo: 'https://cdn.simpleicons.org/xiaomi/fff', path: '/brand/redmipad?category=tablet' },
+            { name: 'Other', logo: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%233b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>', path: '/brand/other?category=tablet' },
+          ].map((brand, idx) => (
+            <Link 
+              to={brand.path} 
+              key={idx} 
+              className="bg-[#0A1329] border border-slate-800 p-6 rounded-3xl flex flex-col items-center justify-center gap-3 hover:border-slate-700 hover:shadow-2xl hover:scale-[1.03] transition-all duration-300 shadow-lg cursor-pointer block"
+            >
+              <img src={brand.logo} alt={brand.name} className="h-8 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
+              <span className="text-xs font-bold text-slate-300">{brand.name}</span>
+            </Link>
+          ))}
+        </div>
+      </section >
+
+      {/* 8.3. Smart Watch Brands We Repair */}
+      <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center border-t border-slate-800/80" >
+        <TextScramble as="h2" className="text-2xl font-bold mb-4 text-white">
+          Smart Watch Brands we Repair
+        </TextScramble>
+        <p className="text-sm text-slate-400 mb-12">We repair out of warranty devices of all major brands</p>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6 max-w-5xl mx-auto justify-center">
+          {[
+            { name: 'Apple Watch', logo: 'https://cdn.simpleicons.org/apple/fff', path: '/brand/apple?category=watch' },
+            { name: 'Samsung Watch', logo: 'https://cdn.simpleicons.org/samsung/fff', path: '/brand/samsung?category=watch' },
+            { name: 'Other', logo: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%233b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>', path: '/brand/other?category=watch' },
           ].map((brand, idx) => (
             <Link 
               to={brand.path} 
@@ -463,11 +586,10 @@ export default function Home() {
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
             {[
-              { title: 'No Fix, Service Charge Rs.499', icon: <IndianRupee className="text-blue-400 w-8 h-8" /> },
               { title: 'Data Security', icon: <Lock className="text-blue-400 w-8 h-8" /> },
               { title: 'Expert Technicians', icon: <Wrench className="text-blue-400 w-8 h-8" /> },
-              { title: '8+ years of Professional Experience', icon: <Award className="text-blue-400 w-8 h-8" /> },
-              { title: '22,000+ Mobile Repairs Completed', icon: <Smartphone className="text-blue-400 w-8 h-8" /> },
+              { title: '15+ years of Professional Experience', icon: <Award className="text-blue-400 w-8 h-8" /> },
+              { title: '36,000+ Mobile Repairs Completed', icon: <Smartphone className="text-blue-400 w-8 h-8" /> },
               { title: 'Expert Display & Glass Replacement', icon: <Monitor className="text-blue-400 w-8 h-8" /> },
               { title: 'Battery Replacement', icon: <BatteryFull className="text-blue-400 w-8 h-8" /> },
               { title: 'Advanced MotherBoard Repair', icon: <Cpu className="text-blue-400 w-8 h-8" /> },
@@ -475,6 +597,8 @@ export default function Home() {
               { title: 'Doorstep Repair Service', icon: <MapPin className="text-blue-400 w-8 h-8" /> },
               { title: 'Quick Turnaround Time', icon: <Clock className="text-blue-400 w-8 h-8" /> },
               { title: 'Trusted By Thousands of Customers', icon: <Users className="text-blue-400 w-8 h-8" /> },
+              { title: 'No Service 499 Visiting Charge', icon: <IndianRupee className="text-blue-400 w-8 h-8" /> },
+
             ].map((feature, i) => (
               <motion.div
                 key={i}
@@ -519,34 +643,67 @@ export default function Home() {
           <p className="text-slate-400 text-sm">A glimpse into our advanced workshops and happy customers.</p>
         </motion.div>
 
-        <div className="flex justify-center max-w-3xl mx-auto">
-          <motion.div
-            className="relative group rounded-[2.5rem] overflow-hidden shadow-2xl aspect-video w-full border border-slate-800/80 cursor-pointer bg-[#0A1329]"
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, ease: 'easeOut' }}
-            viewport={{ once: true, amount: 0.5 }}
-            onClick={() => setLightboxIndex(0)}
-          >
-            <video 
-              src={GALLERY_ITEMS[0].src} 
-              loop 
-              muted 
-              playsInline 
-              className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-700 group-hover:scale-105" 
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent flex items-end p-6 md:p-8">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 md:w-16 md:h-16 bg-blue-600 hover:bg-blue-500 rounded-full flex items-center justify-center text-white shadow-lg transition-transform duration-300 group-hover:scale-110">
-                  <Video className="w-5 h-5 md:w-6 md:h-6 fill-white text-white" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 justify-center">
+          {GALLERY_ITEMS.map((item, idx) => (
+            <motion.div
+              key={idx}
+              className="bg-[#0A1329] border border-slate-800/60 rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl hover:border-slate-700/60 transition-all duration-300 hover:scale-[1.02] cursor-pointer flex flex-col group"
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: idx * 0.05 }}
+              onClick={() => setLightboxIndex(idx)}
+            >
+              {/* Thumbnail Area */}
+              <div className="relative aspect-video bg-black/80 overflow-hidden">
+                <video 
+                  src={item.src} 
+                  className="w-full h-full object-cover opacity-85 group-hover:opacity-100 transition-opacity duration-300"
+                  muted
+                  preload="metadata"
+                  playsInline
+                />
+                
+                {/* Play Button Overlay */}
+                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                  <div className="w-11 h-11 bg-red-600 rounded-full flex items-center justify-center text-white shadow-lg transition-transform duration-300 group-hover:scale-110">
+                    <svg className="w-5 h-5 fill-white ml-0.5" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-bold text-white text-base md:text-xl">Featured Workshop Tour & Repair Process</h3>
-                  <p className="text-xs md:text-sm text-slate-300">Click to enter immersive gallery lightbox</p>
+
+                {/* Duration Badge */}
+                <div className="absolute bottom-2.5 right-2.5 bg-black/80 text-[10px] font-bold text-white px-2 py-0.5 rounded tracking-wide font-mono">
+                  {idx === 0 ? "2:15" : idx === 1 ? "1:48" : idx === 2 ? "1:05" : idx === 3 ? "0:52" : idx === 4 ? "1:24" : idx === 5 ? "0:45" : "1:12"}
+                </div>
+
+                {/* Red YouTube Progress bar indicator at bottom of thumbnail */}
+                <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-slate-800">
+                  <div className="h-full bg-red-600 w-0 group-hover:w-full transition-all duration-[3000ms] ease-out" />
                 </div>
               </div>
-            </div>
-          </motion.div>
+
+              {/* Info Area */}
+              <div className="p-4 flex gap-3 flex-1">
+                {/* Circular channel icon */}
+                <div className="w-9 h-9 rounded-full bg-blue-600/10 border border-blue-500/20 flex items-center justify-center text-blue-400 text-xs font-bold shrink-0">
+                  TM
+                </div>
+                <div className="flex-1 min-w-0 text-left space-y-1">
+                  <h4 className="font-bold text-slate-100 text-sm leading-snug line-clamp-2 group-hover:text-blue-400 transition-colors">
+                    {item.title}
+                  </h4>
+                  <p className="text-[11px] text-slate-450 font-semibold truncate">
+                    TheMobifixx Shop
+                  </p>
+                  <p className="text-[10px] text-slate-500 font-medium">
+                    {idx === 0 ? "5.4K views • 2 weeks ago" : idx === 1 ? "3.1K views • 3 weeks ago" : idx === 2 ? "1.9K views • 1 month ago" : "900+ views • 1 month ago"}
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          ))}
         </div>
       </section >
 
@@ -744,44 +901,210 @@ export default function Home() {
         </div>
       </section >
 
-      {/* 10. Testimonials */}
-      <section className="bg-[#050B18] text-white py-20 relative overflow-hidden" >
+      {/* 10. Testimonials & Live Feedback */}
+      <section className="bg-[#050B18] text-white py-20 relative overflow-hidden" id="reviews">
         <div className="absolute inset-0 bg-blue-600/5 pointer-events-none" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-          <h2 className="text-3xl font-bold mb-2">What Our Customers Say</h2>
-          <p className="text-sm text-slate-400 mb-12">4.5 Average Rating on Google Reviews</p>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          
+          <div className="text-center mb-16">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-blue-400">Customer Testimonials</span>
+            <h2 className="text-3xl font-bold mt-1 mb-2">What Our Customers Say</h2>
+            <p className="text-sm text-slate-400">Real feedback from real clients. No login required to share your experience!</p>
+          </div>
 
-          {testimonials.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-              {testimonials.slice(0, 3).map((review, i) => (
-                <motion.div
-                  key={review.id}
-                  initial={{ opacity: 0, y: 50, rotateY: -30 }}
-                  whileInView={{ opacity: 1, y: 0, rotateY: 0 }}
-                  transition={{ duration: 0.6, delay: i * 0.15, ease: 'easeOut' }}
-                  viewport={{ once: true, amount: 0.3 }}
-                  className="bg-[#0A1329] p-8 rounded-3xl border border-slate-800 text-left flex flex-col h-full hover:border-slate-700 transition-colors shadow-lg"
-                  style={{ transformStyle: 'preserve-3d' }}
-                >
-                  <div className="flex text-amber-400 mb-4">
-                    {[...Array(review.rating)].map((_, j) => <Star key={j} className="w-5 h-5 fill-current" />)}
-                  </div>
-                  <p className="text-slate-300 text-sm leading-relaxed mb-6 italic">"{review.review}"</p>
-                  <div className="mt-auto flex items-center gap-4">
-                    {review.image && <img src={review.image} className="w-12 h-12 rounded-full object-cover border border-slate-700" alt={review.customerName} />}
-                    <div>
-                      <h4 className="font-bold text-white text-sm">{review.customerName}</h4>
-                      <p className="text-xs text-slate-400">{review.deviceType}</p>
+          {/* Rating Summary and Feedback Form */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 max-w-6xl mx-auto mb-16 items-start">
+            
+            {/* Rating Summary Card (4 cols) */}
+            <div className="lg:col-span-4 bg-[#0A1329] border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
+              <h3 className="font-bold text-lg text-white mb-6">Review Summary</h3>
+              <div className="flex items-baseline gap-2 mb-2">
+                <span className="text-5xl font-extrabold text-white">
+                  {totalReviews > 0 ? (testimonials.reduce((acc, curr) => acc + curr.rating, 0) / totalReviews).toFixed(1) : "0.0"}
+                </span>
+                <span className="text-slate-400 text-sm">/ 5.0</span>
+              </div>
+              
+              {/* Star Rating Display */}
+              <div className="flex text-amber-400 gap-1 mb-4">
+                {Array.from({ length: 5 }).map((_, idx) => {
+                  const avg = totalReviews > 0 ? (testimonials.reduce((acc, curr) => acc + curr.rating, 0) / totalReviews) : 0;
+                  return (
+                    <Star 
+                      key={idx} 
+                      className={`w-5 h-5 ${idx < Math.round(avg) ? 'fill-current' : 'text-slate-700'}`} 
+                    />
+                  );
+                })}
+              </div>
+              <p className="text-xs text-slate-400 mb-6 font-medium">Based on {totalReviews} client reviews</p>
+
+              {/* Progress Bars for Ratings */}
+              <div className="space-y-3">
+                {[5, 4, 3, 2, 1].map((stars) => {
+                  const count = testimonials.filter(r => r.rating === stars).length;
+                  const pct = totalReviews > 0 ? Math.round((count / totalReviews) * 100) : 0;
+                  return (
+                    <div key={stars} className="flex items-center gap-3 text-xs text-slate-300">
+                      <span className="w-3 font-semibold">{stars}★</span>
+                      <div className="flex-1 h-2 bg-slate-800 rounded-full overflow-hidden">
+                        <div 
+                          className="h-full bg-amber-400 rounded-full transition-all duration-500"
+                          style={{ width: `${pct}%` }}
+                        />
+                      </div>
+                      <span className="w-8 text-right text-slate-400">{pct}%</span>
                     </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Review Form Card (8 cols) */}
+            <div className="lg:col-span-8 bg-[#0A1329] border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
+              <h3 className="font-bold text-lg text-white mb-2">Write a Review</h3>
+              <p className="text-xs text-slate-400 mb-6">Share your honest repair experience with other customers.</p>
+
+              <form onSubmit={handleReviewSubmit} className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1.5 text-left">
+                    <label className="text-xs font-semibold text-slate-350 block">Your Name *</label>
+                    <input 
+                      type="text"
+                      required
+                      placeholder="E.g., Hamza Khan"
+                      value={newReviewName}
+                      onChange={e => setNewReviewName(e.target.value)}
+                      className="w-full bg-[#050B18] border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+                    />
                   </div>
-                </motion.div>
-              ))}
+                  <div className="space-y-1.5 text-left">
+                    <label className="text-xs font-semibold text-slate-350 block">Device Repaired *</label>
+                    <input 
+                      type="text"
+                      required
+                      placeholder="E.g., iPhone 15 Pro, Dell Laptop"
+                      value={newReviewDevice}
+                      onChange={e => setNewReviewDevice(e.target.value)}
+                      className="w-full bg-[#050B18] border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1.5 text-left">
+                  <label className="text-xs font-semibold text-slate-350 block">Rating *</label>
+                  <div className="flex gap-2">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <button
+                        key={star}
+                        type="button"
+                        onClick={() => setNewReviewRating(star)}
+                        onMouseEnter={() => setNewReviewHoverRating(star)}
+                        onMouseLeave={() => setNewReviewHoverRating(null)}
+                        className="cursor-pointer transition-transform duration-150 active:scale-90"
+                      >
+                        <Star 
+                          className={`w-7 h-7 transition-colors ${
+                            star <= (newReviewHoverRating ?? newReviewRating) 
+                              ? 'fill-amber-400 text-amber-400' 
+                              : 'text-slate-700'
+                          }`} 
+                        />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="space-y-1.5 text-left">
+                  <label className="text-xs font-semibold text-slate-350 block">Your Feedback *</label>
+                  <textarea 
+                    required
+                    rows={3}
+                    placeholder="Write details of your experience..."
+                    value={newReviewComment}
+                    onChange={e => setNewReviewComment(e.target.value)}
+                    className="w-full bg-[#050B18] border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all resize-none"
+                  />
+                </div>
+
+                <div className="flex justify-between items-center pt-2">
+                  <AnimatePresence>
+                    {reviewSuccess && (
+                      <motion.span 
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -10 }}
+                        className="text-xs text-emerald-400 flex items-center gap-1.5 font-bold"
+                      >
+                        <CheckCircle2 className="w-4 h-4" /> Review added successfully!
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
+
+                  <button 
+                    type="submit"
+                    className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-6 rounded-xl transition-all cursor-pointer shadow-lg hover:shadow-blue-500/10 text-xs ml-auto"
+                  >
+                    Submit Feedback
+                  </button>
+                </div>
+              </form>
             </div>
-          ) : (
-            <div className="text-center bg-[#0A1329] max-w-xl mx-auto p-8 rounded-3xl border border-slate-800 shadow-xl">
-              <p className="text-slate-450 text-sm font-medium">No reviews yet.</p>
-            </div>
-          )}
+          </div>
+
+          {/* Customer Reviews Grid */}
+          <div className="border-t border-slate-800/80 pt-16 max-w-6xl mx-auto">
+            <h3 className="font-bold text-xl text-white text-left mb-8 px-1">Latest Customer Reviews ({testimonials.length})</h3>
+            
+            {testimonials.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {testimonials.map((review, i) => (
+                  <motion.div
+                    key={review.id}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: Math.min(i * 0.1, 0.4), ease: 'easeOut' }}
+                    viewport={{ once: true, amount: 0.2 }}
+                    className="bg-[#0A1329] p-6 sm:p-8 rounded-3xl border border-slate-800 text-left flex flex-col h-full hover:border-slate-700 transition-colors shadow-lg"
+                  >
+                    <div className="flex text-amber-400 gap-0.5 mb-4">
+                      {Array.from({ length: 5 }).map((_, j) => (
+                        <Star 
+                          key={j} 
+                          className={`w-4 h-4 ${j < review.rating ? 'fill-current' : 'text-slate-800'}`} 
+                        />
+                      ))}
+                    </div>
+                    <p className="text-slate-350 text-sm leading-relaxed mb-6 italic flex-grow">
+                      "{review.review}"
+                    </p>
+                    <div className="flex items-center gap-3 pt-4 border-t border-slate-800/60 mt-auto">
+                      {review.image ? (
+                        <img 
+                          src={review.image} 
+                          className="w-10 h-10 rounded-full object-cover border border-slate-700 shrink-0" 
+                          alt={review.customerName} 
+                        />
+                      ) : (
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-650 flex items-center justify-center text-white text-sm font-bold shadow-md border border-slate-855 shrink-0">
+                          {review.customerName.charAt(0).toUpperCase()}
+                        </div>
+                      )}
+                      <div className="min-w-0">
+                        <h4 className="font-bold text-white text-sm truncate">{review.customerName}</h4>
+                        <p className="text-[10px] text-slate-500 font-semibold truncate uppercase tracking-wider">{review.deviceType}</p>
+                      </div>
+                      <span className="text-[10px] text-slate-500 font-medium ml-auto shrink-0">{review.createdAt}</span>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center bg-[#0A1329] max-w-xl mx-auto p-8 rounded-3xl border border-slate-800 shadow-xl">
+                <p className="text-slate-450 text-sm font-medium">No reviews yet.</p>
+              </div>
+            )}
+          </div>
         </div>
       </section>
 
@@ -833,6 +1156,12 @@ export default function Home() {
                 <div className="py-6 px-4">
                   <h3 className="font-bold text-slate-200 text-lg group-hover:text-blue-400 transition-colors">{tech.name}</h3>
                   <p className="text-xs text-blue-400/80 mt-1 uppercase tracking-wider font-semibold">Expert Technician</p>
+                  {tech.isOwner && (
+                    <p className="text-xs text-emerald-400 mt-1 uppercase tracking-wider font-bold">Owner</p>
+                  )}
+                  {tech.experience && (
+                    <p className="text-xs text-slate-450 mt-2 font-medium">{tech.experience}</p>
+                  )}
                 </div>
               </div>
             ))}
@@ -964,7 +1293,7 @@ export default function Home() {
               className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-5 py-2 rounded-full transition-all shadow-md hover:shadow-blue-500/25"
             >
               <MapPin className="w-3.5 h-3.5" />
-              Book Free Pickup
+              Book Pickup
             </a>
           </motion.div>
 

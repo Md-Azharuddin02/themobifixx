@@ -93,7 +93,7 @@ export default function Contact() {
                   </div>
                   <div>
                     <span className="text-slate-450 text-[10px] block uppercase font-bold tracking-widest mb-1">Business Hours</span>
-                    <span className="text-sm text-slate-200 font-bold block mb-0.5">Mon - Sun: 9:00 AM - 9:00 PM</span>
+                    <span className="text-sm text-slate-200 font-bold block mb-0.5">Mon - Sun: 9:00 AM - 11:59 PM</span>
                     <span className="text-xs text-slate-400 block">Emergency helpline is active 24/7.</span>
                   </div>
                 </li>

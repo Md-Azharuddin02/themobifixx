@@ -32,7 +32,13 @@ export const DEVICE_MODELS: Record<string, { id: string; name: string; image?: s
         { id: 'macbook-pro-14', name: 'MacBook Pro 14"', image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&q=80&w=200' },
         { id: 'macbook-pro-16', name: 'MacBook Pro 16"', image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&q=80&w=200' },
         { id: 'macbook-air-m2', name: 'MacBook Air M2', image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&q=80&w=200' },
-        { id: 'macbook-air-m3', name: 'MacBook Air M3', image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&q=80&w=200' }
+        { id: 'macbook-air-m3', name: 'MacBook Air M3', image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&q=80&w=200' },
+        { id: 'apple-watch-ultra-2', name: 'Apple Watch Ultra 2', image: 'https://images.unsplash.com/photo-1434494878577-86c23bcb06b9?auto=format&fit=crop&q=80&w=200' },
+        { id: 'apple-watch-ultra', name: 'Apple Watch Ultra' },
+        { id: 'apple-watch-s10', name: 'Apple Watch Series 10' },
+        { id: 'apple-watch-s9', name: 'Apple Watch Series 9' },
+        { id: 'apple-watch-s8', name: 'Apple Watch Series 8' },
+        { id: 'apple-watch-se', name: 'Apple Watch SE' }
     ],
     samsung: [
         { id: 'galaxy-s26-ultra', name: 'Galaxy S26 Ultra', image: 'https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783509702/galaxys26ultra_wfqxfu.jpg' },
@@ -57,7 +63,13 @@ export const DEVICE_MODELS: Record<string, { id: string; name: string; image?: s
         { id: 'galaxy-f55', name: 'Galaxy F55' },
         { id: 'galaxy-tab-s9-ultra', name: 'Galaxy Tab S9 Ultra', image: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&q=80&w=200' },
         { id: 'galaxy-tab-s9-plus', name: 'Galaxy Tab S9+', image: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&q=80&w=200' },
-        { id: 'galaxy-tab-a9', name: 'Galaxy Tab A9', image: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&q=80&w=200' }
+        { id: 'galaxy-tab-a9', name: 'Galaxy Tab A9', image: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&q=80&w=200' },
+        { id: 'galaxy-watch-ultra', name: 'Galaxy Watch Ultra', image: 'https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?auto=format&fit=crop&q=80&w=200' },
+        { id: 'galaxy-watch-7', name: 'Galaxy Watch 7' },
+        { id: 'galaxy-watch-6-classic', name: 'Galaxy Watch 6 Classic' },
+        { id: 'galaxy-watch-6', name: 'Galaxy Watch 6' },
+        { id: 'galaxy-watch-5-pro', name: 'Galaxy Watch 5 Pro' },
+        { id: 'galaxy-watch-5', name: 'Galaxy Watch 5' }
     ],
     realme: [
         { id: 'realme-gt-6', name: 'Realme GT 6', image: 'https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783517666/realmegt6_uy8qem.jpg' },
@@ -316,5 +328,34 @@ export const DEVICE_MODELS: Record<string, { id: string; name: string; image?: s
     ],
     nvidia: [
         { id: 'nvidia-studio-ref', name: 'Nvidia Studio Laptop', image: 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?auto=format&fit=crop&q=80&w=200' }
+    ],
+    redmi: [
+        { id: 'redmi-note-13-pro-plus', name: 'Redmi Note 13 Pro+', image: 'https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783512040/redminote13pro_bm14xi.webp' },
+        { id: 'redmi-note-13-pro', name: 'Redmi Note 13 Pro' },
+        { id: 'redmi-note-13', name: 'Redmi Note 13' },
+        { id: 'redmi-13c', name: 'Redmi 13C' },
+        { id: 'redmi-12', name: 'Redmi 12' }
+    ],
+    infinix: [
+        { id: 'infinix-gt-20-pro', name: 'Infinix GT 20 Pro', image: 'https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783519129/iqooz9_ywgpci.jpg' },
+        { id: 'infinix-note-45', name: 'Infinix Note 45' },
+        { id: 'infinix-hot-40-pro', name: 'Infinix Hot 40 Pro' },
+        { id: 'infinix-zero-30', name: 'Infinix Zero 30' }
+    ],
+    nokia: [
+        { id: 'nokia-g42', name: 'Nokia G42 5G', image: 'https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783519436/me50pro_dm53gr.webp' },
+        { id: 'nokia-c32', name: 'Nokia C32' },
+        { id: 'nokia-xr21', name: 'Nokia XR21' },
+        { id: 'nokia-105', name: 'Nokia 105 (Classic)' }
+    ],
+    alienware: [
+        { id: 'alienware-m16-r2', name: 'Alienware m16 R2', image: 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?auto=format&fit=crop&q=80&w=200' },
+        { id: 'alienware-x16-r2', name: 'Alienware x16 R2' },
+        { id: 'alienware-m18-r2', name: 'Alienware m18 R2' }
+    ],
+    redmipad: [
+        { id: 'redmi-pad-se', name: 'Redmi Pad SE', image: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&q=80&w=200' },
+        { id: 'redmi-pad-pro', name: 'Redmi Pad Pro' },
+        { id: 'xiaomi-pad-6', name: 'Xiaomi Pad 6' }
     ]
 };

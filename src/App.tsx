@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
-import { Phone, ArrowUp, Instagram } from 'lucide-react';
+import { Phone, ArrowUp, Instagram, Mail } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -86,6 +86,20 @@ function FloatingCTAs() {
         <Instagram className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
         <span className="absolute right-16 bg-[#0a1329] text-slate-200 text-xs font-bold px-3 py-1.5 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap hidden sm:inline-block pointer-events-none border border-slate-800">
           Instagram Profile
+        </span>
+      </motion.a>
+
+      {/* Email Support */}
+      <motion.a
+        href="mailto:themobifixx@gmail.com"
+        className="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center shadow-lg hover:shadow-xl hover:bg-blue-700 relative group cursor-pointer transition-all duration-200"
+        aria-label="Email Support"
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        <Mail className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
+        <span className="absolute right-16 bg-[#0a1329] text-slate-200 text-xs font-bold px-3 py-1.5 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap hidden sm:inline-block pointer-events-none border border-slate-800">
+          Email Support
         </span>
       </motion.a>
 

@@ -28,20 +28,52 @@ const MOBILE_SERVICES = [
   { id: 'mobile-other', name: 'Other Issue / Upgrades', icon: HelpCircle },
 ];
 
+// Tablet Specific Repair Options
+const TABLET_SERVICES = [
+  { id: 'tablet-screen', name: 'Screen Replacement', icon: Monitor },
+  { id: 'tablet-battery', name: 'Battery Replacement', icon: Battery },
+  { id: 'tablet-charging', name: 'Charging Port Repair', icon: BatteryCharging },
+  { id: 'tablet-speaker', name: 'Speaker & Mic Repair', icon: Speaker },
+  { id: 'tablet-other', name: 'Other Software or Hardware Issue', icon: HelpCircle },
+];
+
+// Watch Specific Repair Options
+const WATCH_SERVICES = [
+  { id: 'watch-screen', name: 'Screen & Touch Glass Repair', icon: Monitor },
+  { id: 'watch-battery', name: 'Battery Replacement', icon: Battery },
+  { id: 'watch-charging', name: 'Charging Port / Wireless Charger', icon: BatteryCharging },
+  { id: 'watch-buttons', name: 'Physical Button Repair (Crown/Side)', icon: Settings },
+  { id: 'watch-sensor', name: 'Sensor & Back Glass Repair', icon: HelpCircle },
+  { id: 'watch-other', name: 'Other Watch Issues', icon: HelpCircle },
+];
+
 // Device Categorisation Helper
-const getDeviceType = (brand: string, model: string, queryCategory: string | null): 'laptop' | 'mobile' => {
+const getDeviceType = (brand: string, model: string, queryCategory: string | null): 'laptop' | 'mobile' | 'tablet' | 'watch' => {
   if (queryCategory) {
-    if (queryCategory === 'macbook' || queryCategory === 'laptop') return 'laptop';
+    const cat = queryCategory.toLowerCase();
+    if (cat === 'macbook' || cat === 'laptop') return 'laptop';
+    if (cat === 'tablet') return 'tablet';
+    if (cat === 'watch') return 'watch';
     return 'mobile';
   }
   const b = brand.toLowerCase();
   const m = model.toLowerCase();
   if (b === 'apple') {
     if (m.startsWith('macbook')) return 'laptop';
+    if (m.startsWith('ipad')) return 'tablet';
+    if (m.includes('watch')) return 'watch';
     return 'mobile';
   }
-  if (['hp', 'dell', 'lenovo', 'asus', 'acer', 'msi', 'intel', 'nvidia', 'microsoft'].includes(b)) {
+  if (b === 'samsung') {
+    if (m.includes('tab')) return 'tablet';
+    if (m.includes('watch')) return 'watch';
+    return 'mobile';
+  }
+  if (['hp', 'dell', 'lenovo', 'asus', 'acer', 'msi', 'intel', 'nvidia', 'alienware'].includes(b)) {
     return 'laptop';
+  }
+  if (b === 'redmipad') {
+    return 'tablet';
   }
   return 'mobile';
 };
@@ -53,7 +85,15 @@ export default function DeviceRepairPage() {
   const [selectedRepairs, setSelectedRepairs] = useState<string[]>([]);
   
   const deviceType = getDeviceType(brandId || '', modelId || '', category);
-  const activeServices = deviceType === 'laptop' ? LAPTOP_SERVICES : MOBILE_SERVICES;
+  const getActiveServices = () => {
+    switch (deviceType) {
+      case 'laptop': return LAPTOP_SERVICES;
+      case 'tablet': return TABLET_SERVICES;
+      case 'watch': return WATCH_SERVICES;
+      default: return MOBILE_SERVICES;
+    }
+  };
+  const activeServices = getActiveServices();
 
   // Formatting names from URL slugs
   const formattedBrand = brandId ? brandId.charAt(0).toUpperCase() + brandId.slice(1) : '';

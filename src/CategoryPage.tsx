@@ -18,12 +18,20 @@ const CATEGORY_DATA = {
         brands: [
             { name: 'Apple', logo: 'https://cdn.simpleicons.org/apple/fff', path: '/brand/apple' },
             { name: 'Samsung', logo: 'https://cdn.simpleicons.org/samsung/fff', path: '/brand/samsung' },
-            { name: 'OnePlus', logo: 'https://cdn.simpleicons.org/oneplus/fff', path: '/brand/oneplus' },
-            { name: 'Google', logo: 'https://cdn.simpleicons.org/google/fff', path: '/brand/google' },
             { name: 'Xiaomi', logo: 'https://cdn.simpleicons.org/xiaomi/fff', path: '/brand/xiaomi' },
-            { name: 'Vivo', logo: 'https://upload.wikimedia.org/wikipedia/commons/e/e5/Vivo_mobile_logo.svg', path: '/brand/vivo' },
+            { name: 'OnePlus', logo: 'https://cdn.simpleicons.org/oneplus/fff', path: '/brand/oneplus' },
+            { name: 'Vivo', logo: 'https://cdn.simpleicons.org/vivo/fff', path: '/brand/vivo' },
             { name: 'Oppo', logo: 'https://cdn.simpleicons.org/oppo/fff', path: '/brand/oppo' },
             { name: 'Realme', logo: 'https://cdn.simpleicons.org/realme/fff', path: '/brand/realme' },
+            { name: 'Motorola', logo: 'https://cdn.simpleicons.org/motorola/fff', path: '/brand/motorola' },
+            { name: 'Redmi', logo: 'https://cdn.simpleicons.org/redmi/fff', path: '/brand/redmi' },
+            { name: 'Poco', logo: 'https://cdn.simpleicons.org/poco/fff', path: '/brand/poco' },
+            { name: 'Google Pixel', logo: 'https://cdn.simpleicons.org/google/fff', path: '/brand/google' },
+            { name: 'Nothing', logo: 'https://cdn.simpleicons.org/nothing/fff', path: '/brand/nothing' },
+            { name: 'Iqoo', logo: 'https://cdn.simpleicons.org/iqoo/fff', path: '/brand/iqoo' },
+            { name: 'Infinix', logo: 'https://cdn.simpleicons.org/infinix/fff', path: '/brand/infinix' },
+            { name: 'Nokia', logo: 'https://cdn.simpleicons.org/nokia/fff', path: '/brand/nokia' },
+            { name: 'Other', logo: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%233b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>', path: '/brand/other' }
         ]
     },
     laptop: {
@@ -38,9 +46,10 @@ const CATEGORY_DATA = {
             { name: 'Lenovo', logo: 'https://cdn.simpleicons.org/lenovo/fff', path: '/brand/lenovo' },
             { name: 'Microsoft', logo: 'svgInline:microsoft', path: '/brand/microsoft' },
             { name: 'Samsung', logo: 'https://cdn.simpleicons.org/samsung/fff', path: '/brand/samsung' },
-            { name: 'Nvidia', logo: 'https://cdn.simpleicons.org/nvidia/fff', path: '/brand/nvidia' },
+            { name: 'Alienware', logo: 'https://cdn.simpleicons.org/alienware/fff', path: '/brand/alienware' },
             { name: 'Asus', logo: 'https://cdn.simpleicons.org/asus/fff', path: '/brand/asus' },
             { name: 'Acer', logo: 'https://cdn.simpleicons.org/acer/fff', path: '/brand/acer' },
+            { name: 'Other', logo: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%233b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>', path: '/brand/other' }
         ]
     },
     macbook: {
@@ -59,14 +68,17 @@ const CATEGORY_DATA = {
             { name: 'Xiaomi', logo: 'https://cdn.simpleicons.org/xiaomi/fff', path: '/brand/xiaomi' },
             { name: 'Realme', logo: '/realme.avif', path: '/brand/realme' },
             { name: 'Samsung', logo: 'https://cdn.simpleicons.org/samsung/fff', path: '/brand/samsung' },
+            { name: 'Redmi Pad', logo: 'https://cdn.simpleicons.org/xiaomi/fff', path: '/brand/redmipad' },
+            { name: 'Other', logo: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%233b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>', path: '/brand/other' }
         ]
     },
     watch: {
         title: 'Smart Watch',
         icon: Watch,
         brands: [
-            { name: 'Apple', logo: 'https://cdn.simpleicons.org/apple/fff', path: '/brand/apple' },
-            { name: 'Samsung', logo: 'https://cdn.simpleicons.org/samsung/fff', path: '/brand/samsung' },
+            { name: 'Apple Watch', logo: 'https://cdn.simpleicons.org/apple/fff', path: '/brand/apple' },
+            { name: 'Samsung Watch', logo: 'https://cdn.simpleicons.org/samsung/fff', path: '/brand/samsung' },
+            { name: 'Other', logo: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%233b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>', path: '/brand/other' }
         ]
     },
 };
