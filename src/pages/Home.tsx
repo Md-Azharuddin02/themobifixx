@@ -14,6 +14,10 @@ const HERO_SLIDES = [
     image: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1784027052/WhatsApp_Image_2026-07-14_at_4.33.25_PM_2_vtddcw.jpg?auto=format&fit=crop&q=80&w=1920",
   },
   {
+    image: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1784192930/WhatsApp_Image_2026-07-16_at_2.38.16_PM_wpczmy.jpg?auto=format&fit=crop&q=80&w=1920",
+  
+  },
+  {
     image: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1784027052/WhatsApp_Image_2026-07-14_at_4.33.25_PM_1_ijgjo8.jpg?auto=format&fit=crop&q=80&w=1920",
   },
   {
