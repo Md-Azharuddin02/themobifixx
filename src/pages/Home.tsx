@@ -350,7 +350,7 @@ export default function Home() {
 
       {/* 4. SEO / About Text */}
       <section className="max-w-4xl mx-auto px-4 py-8 text-center" >
-        <h2 className="text-xl font-bold mb-4 text-white">
+        <h1 className="text-xl font-bold mb-4 text-white">
           {"Expert Mobile & Laptop Repair Services in Delhi / NCR".split(" ").map((word, i) => (
             <motion.span
               key={i}
@@ -367,7 +367,7 @@ export default function Home() {
               {word}
             </motion.span>
           ))}
-        </h2>
+        </h1>
         <p className="text-sm text-slate-400 leading-relaxed max-w-3xl mx-auto">
           {"Expert Laptop Repair Services you can Trust with 15+ years of experience and 69,000+ successful laptop repairs, Our laptop repair expertise Laptop Display Replacement Keyboard Replacement & Repair MotherBoard Repair Specialist Water Damage Deep Cleaning & Repair Laptop body & Hinge repair Battery Replacement SSD & RAM upgrade Charging Port Repair Speaker, Camera & Mic Repair Fan Cleaning & Overheating Solutions. Software Installation & Windows Recovery Data Backup & Recovery.".split(" ").map((word, i) => (
             <motion.span
