@@ -47,10 +47,25 @@ const WATCH_SERVICES = [
   { id: 'watch-other', name: 'Other Watch Issues', icon: HelpCircle },
 ];
 
+// Desktop Specific Repair Options
+const DESKTOP_SERVICES = [
+  { id: 'desktop-screen', name: 'iMac Screen Replacement', icon: Monitor },
+  { id: 'desktop-ram', name: 'RAM Upgrade / Replacement', icon: Cpu },
+  { id: 'desktop-ssd', name: 'SSD / HDD Storage Upgrade', icon: HardDrive },
+  { id: 'desktop-logicboard', name: 'Motherboard / Logic Board Repair', icon: Cpu },
+  { id: 'desktop-psu', name: 'Power Supply (PSU) Replacement', icon: BatteryCharging },
+  { id: 'desktop-gpu', name: 'Graphics Card (GPU) Upgrade', icon: HardDrive },
+  { id: 'desktop-cleaning', name: 'Deep Dust Cleaning & Thermal Pasting', icon: Settings },
+  { id: 'desktop-os', name: 'OS Reinstallation & Software Cleanup', icon: Settings },
+  { id: 'desktop-data', name: 'Data Recovery & Backup', icon: Database },
+  { id: 'desktop-other', name: 'Other Hardware/Software Issue', icon: HelpCircle },
+];
+
 // Device Categorisation Helper
-const getDeviceType = (brand: string, model: string, queryCategory: string | null): 'laptop' | 'mobile' | 'tablet' | 'watch' => {
+const getDeviceType = (brand: string, model: string, queryCategory: string | null): 'laptop' | 'mobile' | 'tablet' | 'watch' | 'desktop' => {
   if (queryCategory) {
     const cat = queryCategory.toLowerCase();
+    if (cat === 'desktop') return 'desktop';
     if (cat === 'macbook' || cat === 'laptop') return 'laptop';
     if (cat === 'tablet') return 'tablet';
     if (cat === 'watch') return 'watch';
@@ -58,6 +73,19 @@ const getDeviceType = (brand: string, model: string, queryCategory: string | nul
   }
   const b = brand.toLowerCase();
   const m = model.toLowerCase();
+  
+  if (
+    m.includes('desktop') ||
+    m.startsWith('imac') ||
+    m.startsWith('mac-mini') ||
+    m.startsWith('mac-studio') ||
+    m.includes('thinkcentre') ||
+    m.includes('ideacentre') ||
+    m.includes('optiplex')
+  ) {
+    return 'desktop';
+  }
+  
   if (b === 'apple') {
     if (m.startsWith('macbook')) return 'laptop';
     if (m.startsWith('ipad')) return 'tablet';
@@ -69,11 +97,24 @@ const getDeviceType = (brand: string, model: string, queryCategory: string | nul
     if (m.includes('watch')) return 'watch';
     return 'mobile';
   }
-  if (['hp', 'dell', 'lenovo', 'asus', 'acer', 'msi', 'intel', 'nvidia', 'alienware'].includes(b)) {
+  if (b === 'lenovo') {
+    if (m.includes('tab')) return 'tablet';
     return 'laptop';
   }
-  if (b === 'redmipad') {
+  if (b === 'asus') {
+    if (m.includes('phone')) return 'mobile';
+    return 'laptop';
+  }
+  if (b === 'microsoft') {
+    if (m.includes('laptop')) return 'laptop';
     return 'tablet';
+  }
+  if (['xiaomi', 'realme', 'redmipad'].includes(b)) {
+    if (m.includes('pad')) return 'tablet';
+    return 'mobile';
+  }
+  if (['hp', 'dell', 'acer', 'intel', 'msi', 'nvidia', 'alienware'].includes(b)) {
+    return 'laptop';
   }
   return 'mobile';
 };
@@ -87,6 +128,7 @@ export default function DeviceRepairPage() {
   const deviceType = getDeviceType(brandId || '', modelId || '', category);
   const getActiveServices = () => {
     switch (deviceType) {
+      case 'desktop': return DESKTOP_SERVICES;
       case 'laptop': return LAPTOP_SERVICES;
       case 'tablet': return TABLET_SERVICES;
       case 'watch': return WATCH_SERVICES;

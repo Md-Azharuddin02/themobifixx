@@ -29,6 +29,18 @@ const getDeviceCategory = (brandId: string, modelId: string): string => {
   const brand = brandId.toLowerCase();
   const model = modelId.toLowerCase();
   
+  if (
+    model.includes('desktop') ||
+    model.startsWith('imac') ||
+    model.startsWith('mac-mini') ||
+    model.startsWith('mac-studio') ||
+    model.includes('thinkcentre') ||
+    model.includes('ideacentre') ||
+    model.includes('optiplex')
+  ) {
+    return 'desktop';
+  }
+  
   if (brand === 'apple') {
     if (model.startsWith('ipad')) return 'tablet';
     if (model.startsWith('macbook')) return 'laptop';

@@ -39,7 +39,7 @@ const TECHNICIANS = [
   {
     name: "Tusar Singh",
     profileImage: " https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783000124/WhatsApp_Image_2026-07-01_at_5.52.22_PM_1_aiynf3.jpg?w=400&auto=format&q=60",
-    experience: "12 Years Experience",
+    experience: "15 Years Experience",
     isOwner: true
   },
   {
@@ -50,12 +50,12 @@ const TECHNICIANS = [
   {
     name: "Nikhil Chandel",
     profileImage: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783000124/WhatsApp_Image_2026-07-01_at_3.27.54_PM_sgcynd.jpg?w=400&auto=format&q=60",
-    experience: "9 Years Experience"
+    experience: "10 Years Experience"
   },
   {
     name: "Arif Sheikh",
     profileImage: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783976762/WhatsApp_Image_2026-07-13_at_6.57.03_PM_uwkuip.jpg?w=400&auto=format&q=60",
-    experience: "10 Years Experience"
+    experience: "11 Years Experience"
   },
   {
     name: "Rishabh Singh Rajput",
@@ -65,7 +65,7 @@ const TECHNICIANS = [
   {
     name: "Sunny Sharma",
     profileImage: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1784055120/WhatsApp_Image_2026-07-15_at_12.21.46_AM_n2jpdx.jpg?w=400&auto=format&q=60",
-    experience: "9 Years Experience"
+    experience: "10 Years Experience"
   }
 ];
 
@@ -1161,7 +1161,7 @@ export default function Home() {
                   <h3 className="font-bold text-slate-200 text-lg group-hover:text-blue-400 transition-colors">{tech.name}</h3>
                   <p className="text-xs text-blue-400/80 mt-1 uppercase tracking-wider font-semibold">Expert Technician</p>
                   {tech.isOwner && (
-                    <p className="text-xs text-emerald-400 mt-1 uppercase tracking-wider font-bold">Owner</p>
+                    <p className="text-xs text-emerald-400 mt-1 uppercase tracking-wider font-bold">Founder</p>
                   )}
                   {tech.experience && (
                     <p className="text-xs text-slate-450 mt-2 font-medium">{tech.experience}</p>

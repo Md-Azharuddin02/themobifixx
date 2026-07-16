@@ -228,7 +228,7 @@ interface BookingFormInput {
   customerName: string;
   phone: string;
   email?: string;
-  deviceType: 'laptop' | 'macbook' | 'mobile' | 'tablet' | 'other';
+  deviceType: 'laptop' | 'macbook' | 'desktop' | 'mobile' | 'tablet' | 'other';
   brand: string;
   model: string;
   issueDescription: string;
@@ -238,7 +238,7 @@ interface BookingFormInput {
 }
 
 interface RepairBookingFormProps {
-  initialDeviceType?: 'laptop' | 'macbook' | 'mobile' | 'tablet' | 'other';
+  initialDeviceType?: 'laptop' | 'macbook' | 'desktop' | 'mobile' | 'tablet' | 'other';
 }
 
 export function RepairBookingForm({ initialDeviceType = 'laptop' }: RepairBookingFormProps) {
@@ -428,6 +428,7 @@ export function RepairBookingForm({ initialDeviceType = 'laptop' }: RepairBookin
                 >
                   <option value="laptop">Laptop</option>
                   <option value="macbook">MacBook</option>
+                  <option value="desktop">Desktop / iMac</option>
                   <option value="mobile">Mobile</option>
                   <option value="tablet">Tablet</option>
                   <option value="other">Other Gadget</option>

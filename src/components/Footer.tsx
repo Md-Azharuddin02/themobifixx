@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Facebook, Instagram, Phone, Mail, Youtube } from 'lucide-react';
+import { Facebook, Instagram, Phone, Mail, Youtube, X, Monitor, MessageSquare, ArrowRight } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const [isDesktopModalOpen, setIsDesktopModalOpen] = useState(false);
 
   return (
     <footer className="bg-[#02050c] text-slate-400 font-sans border-t border-slate-800/80">
@@ -65,6 +67,14 @@ export default function Footer() {
               <li><Link to="/contact?tab=booking&device=tablet" className="hover:text-blue-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span> Tablet Repair</Link></li>
               <li><Link to="/contact?tab=booking&device=watches" className="hover:text-blue-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span> Watches Repair</Link></li>
               <li><Link to="/contact?tab=booking&device=macbook" className="hover:text-blue-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span> Macbook Repair</Link></li>
+              <li>
+                <button
+                  onClick={() => setIsDesktopModalOpen(true)}
+                  className="hover:text-blue-400 transition-colors flex items-center gap-2 cursor-pointer bg-transparent border-0 p-0 text-slate-300 text-sm focus:outline-none"
+                >
+                  <span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span> Desktop Repair
+                </button>
+              </li>
             </ul>
           </div>
 
@@ -113,6 +123,122 @@ export default function Footer() {
           </div>
         </div>
       </div>
+      {/* Desktop Repair Modal */}
+      <AnimatePresence>
+        {isDesktopModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-sm p-4">
+            {/* Backdrop close area */}
+            <div className="absolute inset-0 cursor-default" onClick={() => setIsDesktopModalOpen(false)}></div>
+            
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ duration: 0.3, ease: 'easeOut' }}
+              className="bg-[#0A1329] border border-slate-800 rounded-3xl w-full max-w-xl overflow-hidden relative shadow-2xl p-6 md:p-8 space-y-6 z-10"
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => setIsDesktopModalOpen(false)}
+                className="absolute top-4 right-4 text-slate-400 hover:text-white bg-slate-900/60 p-2 rounded-full border border-slate-800 hover:border-slate-700 transition-all cursor-pointer focus:outline-none"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              {/* Title Header */}
+              <div className="flex items-start gap-4 text-left">
+                <div className="w-12 h-12 rounded-2xl bg-blue-600/10 border border-blue-900/30 flex items-center justify-center text-blue-400 shrink-0">
+                  <Monitor className="w-6 h-6" />
+                </div>
+                <div className="space-y-1">
+                  <h3 className="text-xl md:text-2xl font-bold text-white tracking-tight">Desktop &amp; iMac Repair</h3>
+                  <p className="text-xs md:text-sm text-slate-400 leading-relaxed">
+                    Premium doorstep and carry-in repair services for iMac, Mac Mini, Custom Gaming PCs, and Workstations.
+                  </p>
+                </div>
+              </div>
+
+              {/* Selection Options List */}
+              <div className="space-y-3.5">
+                {/* Option 1: Select Model */}
+                <Link
+                  to="/category/desktop"
+                  onClick={() => setIsDesktopModalOpen(false)}
+                  className="flex items-center justify-between p-4 bg-[#0E1B38] border border-slate-800 rounded-2xl hover:border-blue-500 hover:bg-[#122347] transition-all group shadow-sm text-left"
+                >
+                  <div className="flex items-center gap-3.5">
+                    <div className="w-10 h-10 rounded-xl bg-blue-600/10 border border-blue-900/20 flex items-center justify-center text-blue-400 group-hover:bg-blue-600/20 group-hover:text-blue-300 transition-colors shrink-0">
+                      <Monitor className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <span className="text-sm font-bold text-white block">Select Desktop Model</span>
+                      <span className="text-xs text-slate-450">iMac, Mac Mini, or specific brand PC models</span>
+                    </div>
+                  </div>
+                  <ArrowRight className="w-5 h-5 text-slate-500 group-hover:text-blue-400 group-hover:translate-x-1 transition-all shrink-0" />
+                </Link>
+
+                {/* Option 2: Quick Booking Form */}
+                <Link
+                  to="/contact?tab=booking&device=desktop"
+                  onClick={() => setIsDesktopModalOpen(false)}
+                  className="flex items-center justify-between p-4 bg-[#0E1B38] border border-slate-800 rounded-2xl hover:border-blue-500 hover:bg-[#122347] transition-all group shadow-sm text-left"
+                >
+                  <div className="flex items-center gap-3.5">
+                    <div className="w-10 h-10 rounded-xl bg-blue-600/10 border border-blue-900/20 flex items-center justify-center text-blue-400 group-hover:bg-blue-600/20 group-hover:text-blue-300 transition-colors shrink-0">
+                      <ArrowRight className="w-5 h-5 rotate-[-45deg]" />
+                    </div>
+                    <div>
+                      <span className="text-sm font-bold text-white block">Book Doorstep Pickup</span>
+                      <span className="text-xs text-slate-450">Fill details directly to schedule technician pickup</span>
+                    </div>
+                  </div>
+                  <ArrowRight className="w-5 h-5 text-slate-500 group-hover:text-blue-400 group-hover:translate-x-1 transition-all shrink-0" />
+                </Link>
+
+                {/* Option 3: WhatsApp Support (Emerald highlight) */}
+                <a
+                  href="https://wa.me/919310112994?text=Hi,%20I%20would%20like%20to%20get%20a%20repair%20quote%20for%20my%20Desktop%20PC%20/%20iMac.%20Please%20assist%20me."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-between p-4 bg-emerald-950/10 border border-emerald-900/30 rounded-2xl hover:border-emerald-500 hover:bg-emerald-900/10 transition-all group shadow-sm text-left"
+                >
+                  <div className="flex items-center gap-3.5">
+                    <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">
+                      <MessageSquare className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <span className="text-sm font-bold text-white block flex items-center gap-1.5">
+                        WhatsApp Live Chat
+                        <span className="bg-emerald-500 text-black text-[9px] font-black uppercase px-1.5 py-0.5 rounded-full shrink-0 animate-pulse">Live</span>
+                      </span>
+                      <span className="text-xs text-slate-450">Chat with a technician for custom builds or hardware issues</span>
+                    </div>
+                  </div>
+                  <ArrowRight className="w-5 h-5 text-slate-500 group-hover:text-emerald-400 group-hover:translate-x-1 transition-all shrink-0" />
+                </a>
+
+                {/* Option 4: Call Direct */}
+                <a
+                  href="tel:+919310112994"
+                  className="flex items-center justify-between p-4 bg-[#0E1B38] border border-slate-800 rounded-2xl hover:border-blue-500 hover:bg-[#122347] transition-all group shadow-sm text-left"
+                >
+                  <div className="flex items-center gap-3.5">
+                    <div className="w-10 h-10 rounded-xl bg-blue-600/10 border border-blue-900/20 flex items-center justify-center text-blue-400 group-hover:bg-blue-600/20 group-hover:text-blue-300 transition-colors shrink-0">
+                      <Phone className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <span className="text-sm font-bold text-white block">Call Nehru Place Center</span>
+                      <span className="text-xs text-slate-450">+91 9310112994 — Speak with an engineer</span>
+                    </div>
+                  </div>
+                  <ArrowRight className="w-5 h-5 text-slate-500 group-hover:text-blue-400 group-hover:translate-x-1 transition-all shrink-0" />
+                </a>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </footer>
   );
 }

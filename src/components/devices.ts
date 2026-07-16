@@ -38,7 +38,13 @@ export const DEVICE_MODELS: Record<string, { id: string; name: string; image?: s
         { id: 'apple-watch-s10', name: 'Apple Watch Series 10' },
         { id: 'apple-watch-s9', name: 'Apple Watch Series 9' },
         { id: 'apple-watch-s8', name: 'Apple Watch Series 8' },
-        { id: 'apple-watch-se', name: 'Apple Watch SE' }
+        { id: 'apple-watch-se', name: 'Apple Watch SE' },
+        { id: 'imac-24-m3', name: 'iMac 24" M3', image: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&q=80&w=200' },
+        { id: 'imac-24-m1', name: 'iMac 24" M1', image: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&q=80&w=200' },
+        { id: 'imac-27-intel', name: 'iMac 27" (Intel)', image: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&q=80&w=200' },
+        { id: 'mac-mini-m2', name: 'Mac Mini M2', image: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&q=80&w=200' },
+        { id: 'mac-mini-m1', name: 'Mac Mini M1', image: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&q=80&w=200' },
+        { id: 'mac-studio-m2', name: 'Mac Studio M2', image: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&q=80&w=200' }
     ],
     samsung: [
         { id: 'galaxy-s26-ultra', name: 'Galaxy S26 Ultra', image: 'https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783509702/galaxys26ultra_wfqxfu.jpg' },
@@ -246,6 +252,10 @@ export const DEVICE_MODELS: Record<string, { id: string; name: string; image?: s
         { id: 'hp-pavilion-x360', name: 'HP Pavilion x360' },
         { id: 'hp-chromebook-x360', name: 'HP Chromebook x360' },
         { id: 'hp-250-g9', name: 'HP 250 G9' },
+        { id: 'hp-pavilion-desktop', name: 'HP Pavilion Desktop' },
+        { id: 'hp-envy-desktop', name: 'HP Envy Desktop' },
+        { id: 'hp-elite-desktop', name: 'HP EliteDesk' },
+        { id: 'hp-pro-desktop', name: 'HP ProDesk' }
     ],
     dell: [
         { id: 'dell-xps-15', name: 'Dell XPS 15' },
@@ -268,6 +278,10 @@ export const DEVICE_MODELS: Record<string, { id: string; name: string; image?: s
         { id: 'dell-xps-13-plus', name: 'Dell XPS 13 Plus' },
         { id: 'dell-inspiron-13', name: 'Dell Inspiron 13' },
         { id: 'dell-latitude-5440', name: 'Dell Latitude 5440' },
+        { id: 'dell-inspiron-desktop', name: 'Dell Inspiron Desktop' },
+        { id: 'dell-optiplex-desktop', name: 'Dell OptiPlex Desktop' },
+        { id: 'dell-precision-desktop', name: 'Dell Precision Workstation' },
+        { id: 'dell-xps-desktop', name: 'Dell XPS Desktop' }
     ],
     iqoo: [
         { id: 'iqoo-12', name: 'iQOO 12', image: 'https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783519132/iqoo12_lmpx2s.webp' },
@@ -303,7 +317,10 @@ export const DEVICE_MODELS: Record<string, { id: string; name: string; image?: s
         { id: 'lenovo-yoga-7i', name: 'Yoga 7i', image: 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&q=80&w=200' },
         { id: 'ideapad-slim-3', name: 'IdeaPad Slim 3', image: 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&q=80&w=200' },
         { id: 'lenovo-tab-m10', name: 'Lenovo Tab M10', image: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&q=80&w=200' },
-        { id: 'lenovo-tab-p11', name: 'Lenovo Tab P11', image: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&q=80&w=200' }
+        { id: 'lenovo-tab-p11', name: 'Lenovo Tab P11', image: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&q=80&w=200' },
+        { id: 'lenovo-thinkcentre', name: 'Lenovo ThinkCentre' },
+        { id: 'lenovo-ideacentre', name: 'Lenovo IdeaCentre' },
+        { id: 'lenovo-legion-desktop', name: 'Lenovo Legion Gaming Desktop' }
     ],
     acer: [
         { id: 'acer-predator-helios-16', name: 'Predator Helios 16', image: 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?auto=format&fit=crop&q=80&w=200' },

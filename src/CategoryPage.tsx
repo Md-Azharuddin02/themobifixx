@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ChevronRight, Smartphone, Laptop, Tablet, Watch } from 'lucide-react';
+import { ChevronRight, Smartphone, Laptop, Tablet, Watch, Monitor } from 'lucide-react';
 
 const MicrosoftSVG = () => (
     <svg viewBox="0 0 23 23" xmlns="http://www.w3.org/2000/svg" className="h-10 w-10">
@@ -78,6 +78,17 @@ const CATEGORY_DATA = {
         brands: [
             { name: 'Apple Watch', logo: 'https://cdn.simpleicons.org/apple/fff', path: '/brand/apple' },
             { name: 'Samsung Watch', logo: 'https://cdn.simpleicons.org/samsung/fff', path: '/brand/samsung' },
+            { name: 'Other', logo: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%233b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>', path: '/brand/other' }
+        ]
+    },
+    desktop: {
+        title: 'Desktop / iMac',
+        icon: Monitor,
+        brands: [
+            { name: 'Apple iMac / Mac Mini', logo: 'https://cdn.simpleicons.org/apple/fff', path: '/brand/apple' },
+            { name: 'Dell PC', logo: 'https://cdn.simpleicons.org/dell/fff', path: '/brand/dell' },
+            { name: 'HP PC', logo: 'https://cdn.simpleicons.org/hp/fff', path: '/brand/hp' },
+            { name: 'Lenovo PC', logo: 'https://cdn.simpleicons.org/lenovo/fff', path: '/brand/lenovo' },
             { name: 'Other', logo: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%233b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>', path: '/brand/other' }
         ]
     },
