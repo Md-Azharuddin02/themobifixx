@@ -34,7 +34,8 @@ export default function ServiceDetail() {
         e.preventDefault();
         if (!customerPhone) return;
         setIsSubmitted(true);
-        // Prefilled message to whatsapp
+        
+
         const message = `Hi, I want to book a repair for ${service?.title || 'my device'}. Phone number: ${customerPhone}.`;
         window.open(`https://wa.me/919310112994?text=${encodeURIComponent(message)}`, '_blank');
     };
@@ -55,10 +56,10 @@ export default function ServiceDetail() {
 
                 <div className="flex flex-col lg:flex-row gap-8 relative">
 
-                    {/* Left Column (Main Content) */}
+                    {}
                     <div className="lg:w-2/3 space-y-8">
 
-                        {/* Options Grid */}
+                        {}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             {REPAIR_OPTIONS.map((opt) => (
                                 <div key={opt.id} className="bg-[#0A1329] p-4 rounded-xl shadow-lg border border-slate-800 flex items-center justify-between hover:border-slate-750 transition-colors">
@@ -81,7 +82,7 @@ export default function ServiceDetail() {
                             ))}
                         </div>
 
-                        {/* Banner */}
+                        {}
                         <div className="bg-[#0A1329] rounded-xl shadow-lg border border-slate-800 overflow-hidden flex flex-col md:flex-row items-center gap-6 p-6">
                             <div className="w-32 h-32 shrink-0 rounded-xl overflow-hidden bg-slate-900 border border-slate-800">
                                 <img src={service?.featuredImage} alt="Phone" className="w-full h-full object-cover opacity-80" />
@@ -99,11 +100,11 @@ export default function ServiceDetail() {
                         </div>
                     </div>
 
-                    {/* Right Column (Sidebar) */}
+                    {}
                     <div className="lg:w-1/3">
                         <div className="sticky top-24 space-y-6">
 
-                            {/* Cart / Book Form */}
+                            {}
                             <div className="bg-[#0A1329] rounded-xl shadow-2xl border border-slate-800 overflow-hidden">
                                 <div className="bg-[#0E1B38] px-6 py-4 border-b border-slate-800 flex items-center justify-between">
                                     <h3 className="font-bold text-white">Direct Booking</h3>

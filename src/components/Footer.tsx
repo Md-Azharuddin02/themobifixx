@@ -12,7 +12,7 @@ export default function Footer() {
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 items-start">
 
-          {/* Brand & About + Quick Links */}
+          {}
           <div className="space-y-6">
             <Link to="/">
               <img src='https://res.cloudinary.com/dzhsxv2wq/image/upload/v1784028396/WhatsApp_Image_2026-07-14_at_4.48.50_PM_1_rfu6xy.jpg' alt="TheMobifixx" className="h-16 w-auto rounded-xl" />
@@ -99,7 +99,7 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Disclaimer Area */}
+      {}
       <div className="border-t border-slate-900 bg-[#010307]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center">
           <h5 className="font-bold text-sm text-slate-200 mb-4">Disclaimer</h5>
@@ -113,7 +113,7 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Bottom Bar */}
+      {}
       <div className="border-t border-slate-900 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col md:flex-row items-center justify-between text-xs text-slate-500 gap-4">
           <p>© {currentYear} TheMobifixx. All rights reserved. | Designed & Developed by <a href="https://www.arbormit.com" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 font-bold transition-all underline decoration-dashed decoration-blue-500/50 underline-offset-4 hover:decoration-solid">Arbormit.com</a></p>
@@ -123,11 +123,11 @@ export default function Footer() {
           </div>
         </div>
       </div>
-      {/* Desktop Repair Modal */}
+      {}
       <AnimatePresence>
         {isDesktopModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-sm p-4">
-            {/* Backdrop close area */}
+            {}
             <div className="absolute inset-0 cursor-default" onClick={() => setIsDesktopModalOpen(false)}></div>
             
             <motion.div
@@ -137,7 +137,7 @@ export default function Footer() {
               transition={{ duration: 0.3, ease: 'easeOut' }}
               className="bg-[#0A1329] border border-slate-800 rounded-3xl w-full max-w-xl overflow-hidden relative shadow-2xl p-6 md:p-8 space-y-6 z-10"
             >
-              {/* Close Button */}
+              {}
               <button
                 onClick={() => setIsDesktopModalOpen(false)}
                 className="absolute top-4 right-4 text-slate-400 hover:text-white bg-slate-900/60 p-2 rounded-full border border-slate-800 hover:border-slate-700 transition-all cursor-pointer focus:outline-none"
@@ -145,7 +145,7 @@ export default function Footer() {
                 <X className="w-5 h-5" />
               </button>
 
-              {/* Title Header */}
+              {}
               <div className="flex items-start gap-4 text-left">
                 <div className="w-12 h-12 rounded-2xl bg-blue-600/10 border border-blue-900/30 flex items-center justify-center text-blue-400 shrink-0">
                   <Monitor className="w-6 h-6" />
@@ -158,9 +158,9 @@ export default function Footer() {
                 </div>
               </div>
 
-              {/* Selection Options List */}
+              {}
               <div className="space-y-3.5">
-                {/* Option 1: Select Model */}
+                {}
                 <Link
                   to="/category/desktop"
                   onClick={() => setIsDesktopModalOpen(false)}
@@ -178,7 +178,7 @@ export default function Footer() {
                   <ArrowRight className="w-5 h-5 text-slate-500 group-hover:text-blue-400 group-hover:translate-x-1 transition-all shrink-0" />
                 </Link>
 
-                {/* Option 2: Quick Booking Form */}
+                {}
                 <Link
                   to="/contact?tab=booking&device=desktop"
                   onClick={() => setIsDesktopModalOpen(false)}
@@ -196,7 +196,7 @@ export default function Footer() {
                   <ArrowRight className="w-5 h-5 text-slate-500 group-hover:text-blue-400 group-hover:translate-x-1 transition-all shrink-0" />
                 </Link>
 
-                {/* Option 3: WhatsApp Support (Emerald highlight) */}
+                {}
                 <a
                   href="https://wa.me/919310112994?text=Hi,%20I%20would%20like%20to%20get%20a%20repair%20quote%20for%20my%20Desktop%20PC%20/%20iMac.%20Please%20assist%20me."
                   target="_blank"
@@ -218,7 +218,7 @@ export default function Footer() {
                   <ArrowRight className="w-5 h-5 text-slate-500 group-hover:text-emerald-400 group-hover:translate-x-1 transition-all shrink-0" />
                 </a>
 
-                {/* Option 4: Call Direct */}
+                {}
                 <a
                   href="tel:+919310112994"
                   className="flex items-center justify-between p-4 bg-[#0E1B38] border border-slate-800 rounded-2xl hover:border-blue-500 hover:bg-[#122347] transition-all group shadow-sm text-left"

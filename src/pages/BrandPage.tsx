@@ -81,17 +81,20 @@ export default function BrandPage() {
   const category = searchParams.get('category');
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Format brand name for display
+  
+
   const formattedBrand = brandId ? brandId.charAt(0).toUpperCase() + brandId.slice(1) : '';
 
-  // Use mock apple data or generate generic mock data for other brands
+  
+
   const allDevices = DEVICE_MODELS[brandId?.toLowerCase() || ''] || Array.from({ length: 12 }).map((_, i) => ({
     id: `${brandId}-model-${i + 1}`,
     name: `${formattedBrand} Model ${i + 1}`,
     image: undefined as string | undefined
   }));
 
-  // Filter by category if query param is set
+  
+
   const categoryFiltered = category 
     ? allDevices.filter(d => {
         const devCat = getDeviceCategory(brandId || '', d.id);
@@ -106,7 +109,8 @@ export default function BrandPage() {
     device.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Redirect if brand doesn't exist
+  
+
   useEffect(() => {
     const brandExists = brandId ? (brandId.toLowerCase() === 'other' || DEVICE_MODELS.hasOwnProperty(brandId.toLowerCase())) : false;
     if (!brandExists) {
@@ -117,7 +121,7 @@ export default function BrandPage() {
   if (brandId?.toLowerCase() === 'other') {
     return (
       <div className="min-h-screen bg-[#050B18] pt-20 pb-12 text-slate-200">
-        {/* Breadcrumb Navigation */}
+        {}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-xs font-medium text-slate-450 flex items-center gap-2 overflow-x-auto whitespace-nowrap">
           <Link to="/" className="hover:text-blue-400 transition-colors">Home</Link>
           <ChevronRight className="w-3 h-3 shrink-0" />

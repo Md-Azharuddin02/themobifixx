@@ -15,7 +15,8 @@ import Services from './pages/Services';
 import ServiceDetail from './pages/ServiceDetail';
 
 
-// Scroll Restoration Utility
+
+
 function ScrollToTop() {
   const { pathname } = useLocation();
 
@@ -26,7 +27,8 @@ function ScrollToTop() {
   return null;
 }
 
-// Floating Live Interaction Buttons
+
+
 function FloatingCTAs() {
   const [isScrollToTopVisible, setIsScrollToTopVisible] = useState(false);
 
@@ -51,7 +53,7 @@ function FloatingCTAs() {
 
   return (
     <div className="fixed bottom-6 right-6 z-40 flex flex-col items-center space-y-4">
-      {/* Go To Top Button */}
+      {}
       <AnimatePresence>
         {isScrollToTopVisible && (
           <motion.button
@@ -73,7 +75,7 @@ function FloatingCTAs() {
         )}
       </AnimatePresence>
 
-      {/* Instagram Profile */}
+      {}
       <motion.a
         href="https://www.instagram.com/themobifixx"
         target="_blank"
@@ -89,7 +91,7 @@ function FloatingCTAs() {
         </span>
       </motion.a>
 
-      {/* Email Support */}
+      {}
       <motion.a
         href="mailto:themobifixx@gmail.com"
         className="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center shadow-lg hover:shadow-xl hover:bg-blue-700 relative group cursor-pointer transition-all duration-200"
@@ -103,7 +105,7 @@ function FloatingCTAs() {
         </span>
       </motion.a>
 
-      {/* WhatsApp Chat Support */}
+      {}
       <motion.a
         href="https://wa.me/919310112994?text=Hi,%20I%20would%20like%20to%20know%20more%20about%20your%20repair%20services.%20Please%20assist%20me."
         target="_blank"
@@ -135,10 +137,10 @@ export default function App() {
       <SEOManager />
       <ScrollToTop />
       <div className="min-h-screen flex flex-col justify-between font-sans bg-[#050B18] text-slate-200 antialiased">
-        {/* Navigation Sticky Bar */}
+        {}
         <Header />
 
-        {/* Core Page Container */}
+        {}
         <main className="flex-grow">
           <Routes>
             <Route path="/" element={<Home />} />
@@ -151,15 +153,15 @@ export default function App() {
             <Route path="/services" element={<Services />} />
             <Route path="/services/:slug" element={<ServiceDetail />} />
 
-            {/* Fallback Catch-all Redirect */}
+            {}
             <Route path="*" element={<Home />} />
           </Routes>
         </main>
 
-        {/* Global Floating Lead Capture Actions */}
+        {}
         <FloatingCTAs />
 
-        {/* Structured Bottom Footer */}
+        {}
         <Footer />
       </div>
     </BrowserRouter>

@@ -175,7 +175,8 @@ function getPageMeta(pathname: string): PageMeta {
     };
   }
 
-  // Default fallback
+  
+
   return {
     title: 'Best Mobile & Laptop Repair in Delhi, Nehru Place | TheMobifixx',
     description:
@@ -183,7 +184,8 @@ function getPageMeta(pathname: string): PageMeta {
   };
 }
 
-// ─── Helpers to manage <head> tags ──────────────────────────────────────────
+
+
 function setMeta(selector: string, attr: string, value: string) {
   let el = document.querySelector<HTMLMetaElement>(selector);
   if (!el) {
@@ -210,7 +212,8 @@ function setLink(rel: string, href: string, extra?: Record<string, string>) {
 }
 
 function injectSchema(schemas: object | object[]) {
-  // Remove old dynamic schema
+  
+
   document.querySelectorAll('script[data-dynamic-schema]').forEach((s) => s.remove());
   const arr = Array.isArray(schemas) ? schemas : [schemas];
   arr.forEach((schema) => {
@@ -230,17 +233,20 @@ export default function SEOManager() {
     const canonicalUrl = `${SITE_URL}${pathname === '/' ? '' : pathname}`;
     const ogImage = meta.ogImage || DEFAULT_OG_IMAGE;
 
-    // Title
+    
+
     document.title = meta.title;
 
-    // Standard meta
+    
+
     setMeta('meta[name="description"]', 'content', meta.description);
     if (meta.keywords) {
       setMeta('meta[name="keywords"]', 'content', meta.keywords);
     }
     setMeta('meta[name="robots"]', 'content', 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1');
 
-    // Open Graph
+    
+
     setMeta('meta[property="og:title"]', 'content', meta.title);
     setMeta('meta[property="og:description"]', 'content', meta.description);
     setMeta('meta[property="og:url"]', 'content', canonicalUrl);
@@ -252,7 +258,8 @@ export default function SEOManager() {
     setMeta('meta[property="og:locale"]', 'content', 'en_IN');
     setMeta('meta[property="og:site_name"]', 'content', SITE_NAME);
 
-    // Twitter / X Card
+    
+
     setMeta('meta[name="twitter:card"]', 'content', 'summary_large_image');
     setMeta('meta[name="twitter:site"]', 'content', '@themobifixx');
     setMeta('meta[name="twitter:creator"]', 'content', '@themobifixx');
@@ -261,19 +268,23 @@ export default function SEOManager() {
     setMeta('meta[name="twitter:image"]', 'content', ogImage);
     setMeta('meta[name="twitter:image:alt"]', 'content', `${SITE_NAME} Repair Center`);
 
-    // GEO meta tags
+    
+
     setMeta('meta[name="geo.region"]', 'content', 'IN-DL');
     setMeta('meta[name="geo.placename"]', 'content', 'Nehru Place, New Delhi, India');
     setMeta('meta[name="geo.position"]', 'content', '28.5494;77.2513');
     setMeta('meta[name="ICBM"]', 'content', '28.5494, 77.2513');
 
-    // Canonical
+    
+
     setLink('canonical', canonicalUrl);
-    // hreflang
+    
+
     setLink('alternate', canonicalUrl, { hreflang: 'en-IN' });
     setLink('alternate', canonicalUrl, { hreflang: 'x-default' });
 
-    // JSON-LD structured data
+    
+
     if (meta.schema) {
       injectSchema(meta.schema);
     }

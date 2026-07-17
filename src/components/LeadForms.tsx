@@ -7,21 +7,26 @@ import { Send, CheckCircle2, Loader2, Calendar, ArrowRight, MessageSquare, Mail 
 const WA_NUMBER = '919310112994';
 const SUPPORT_EMAIL = 'themobifixx@gmail.com';
 
-// ─── Utility: open WhatsApp with pre-filled message ─────────────────────────
+
+
 function openWhatsApp(message: string) {
   window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer');
 }
 
-// ─── Utility: generate a local booking reference ─────────────────────────────
+
+
 function generateBookingRef(): string {
   const ts = Date.now().toString(36).toUpperCase();
   const rand = Math.random().toString(36).slice(2, 5).toUpperCase();
   return `TMX-${ts}-${rand}`;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// INQUIRY FORM
-// ─────────────────────────────────────────────────────────────────────────────
+
+
+
+
+
+
 
 interface InquiryFormInput {
   name: string;
@@ -52,7 +57,8 @@ export function InquiryForm() {
       `*Email:* ${data.email || 'N/A'}\n` +
       `*Message:* ${data.message}`;
 
-    // Small delay for UX feedback, then open WhatsApp
+    
+
     setTimeout(() => {
       openWhatsApp(waMsg);
       setSubmittedData(data);
@@ -220,9 +226,12 @@ export function InquiryForm() {
   );
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// REPAIR BOOKING FORM
-// ─────────────────────────────────────────────────────────────────────────────
+
+
+
+
+
+
 
 interface BookingFormInput {
   customerName: string;
@@ -494,7 +503,7 @@ export function RepairBookingForm({ initialDeviceType = 'laptop' }: RepairBookin
               {errors.issueDescription && <span className="text-xs text-rose-500 mt-1 block">{errors.issueDescription.message}</span>}
             </div>
 
-            {/* Pickup checkbox */}
+            {}
             <div className="bg-[#0E1B38] border border-slate-800 rounded-xl p-5 space-y-4 shadow-lg">
               <div className="flex items-start space-x-3">
                 <input

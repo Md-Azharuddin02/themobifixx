@@ -35,7 +35,7 @@ export default function Contact() {
   return (
     <div className="bg-[#050B18] min-h-screen font-sans text-slate-200 pb-20" id="contact-us">
 
-      {/* ─── HERO HEADER ─────────────────────────────────────────── */}
+      {}
       <section className="bg-[#030712]/50 py-16 sm:py-20 border-b border-slate-800/80 text-center" id="contact-header">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight">
@@ -47,14 +47,14 @@ export default function Contact() {
         </div>
       </section>
 
-      {/* ─── MAIN GRID ───────────────────────────────────────────── */}
+      {}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
-          {/* ── LEFT: Contact info & Locations (5-cols) */}
+          {}
           <div className="lg:col-span-5 space-y-6">
 
-            {/* Emergency Support card */}
+            {}
             <div className="bg-[#0A1329] border border-slate-800 rounded-2xl p-6 md:p-8 space-y-6 shadow-xl">
               <h3 className="font-bold text-white text-lg border-b border-slate-800 pb-3">Emergency Support</h3>
               <ul className="space-y-6">
@@ -100,7 +100,7 @@ export default function Contact() {
               </ul>
             </div>
 
-            {/* Branch listings */}
+            {}
             <div className="space-y-4">
               <h3 className="font-bold text-white text-lg px-1">Service Centre Addresses</h3>
               <div className="space-y-3">
@@ -120,7 +120,7 @@ export default function Contact() {
               </div>
             </div>
 
-            {/* Map panel */}
+            {}
             <div className="bg-[#0A1329] border border-slate-800 rounded-2xl p-5 space-y-4 shadow-xl" id="interactive-map-panel">
               <h4 className="font-bold text-white text-sm">Location Map</h4>
               <div className="relative rounded-xl overflow-hidden h-[240px] bg-slate-900 border border-slate-800">
@@ -131,10 +131,10 @@ export default function Contact() {
             </div>
           </div>
 
-          {/* ── RIGHT: Lead forms (7-cols) */}
+          {}
           <div className="lg:col-span-7">
             
-            {/* Tab switcher - Pill style */}
+            {}
             <div className="flex p-1 bg-[#0A1329] border border-slate-800 rounded-full shadow-xl mb-8 max-w-md mx-auto">
               <button
                 onClick={() => changeTab('booking')}
@@ -154,7 +154,7 @@ export default function Contact() {
               </button>
             </div>
 
-            {/* Selected form container */}
+            {}
             <div className="bg-[#0A1329] border border-slate-800 rounded-2xl p-6 md:p-8 shadow-xl">
               {activeTab === 'booking' ? (
                 <div>

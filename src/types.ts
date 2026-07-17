@@ -22,14 +22,16 @@ export interface RepairRequest {
   preferredDate: string;
   status: 'pending' | 'accepted' | 'in_repair' | 'completed' | 'cancelled';
   createdAt: string;
-  userId?: string; // Associated registered user
+  userId?: string; 
+
 }
 
 export interface Technician {
   id?: string;
   name: string;
   designation: string;
-  experience: number; // in years
+  experience: number; 
+
   specialization: string;
   repairsCompleted: number;
   rating: number;
@@ -47,7 +49,8 @@ export interface Testimonial {
   image: string;
   deviceType: string;
   createdAt: string;
-  userId?: string; // Associated registered user
+  userId?: string; 
+
 }
 
 export interface ServiceCategory {
@@ -55,7 +58,8 @@ export interface ServiceCategory {
   title: string;
   slug: string;
   description: string;
-  icon: string; // Lucide icon name
+  icon: string; 
+
   featuredImage: string;
   seoTitle: string;
   seoDescription: string;

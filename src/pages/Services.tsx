@@ -54,7 +54,7 @@ export default function Services() {
     return (
         <div className="bg-[#050B18] min-h-screen font-sans text-slate-200 pb-20">
 
-            {/* ─── HERO HEADER ─────────────────────────────────────────── */}
+            {}
             <section className="bg-[#030712]/50 py-16 sm:py-20 border-b border-slate-800/80" id="services-header">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
 
@@ -65,7 +65,7 @@ export default function Services() {
                         Discover our complete list of premium diagnostics, chip-level logic board repairs, and speed optimizations in Delhi NCR.
                     </p>
 
-                    {/* Search bar */}
+                    {}
                     <div className="max-w-lg mx-auto relative mt-4">
                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 pointer-events-none" />
                         <input
@@ -79,10 +79,10 @@ export default function Services() {
                 </div>
             </section>
 
-            {/* ─── CATALOG ─────────────────────────────────────────────── */}
+            {}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
-                {/* Filter buttons */}
+                {}
                 <div className="flex flex-wrap items-center justify-center gap-3 mb-10">
                     {filters.map((f) => (
                         <button

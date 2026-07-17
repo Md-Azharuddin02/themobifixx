@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { useParams, Link, useSearchParams } from 'react-router-dom';
 import { ChevronRight, Battery, Maximize, CircleDashed, Mic, Speaker, Wifi, Smartphone, ShieldCheck, Clock, MessageSquare, CheckCircle2, AlertTriangle, Cpu, HardDrive, Monitor, Keyboard, BatteryCharging, Settings, HelpCircle, Database } from 'lucide-react';
 
-// Laptop Specific Repair Options
+
+
 const LAPTOP_SERVICES = [
   { id: 'laptop-screen', name: 'Screen Replacement', icon: Monitor },
   { id: 'ram-upgrade', name: 'RAM Upgrade', icon: Cpu },
@@ -15,7 +16,8 @@ const LAPTOP_SERVICES = [
   { id: 'laptop-other', name: 'Other Issues (Body/Hinges/Overheating)', icon: HelpCircle },
 ];
 
-// Mobile Specific Repair Options
+
+
 const MOBILE_SERVICES = [
   { id: 'screen-replacement', name: 'Screen Replacement', icon: Maximize },
   { id: 'back-glass', name: 'Back Glass Replacement', icon: CircleDashed },
@@ -28,7 +30,8 @@ const MOBILE_SERVICES = [
   { id: 'mobile-other', name: 'Other Issue / Upgrades', icon: HelpCircle },
 ];
 
-// Tablet Specific Repair Options
+
+
 const TABLET_SERVICES = [
   { id: 'tablet-screen', name: 'Screen Replacement', icon: Monitor },
   { id: 'tablet-battery', name: 'Battery Replacement', icon: Battery },
@@ -37,7 +40,8 @@ const TABLET_SERVICES = [
   { id: 'tablet-other', name: 'Other Software or Hardware Issue', icon: HelpCircle },
 ];
 
-// Watch Specific Repair Options
+
+
 const WATCH_SERVICES = [
   { id: 'watch-screen', name: 'Screen & Touch Glass Repair', icon: Monitor },
   { id: 'watch-battery', name: 'Battery Replacement', icon: Battery },
@@ -47,7 +51,8 @@ const WATCH_SERVICES = [
   { id: 'watch-other', name: 'Other Watch Issues', icon: HelpCircle },
 ];
 
-// Desktop Specific Repair Options
+
+
 const DESKTOP_SERVICES = [
   { id: 'desktop-screen', name: 'iMac Screen Replacement', icon: Monitor },
   { id: 'desktop-ram', name: 'RAM Upgrade / Replacement', icon: Cpu },
@@ -61,7 +66,8 @@ const DESKTOP_SERVICES = [
   { id: 'desktop-other', name: 'Other Hardware/Software Issue', icon: HelpCircle },
 ];
 
-// Device Categorisation Helper
+
+
 const getDeviceType = (brand: string, model: string, queryCategory: string | null): 'laptop' | 'mobile' | 'tablet' | 'watch' | 'desktop' => {
   if (queryCategory) {
     const cat = queryCategory.toLowerCase();
@@ -137,7 +143,8 @@ export default function DeviceRepairPage() {
   };
   const activeServices = getActiveServices();
 
-  // Formatting names from URL slugs
+  
+
   const formattedBrand = brandId ? brandId.charAt(0).toUpperCase() + brandId.slice(1) : '';
   const formattedModel = modelId ? modelId.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') : 'Device';
 
@@ -147,7 +154,8 @@ export default function DeviceRepairPage() {
     return `https://wa.me/919310112994?text=${encodeURIComponent(text)}`;
   };
 
-  // Toggle selection
+  
+
   const toggleRepair = (id: string) => {
     setSelectedRepairs(prev =>
       prev.includes(id)
@@ -158,7 +166,7 @@ export default function DeviceRepairPage() {
 
   return (
     <div className="min-h-screen bg-[#050B18] pt-20 pb-12 text-slate-200">
-      {/* Breadcrumb Navigation */}
+      {}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-xs font-medium text-slate-450 flex items-center gap-2 overflow-x-auto whitespace-nowrap">
         <Link to="/" className="hover:text-blue-400 transition-colors">Home</Link>
         <ChevronRight className="w-3 h-3 shrink-0" />
@@ -182,14 +190,14 @@ export default function DeviceRepairPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-2">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
-          {/* Left Main Content */}
+          {}
           <div className="lg:col-span-8 space-y-8">
 
-            {/* Header Title */}
+            {}
             <div>
               <h1 className="text-2xl font-bold text-white mb-6">{formattedModel} Repair Services</h1>
 
-              {/* Repair Grid */}
+              {}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {activeServices.map(service => {
                   const Icon = service.icon;
@@ -231,7 +239,7 @@ export default function DeviceRepairPage() {
             </div>
           </div>
 
-          {/* Right Sidebar - Sticky Booking Panel */}
+          {}
           <div className="lg:col-span-4">
             <div className="bg-[#0A1329] rounded-3xl p-6 shadow-2xl border border-slate-800 sticky top-28 flex flex-col h-auto lg:h-[calc(100vh-160px)] lg:min-h-[400px] lg:max-h-[600px]">
 
@@ -243,7 +251,7 @@ export default function DeviceRepairPage() {
                 <p className="text-xs text-slate-450 mt-1 capitalize">{formattedBrand} • {formattedModel}</p>
               </div>
 
-              {/* Selected Items Scroll Area */}
+              {}
               <div className="flex-grow overflow-y-auto py-4 space-y-4 pr-2 custom-scrollbar">
                 {selectedRepairs.length === 0 ? (
                   <div className="h-full flex flex-col items-center justify-center text-center text-slate-500 space-y-2">
@@ -265,25 +273,11 @@ export default function DeviceRepairPage() {
                 )}
               </div>
 
-              {/* Footer / Checkout */}
+              {}
               <div className="pt-4 border-t border-slate-800 shrink-0 space-y-4">
-                {/* <div className="flex items-center justify-between">
-                  <span className="text-sm font-bold text-slate-400">Doorstep Diagnostics</span>
-                  <span className="text-2xl font-bold text-emerald-450">
-                    FREE
-                  </span>
-                </div> */}
+                {}
 
-                {/* <div className="text-[10px] text-slate-500 font-semibold space-y-1.5 pt-2 border-t border-slate-800/60">
-                  <div className="flex items-center justify-between">
-                    <span>Inspection Fee</span>
-                    <span className="text-emerald-400">FREE</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span>Transit & Pickup</span>
-                    <span className="text-emerald-400">FREE</span>
-                  </div>
-                </div> */}
+                {}
 
                 <a
                   href={getWhatsAppLink()}
@@ -321,7 +315,7 @@ export default function DeviceRepairPage() {
         </div>
       </div>
 
-      {/* Modal removed */}
+      {}
     </div>
   );
 }

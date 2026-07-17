@@ -119,7 +119,8 @@ export default function Home() {
     localStorage.setItem('themobifixx_reviews', JSON.stringify(testimonials));
   }, [testimonials]);
 
-  // Review form states
+  
+
   const [newReviewName, setNewReviewName] = useState('');
   const [newReviewDevice, setNewReviewDevice] = useState('');
   const [newReviewComment, setNewReviewComment] = useState('');
@@ -181,7 +182,8 @@ export default function Home() {
     const scroller = techScrollRef.current;
     if (scroller) {
       scroller.addEventListener('scroll', checkTechScroll);
-      // Run once initially
+      
+
       checkTechScroll();
 
       const observer = new ResizeObserver(() => {
@@ -280,7 +282,7 @@ export default function Home() {
   return (
     <div className="bg-[#050B18] font-sans text-slate-100 min-h-screen" id="home">
 
-      {/* 1. Hero Banner Slideshow */}
+      {}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative">
         <div className="relative rounded-[2.5rem] overflow-hidden shadow-2xl border border-slate-800/80 h-[32rem] md:h-[40rem] bg-slate-950">
           {HERO_SLIDES.map((slide, idx) => (
@@ -311,7 +313,7 @@ export default function Home() {
             </div>
           ))}
 
-          {/* Slide Indicators */}
+          {}
           <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-2">
             {HERO_SLIDES.map((_, idx) => (
               <button
@@ -325,7 +327,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 3. Trust Stats Band */}
+      {}
       <section className="bg-[#0A1329] border-y border-slate-800/80 py-8 my-8" >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-slate-800">
@@ -349,7 +351,7 @@ export default function Home() {
         </div>
       </section >
 
-      {/* 4. SEO / About Text */}
+      {}
       <section className="max-w-4xl mx-auto px-4 py-8 text-center" >
         <h1 className="text-xl font-bold mb-4 text-white">
           {"Expert Mobile & Laptop Repair Services in Delhi / NCR".split(" ").map((word, i) => (
@@ -389,7 +391,7 @@ export default function Home() {
         </p>
       </section >
 
-      {/* 8. Brands We Repair */}
+      {}
       <section id="brands" className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center border-t border-slate-800/80" >
         <TextScramble as="h2" className="text-2xl font-bold mb-4 text-white">
           Mobile Brands we Repair
@@ -426,7 +428,7 @@ export default function Home() {
         </div>
       </section >
 
-      {/* 8.1. Laptop Brands We Repair */}
+      {}
       <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center border-t border-slate-800/80" >
         <TextScramble as="h2" className="text-2xl font-bold mb-4 text-white">
           Laptop Brands we Repair
@@ -459,7 +461,7 @@ export default function Home() {
         </div>
       </section >
 
-      {/* 8.2. Tablet Brands We Repair */}
+      {}
       <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center border-t border-slate-800/80" >
         <TextScramble as="h2" className="text-2xl font-bold mb-4 text-white">
           Tablet Brands we Repair
@@ -487,7 +489,7 @@ export default function Home() {
         </div>
       </section >
 
-      {/* 8.3. Smart Watch Brands We Repair */}
+      {}
       <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center border-t border-slate-800/80" >
         <TextScramble as="h2" className="text-2xl font-bold mb-4 text-white">
           Smart Watch Brands we Repair
@@ -512,66 +514,9 @@ export default function Home() {
       </section >
 
 
-      {/* 2. Service Categories Grid
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center" id="services">
-        <h2 className="text-xl md:text-2xl font-bold mb-8 text-white">
-          {"Doorstep Mobile Repair Services in Delhi / NCR".split(" ").map((word, i) => (
-            <motion.span
-              key={i}
-              animate={{ y: [0, -4, 0] }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                repeatType: 'loop',
-                delay: i * 0.1,
-                ease: 'easeInOut',
-              }}
-              className="inline-block mr-2"
-            >
-              {word}
-            </motion.span>
-          ))}
-        </h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 md:gap-8 max-w-4xl mx-auto">
-          {categories.map((cat, idx) => (
-            <Link to={cat.path} key={idx} className="relative w-full aspect-square" style={{ perspective: '1000px' }}>
-              <motion.div
-                className="relative w-full h-full"
-                style={{ transformStyle: 'preserve-3d' }}
-                whileHover={{ rotateY: 180 }}
-                transition={{ duration: 0.6, ease: 'easeInOut' }}
-              >
-      //           {/* Front of the card 
-      //           <div
-      //             className="absolute w-full h-full bg-[#0A1329] border border-slate-800 shadow-md rounded-3xl flex flex-col items-center justify-center p-4"
-      //             style={{ backfaceVisibility: 'hidden' }}
-      //           >
-      //             <div className="p-2 w-full h-full flex flex-col items-center justify-center">
-      //               {cat.icon}
-      //               <span className="text-xs font-semibold text-slate-300 mt-2">{cat.title}</span>
-      //             </div>
-      //           </div>
+      {}
 
-      //           {/* Back of the card 
-      //           <div
-      //             className="absolute w-full h-full bg-[#0E1B38] border border-slate-700 shadow-lg rounded-3xl flex flex-col items-center justify-center p-4"
-      //             style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
-      //           >
-      //             <Wrench className="w-6 h-6 text-blue-400 mb-3" />
-      //             <span className="text-xs font-bold text-white text-center">
-      //               Book Repair
-      //             </span>
-      //             <span className="text-[10px] text-slate-400 mt-1">
-      //               for {cat.title}
-      //             </span>
-      //           </div>
-      //         </motion.div>
-      //       </Link>
-      //     ))}
-      //   </div>
-      // </section > */}
-
-      {/* 6. Why Choose Us Grid */}
+      {}
       <section className="bg-[#030712]/40 py-20 border-y border-slate-800/80" id="about-us">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-center mb-12 text-white">
@@ -620,7 +565,7 @@ export default function Home() {
         </div>
       </section >
 
-      {/* 7. Gallery Section */}
+      {}
       <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" >
         <motion.div
           className="text-center mb-12"
@@ -658,7 +603,7 @@ export default function Home() {
               transition={{ duration: 0.4, delay: idx * 0.05 }}
               onClick={() => setLightboxIndex(idx)}
             >
-              {/* Thumbnail Area */}
+              {}
               <div className="relative aspect-video bg-black/80 overflow-hidden">
                 <video
                   src={item.src}
@@ -668,7 +613,7 @@ export default function Home() {
                   playsInline
                 />
 
-                {/* Play Button Overlay */}
+                {}
                 <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
                   <div className="w-11 h-11 bg-red-600 rounded-full flex items-center justify-center text-white shadow-lg transition-transform duration-300 group-hover:scale-110">
                     <svg className="w-5 h-5 fill-white ml-0.5" viewBox="0 0 24 24">
@@ -677,20 +622,20 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* Duration Badge */}
+                {}
                 <div className="absolute bottom-2.5 right-2.5 bg-black/80 text-[10px] font-bold text-white px-2 py-0.5 rounded tracking-wide font-mono">
                   {idx === 0 ? "2:15" : idx === 1 ? "1:48" : idx === 2 ? "1:05" : idx === 3 ? "0:52" : idx === 4 ? "1:24" : idx === 5 ? "0:45" : "1:12"}
                 </div>
 
-                {/* Red YouTube Progress bar indicator at bottom of thumbnail */}
+                {}
                 <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-slate-800">
                   <div className="h-full bg-red-600 w-0 group-hover:w-full transition-all duration-[3000ms] ease-out" />
                 </div>
               </div>
 
-              {/* Info Area */}
+              {}
               <div className="p-4 flex gap-3 flex-1">
-                {/* Circular channel icon */}
+                {}
                 <div className="w-9 h-9 rounded-full bg-blue-600/10 border border-blue-500/20 flex items-center justify-center text-blue-400 text-xs font-bold shrink-0">
                   TM
                 </div>
@@ -711,7 +656,7 @@ export default function Home() {
         </div>
       </section >
 
-      {/* Lightbox Modal */}
+      {}
       <AnimatePresence>
         {
           lightboxIndex !== null && (
@@ -722,10 +667,10 @@ export default function Home() {
               className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#030712]/95 backdrop-blur-md px-4 md:px-12 py-10"
               onClick={() => setLightboxIndex(null)}
             >
-              {/* Soft background glow */}
+              {}
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-blue-600/10 rounded-full blur-[80px] md:blur-[140px] pointer-events-none -z-10" />
 
-              {/* Header: Title & Counter Controls */}
+              {}
               <div className="w-full max-w-4xl flex items-center justify-between mb-6 z-10" onClick={e => e.stopPropagation()}>
                 <div>
                   <span className="text-[10px] font-bold uppercase tracking-widest text-blue-400">Workshop Tour Gallery</span>
@@ -746,9 +691,9 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Main Slider Area */}
+              {}
               <div className="w-full max-w-4xl flex items-center justify-between gap-4 md:gap-8 z-10 relative">
-                {/* Left control button */}
+                {}
                 <button
                   className="bg-[#0A1329] border border-slate-800 hover:bg-blue-600 hover:border-blue-500 text-slate-350 hover:text-white p-3.5 rounded-full transition-all cursor-pointer shadow-xl shrink-0 hidden md:block"
                   onClick={(e) => { e.stopPropagation(); handlePrev(); }}
@@ -756,7 +701,7 @@ export default function Home() {
                   <ChevronLeft className="w-6 h-6" />
                 </button>
 
-                {/* Styled Video Frame with margin, padding, double borders and glow */}
+                {}
                 <div
                   className="flex-1 bg-[#0A1329] border border-slate-800 p-2 md:p-3.5 rounded-[2rem] shadow-[0_0_50px_rgba(37,99,235,0.18)] max-h-[60vh] flex items-center justify-center overflow-hidden"
                   onClick={(e) => e.stopPropagation()}
@@ -771,7 +716,7 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* Right control button */}
+                {}
                 <button
                   className="bg-[#0A1329] border border-slate-800 hover:bg-blue-600 hover:border-blue-500 text-slate-350 hover:text-white p-3.5 rounded-full transition-all cursor-pointer shadow-xl shrink-0 hidden md:block"
                   onClick={(e) => { e.stopPropagation(); handleNext(); }}
@@ -780,16 +725,16 @@ export default function Home() {
                 </button>
               </div>
 
-              {/* Caption Description block */}
+              {}
               <div className="w-full max-w-2xl mt-5 text-center z-10 px-4" onClick={e => e.stopPropagation()}>
                 <p className="text-xs md:text-sm text-slate-400 leading-relaxed">
                   {GALLERY_ITEMS[lightboxIndex].desc}
                 </p>
               </div>
 
-              {/* Mobile Arrows & Bottom Indicator Dots */}
+              {}
               <div className="w-full max-w-4xl mt-6 flex flex-col items-center gap-4 z-10" onClick={e => e.stopPropagation()}>
-                {/* Mobile indicators */}
+                {}
                 <div className="flex items-center gap-6 md:hidden">
                   <button
                     className="bg-[#0A1329] border border-slate-800 text-slate-300 p-3 rounded-full transition-all cursor-pointer active:bg-blue-600"
@@ -805,7 +750,7 @@ export default function Home() {
                   </button>
                 </div>
 
-                {/* Direct Dot Indicators to roam from video to video */}
+                {}
                 <div className="flex items-center gap-2 overflow-x-auto max-w-full py-2 px-4 scrollbar-none">
                   {GALLERY_ITEMS.map((item, idx) => (
                     <button
@@ -822,7 +767,7 @@ export default function Home() {
         }
       </AnimatePresence>
 
-      {/* 9. How It Works */}
+      {}
       <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center border-t border-slate-800/80">
         <SparklesText
           className="text-3xl font-bold mb-16 text-white"
@@ -830,7 +775,7 @@ export default function Home() {
           colors={{ first: "#3b82f6", second: "#60a5fa" }}
         />
         <div className="flex flex-col md:flex-row items-center justify-center gap-8 relative max-w-4xl mx-auto">
-          {/* Dotted Line connector (Desktop only) */}
+          {}
           <div className="hidden md:block absolute top-12 left-[10%] right-[10%] h-0.5 border-t border-dashed border-slate-800 z-0"></div>
 
           {[
@@ -858,7 +803,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 10. Common Problems We Fix */}
+      {}
       <section className="bg-[#030712]/40 py-20 border-y border-slate-800/80" >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-4 text-white">
@@ -883,17 +828,17 @@ export default function Home() {
                 key={i}
                 className="relative rounded-3xl overflow-hidden aspect-[4/3] bg-[#0A1329] border border-slate-800 shadow-xl transition-all block"
               >
-                {/* Background repair image */}
+                {}
                 <img
                   src={prob.image}
                   alt={prob.title}
                   className="w-full h-full object-cover"
                 />
 
-                {/* Visual dark overlay gradient at the bottom */}
+                {}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/35 to-transparent flex flex-col justify-end p-6" />
 
-                {/* Overlay Text */}
+                {}
                 <div className="absolute inset-x-0 bottom-0 p-5 z-10 text-center">
                   <h3 className="font-bold text-white text-sm sm:text-base md:text-lg">
                     {prob.title}
@@ -905,7 +850,7 @@ export default function Home() {
         </div>
       </section >
 
-      {/* 10. Testimonials & Live Feedback */}
+      {}
       <section className="bg-[#050B18] text-white py-20 relative overflow-hidden" id="reviews">
         <div className="absolute inset-0 bg-blue-600/5 pointer-events-none" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -916,10 +861,10 @@ export default function Home() {
             <p className="text-sm text-slate-400">Real feedback from real clients. No login required to share your experience!</p>
           </div>
 
-          {/* Rating Summary and Feedback Form */}
+          {}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 max-w-6xl mx-auto mb-16 items-start">
 
-            {/* Rating Summary Card (4 cols) */}
+            {}
             <div className="lg:col-span-4 bg-[#0A1329] border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
               <h3 className="font-bold text-lg text-white mb-6">Review Summary</h3>
               <div className="flex items-baseline gap-2 mb-2">
@@ -929,7 +874,7 @@ export default function Home() {
                 <span className="text-slate-400 text-sm">/ 5.0</span>
               </div>
 
-              {/* Star Rating Display */}
+              {}
               <div className="flex text-amber-400 gap-1 mb-4">
                 {Array.from({ length: 5 }).map((_, idx) => {
                   const avg = totalReviews > 0 ? (testimonials.reduce((acc, curr) => acc + curr.rating, 0) / totalReviews) : 0;
@@ -943,7 +888,7 @@ export default function Home() {
               </div>
               <p className="text-xs text-slate-400 mb-6 font-medium">Based on {totalReviews} client reviews</p>
 
-              {/* Progress Bars for Ratings */}
+              {}
               <div className="space-y-3">
                 {[5, 4, 3, 2, 1].map((stars) => {
                   const count = testimonials.filter(r => r.rating === stars).length;
@@ -964,7 +909,7 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Review Form Card (8 cols) */}
+            {}
             <div className="lg:col-span-8 bg-[#0A1329] border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
               <h3 className="font-bold text-lg text-white mb-2">Write a Review</h3>
               <p className="text-xs text-slate-400 mb-6">Share your honest repair experience with other customers.</p>
@@ -1056,7 +1001,7 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Customer Reviews Grid */}
+          {}
           <div className="border-t border-slate-800/80 pt-16 max-w-6xl mx-auto">
             <h3 className="font-bold text-xl text-white text-left mb-8 px-1">Latest Customer Reviews ({testimonials.length})</h3>
 
@@ -1112,12 +1057,12 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 11. Technician Section */}
+      {}
       <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center bg-[#030712]/40 border-t border-slate-800/80" id="contact-us">
         <h2 className="text-3xl font-bold mb-4 text-white">Meet Our Expert Technicians</h2>
         <p className="text-sm text-slate-400 mb-12">Certified professionals dedicated to restoring your devices.</p>
         <div className="relative max-w-6xl mx-auto group/slider">
-          {/* Left Arrow Button */}
+          {}
           <button
             onClick={() => scrollTech('left')}
             className={`absolute left-0 top-1/2 -translate-y-1/2 z-25 bg-[#0A1329]/95 hover:bg-blue-600 text-white p-3.5 rounded-full border border-slate-800 shadow-2xl transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer backdrop-blur-md md:group-hover/slider:translate-x-0 md:-translate-x-4 ${canScrollLeftTech ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}
@@ -1126,7 +1071,7 @@ export default function Home() {
             <ChevronLeft className="w-5 h-5" />
           </button>
 
-          {/* Right Arrow Button */}
+          {}
           <button
             onClick={() => scrollTech('right')}
             className={`absolute right-0 top-1/2 -translate-y-1/2 z-25 bg-[#0A1329]/95 hover:bg-blue-600 text-white p-3.5 rounded-full border border-slate-800 shadow-2xl transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer backdrop-blur-md md:group-hover/slider:translate-x-0 md:translate-x-4 ${canScrollRightTech ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}
@@ -1135,11 +1080,11 @@ export default function Home() {
             <ChevronRightIcon className="w-5 h-5" />
           </button>
 
-          {/* Gradient Affordance Overlays */}
+          {}
           <div className={`absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-[#050B18] via-[#050B18]/40 to-transparent pointer-events-none z-10 transition-opacity duration-300 ${canScrollLeftTech ? 'opacity-100' : 'opacity-0'}`} />
           <div className={`absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-[#050B18] via-[#050B18]/40 to-transparent pointer-events-none z-10 transition-opacity duration-300 ${canScrollRightTech ? 'opacity-100' : 'opacity-0'}`} />
 
-          {/* Scrollable Container */}
+          {}
           <div
             ref={techScrollRef}
             className="flex overflow-x-auto gap-6 pb-8 pt-4 px-4 scrollbar-none snap-x snap-mandatory scroll-smooth"
@@ -1173,7 +1118,7 @@ export default function Home() {
         </div>
       </section >
 
-      {/* 12. Bottom CTA Banner */}
+      {}
       <section className="bg-[#0A1329] py-20 text-center text-white relative overflow-hidden border-t border-slate-800" >
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5"></div>
         <div className="relative z-10 max-w-2xl mx-auto px-4">
@@ -1202,10 +1147,10 @@ export default function Home() {
         </div>
       </section >
 
-      {/* 13. Serviceable Areas Section */}
+      {}
       <section className="relative py-16 sm:py-20 border-t border-slate-900/60 overflow-hidden bg-[#050B18]">
 
-        {/* Background glow blobs */}
+        {}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-blue-600/5 blur-3xl" />
           <div className="absolute top-0 right-0 w-72 h-72 rounded-full bg-indigo-600/4 blur-3xl" />
@@ -1214,7 +1159,7 @@ export default function Home() {
 
         <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6">
 
-          {/* Header */}
+          {}
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -1237,7 +1182,7 @@ export default function Home() {
             </p>
           </motion.div>
 
-          {/* City Cards Grid */}
+          {}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-10">
             {[
               { city: 'South Delhi', sub: 'Nehru Place', color: 'blue' },
@@ -1259,10 +1204,10 @@ export default function Home() {
                 whileHover={{ y: -4, scale: 1.03 }}
                 className="relative group bg-[#0A1329] border border-slate-800/80 rounded-2xl p-4 flex flex-col items-center text-center cursor-default overflow-hidden hover:border-blue-500/30 transition-colors duration-300 shadow-sm hover:shadow-blue-500/10 hover:shadow-lg"
               >
-                {/* Subtle card glow on hover */}
+                {}
                 <div className="absolute inset-0 bg-gradient-to-b from-blue-600/0 to-blue-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl" />
 
-                {/* Ping dot */}
+                {}
                 <div className="relative mb-3">
                   <span className="flex h-2.5 w-2.5">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-50" style={{ animationDelay: `${idx * 300}ms` }} />
@@ -1280,7 +1225,7 @@ export default function Home() {
             ))}
           </div>
 
-          {/* Bottom strip — live coverage badge + CTA */}
+          {}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}

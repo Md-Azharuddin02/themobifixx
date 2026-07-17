@@ -76,7 +76,8 @@ export default function Header() {
     setSearchResults([]);
   };
 
-  // Removed Auth state helpers
+  
+
 
   const handleNavClick = (sectionId: string) => {
     setIsMobileMenuOpen(false);
@@ -95,7 +96,7 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between py-3 gap-4">
           
-          {/* Logo & Mobile Menu Toggle */}
+          {}
           <div className="flex-shrink-0 flex items-center gap-4">
             <button 
               className="lg:hidden p-2 text-slate-300 hover:text-blue-400 transition-colors" 
@@ -109,7 +110,7 @@ export default function Header() {
             </Link>
           </div>
 
-          {/* Desktop Navigation Links */}
+          {}
           <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
             <button 
               onClick={() => handleNavClick('home')} 
@@ -137,7 +138,7 @@ export default function Header() {
               Contact Us
             </Link>
 
-            {/* Expanding Search Bar (Desktop) */}
+            {}
             <div className="relative flex items-center" ref={searchRef}>
               <AnimatePresence>
                 {isSearchOpen && (
@@ -175,7 +176,7 @@ export default function Header() {
                 <Search className="h-4 w-4" />
               </button>
 
-              {/* Search Results Dropdown */}
+              {}
               {isSearchOpen && searchQuery.trim() && searchResults.length > 0 && (
                 <div className="absolute top-full right-0 mt-2 w-72 bg-[#0a1329] border border-slate-800 rounded-2xl shadow-2xl overflow-hidden z-50">
                   <ul className="divide-y divide-slate-800 max-h-80 overflow-y-auto">
@@ -202,9 +203,9 @@ export default function Header() {
               )}
             </div>
 
-            {/* Auth section removed */}
+            {}
 
-            {/* CTA Call button */}
+            {}
             <a
               href="tel:+919310112994"
               className="bg-transparent border border-blue-600/40 text-blue-400 hover:bg-blue-600/10 text-xs font-bold px-4 py-2 rounded-full transition-all shadow-md flex items-center gap-1.5"
@@ -212,7 +213,7 @@ export default function Header() {
               <Phone className="w-3.5 h-3.5" /> Call
             </a>
 
-            {/* CTA Book Repair button */}
+            {}
             <Link
               to="/contact?tab=booking"
               className="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-5 py-2.5 rounded-full transition-all shadow-md flex items-center gap-1.5"
@@ -221,9 +222,9 @@ export default function Header() {
             </Link>
           </nav>
 
-          {/* Mobile Right Quick Action Block */}
+          {}
           <div className="flex lg:hidden items-center gap-2">
-            {/* Minimal Search Button for Mobile */}
+            {}
             <div className="relative" ref={searchRef}>
               <AnimatePresence>
                 {isSearchOpen && (
@@ -265,7 +266,7 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Mobile Menu Overlay */}
+      {}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div 
@@ -294,7 +295,7 @@ export default function Header() {
                 </button>
               </div>
 
-              {/* Mobile Search Results */}
+              {}
               {searchQuery.trim() && searchResults.length > 0 && (
                 <div className="px-4 py-2 border-b border-slate-800 max-h-48 overflow-y-auto bg-[#0a1329]/40">
                   <ul className="divide-y divide-slate-850">
@@ -341,7 +342,7 @@ export default function Header() {
                 </Link>
 
                 <div className="pt-6 space-y-3">
-                  {/* Auth section removed */}
+                  {}
                   
                   <Link
                     to="/contact?tab=booking"
