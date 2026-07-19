@@ -50,6 +50,7 @@ const getDeviceCategory = (brandId: string, modelId: string): string => {
   if (brand === 'samsung') {
     if (model.includes('tab')) return 'tablet';
     if (model.includes('watch')) return 'watch';
+    if (model.includes('book') || model.includes('laptop')) return 'laptop';
     return 'mobile';
   }
   if (brand === 'lenovo') {
@@ -232,10 +233,47 @@ export default function BrandPage() {
               </span>
             </Link>
           ))}
+
+          {/* Other / Not Listed Model card */}
+          {filteredDevices.length > 0 && (
+            <a
+              href={`https://wa.me/919310112994?text=${encodeURIComponent(
+                `Hi! 👋 I have a ${formattedBrand} ${category || 'device'} that is not listed on your website model list. I would like to get a repair quote and book doorstep service.`
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-[#0A1329] border border-slate-800/80 rounded-2xl p-4 sm:p-5 flex flex-col items-center justify-center gap-4 hover:border-green-500/80 hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 group cursor-pointer shadow-lg"
+            >
+              <div className="w-20 h-24 sm:w-24 sm:h-28 relative overflow-hidden rounded-xl bg-slate-900/60 border border-slate-800/60 flex items-center justify-center p-2.5 group-hover:-translate-y-1 transition-transform duration-300">
+                <div className="relative w-full h-full flex items-center justify-center">
+                  <div className="w-10 h-10 bg-green-500/10 border border-green-500/20 rounded-full flex items-center justify-center text-green-400">
+                    <MessageSquare className="w-5 h-5" />
+                  </div>
+                </div>
+              </div>
+              <span className="text-xs font-bold text-slate-300 text-center group-hover:text-green-400 transition-colors leading-relaxed">
+                Other / Not Listed
+              </span>
+            </a>
+          )}
+
           {filteredDevices.length === 0 && (
-            <div className="col-span-full text-center py-16 bg-[#0A1329] border border-slate-800/60 rounded-3xl">
-              <h3 className="font-bold text-slate-300">No models found</h3>
-              <p className="text-sm text-slate-500 mt-1">Try adjusting your search for "{searchQuery}".</p>
+            <div className="col-span-full text-center py-16 bg-[#0A1329] border border-slate-800/60 rounded-3xl flex flex-col items-center justify-center gap-4">
+              <div>
+                <h3 className="font-bold text-slate-300">No models found</h3>
+                <p className="text-sm text-slate-500 mt-1">Try adjusting your search for "{searchQuery}".</p>
+              </div>
+              <a
+                href={`https://wa.me/919310112994?text=${encodeURIComponent(
+                  `Hi! 👋 My ${formattedBrand} ${category || 'device'} is not listed under keyword "${searchQuery}". I would like to get a repair quote and check availability.`
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-2 flex items-center gap-2 bg-[#25D366] hover:bg-[#20ba56] text-white font-bold py-3 px-6 rounded-full shadow-lg transition-all text-xs cursor-pointer"
+              >
+                <MessageSquare className="w-4 h-4" />
+                <span>Contact via WhatsApp</span>
+              </a>
             </div>
           )}
         </div>

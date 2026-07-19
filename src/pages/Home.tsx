@@ -44,7 +44,7 @@ const TECHNICIANS = [
   },
   {
     name: "Suhail Malik",
-    profileImage: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783000124/WhatsApp_Image_2026-07-01_at_5.52.22_PM_jtrlcf.jpg?w=400&auto=format&q=60",
+    profileImage: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1784318197/WhatsApp_Image_2026-07-18_at_1.26.24_AM_klquk8.jpg?w=400&auto=format&q=60",
     experience: "10 Years Experience"
   },
   {
@@ -921,7 +921,7 @@ export default function Home() {
                     <input
                       type="text"
                       required
-                      placeholder="E.g., Hamza Khan"
+                      placeholder="E.g., Tusar Singh"
                       value={newReviewName}
                       onChange={e => setNewReviewName(e.target.value)}
                       className="w-full bg-[#050B18] border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
@@ -1003,7 +1003,7 @@ export default function Home() {
 
           {}
           <div className="border-t border-slate-800/80 pt-16 max-w-6xl mx-auto">
-            <h3 className="font-bold text-xl text-white text-left mb-8 px-1">Latest Customer Reviews ({testimonials.length})</h3>
+            <h3 className="font-bold text-xl text-white text-left mb-8 px-1">Latest Customer Reviews</h3>
 
             {testimonials.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

@@ -14,6 +14,9 @@
     <link rel="alternate" href="https://themobifixx.com/" hreflang="en-IN" />
     <link rel="alternate" href="https://themobifixx.com/" hreflang="x-default" />
 
+    <!-- ═══ GOOGLE SITE VERIFICATION ══════════════════════════════════════════ -->
+    <meta name="google-site-verification" content="YOUR_GSC_VERIFICATION_CODE" />
+
     <!-- ═══ GEO TARGETING ══════════════════════════════════════════════════════ -->
     <meta name="geo.region" content="IN-DL" />
     <meta name="geo.placename" content="Nehru Place, New Delhi, India" />
@@ -64,9 +67,11 @@
     <link rel="dns-prefetch" href="https://maps.google.com" />
 
     <!-- ═══ FAVICONS / ICONS ══════════════════════════════════════════════════ -->
+    <link rel="shortcut icon" href="/favicon.ico" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
 
@@ -161,6 +166,36 @@
         ]
       }
     ]
+    </script>
+
+    <!-- ═══ CODE PROTECTION ═══════════════════════════════════════════════════ -->
+    <script>
+      (function() {
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') return;
+        
+        // Disable Right-Click (Context Menu)
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        
+        // Disable Shortcuts (F12, Ctrl+Shift+I/J/C, Cmd+Opt+I/J/C, View Source)
+        document.addEventListener('keydown', e => {
+          if (
+            e.key === 'F12' ||
+            (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
+            (e.metaKey && e.altKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
+            (e.ctrlKey && (e.key === 'u' || e.key === 'U')) ||
+            (e.metaKey && (e.key === 'u' || e.key === 'U'))
+          ) {
+            e.preventDefault();
+          }
+        });
+
+        // Anti-debugging loop to pause execution if DevTools is opened
+        setInterval(() => {
+          (function() {
+            return false;
+          }['constructor']('debugger')());
+        }, 200);
+      })();
     </script>
   </head>
   <body>

@@ -1,6 +1,7 @@
 {
-  "name": "LapyZone",
-  "description": "Premium device repair and refurbished technology services in Delhi NCR. Specializing in laptops, MacBooks, tablets, and mobile devices.",
+  "name": "TheMobifixx",
+  "description": "Delhi NCR's #1 mobile & laptop repair center at Nehru Place. Chip-level repairs, 90-day warranty & free doorstep pickup.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
+  
