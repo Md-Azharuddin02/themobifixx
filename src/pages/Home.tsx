@@ -33,6 +33,7 @@ const GALLERY_ITEMS = [
   { type: 'video', title: 'Premium Battery Replacement', desc: 'Replacing old batteries with new premium cells to keep 100% battery life.', src: 'https://res.cloudinary.com/dzhsxv2wq/video/upload/v1783496186/battery_yinoig.mp4' },
   { type: 'video', title: 'Board Diagnostics', desc: 'Finding short circuits on boards using heat cameras.', src: 'https://res.cloudinary.com/dzhsxv2wq/video/upload/v1783496186/ss_eju8jp.mp4' },
   { type: 'video', title: 'Water Damage Repair', desc: 'Cleaning the phone board and removing water completely.', src: 'https://res.cloudinary.com/dzhsxv2wq/video/upload/v1783496186/iphoneb_dpu1ot.mp4' },
+  { type: 'video', title: '', desc: 'Fixing mobile motherboard', src: 'https://res.cloudinary.com/dzhsxv2wq/video/upload/v1784669031/WhatsApp_Video_2026-07-21_at_10.12.46_PM_xwr6mt.mp4'}
 ];
 
 const TECHNICIANS = [
@@ -45,27 +46,32 @@ const TECHNICIANS = [
   {
     name: "Suhail Malik",
     profileImage: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1784318197/WhatsApp_Image_2026-07-18_at_1.26.24_AM_klquk8.jpg?w=400&auto=format&q=60",
-    experience: "10 Years Experience"
+    experience: "9 Years Experience"
   },
   {
     name: "Nikhil Chandel",
     profileImage: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783000124/WhatsApp_Image_2026-07-01_at_3.27.54_PM_sgcynd.jpg?w=400&auto=format&q=60",
-    experience: "10 Years Experience"
+    experience: "9 Years Experience"
   },
   {
     name: "Arif Sheikh",
     profileImage: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783976762/WhatsApp_Image_2026-07-13_at_6.57.03_PM_uwkuip.jpg?w=400&auto=format&q=60",
-    experience: "11 Years Experience"
+    experience: "9 Years Experience"
   },
   {
     name: "Rishabh Singh Rajput",
     profileImage: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783976762/WhatsApp_Image_2026-07-13_at_6.57.21_PM_khakxv.jpg?w=400&auto=format&q=60",
-    experience: "10 Years Experience"
+    experience: "9 Years Experience"
   },
   {
     name: "Sunny Sharma",
     profileImage: "https://res.cloudinary.com/dzhsxv2wq/image/upload/v1784055120/WhatsApp_Image_2026-07-15_at_12.21.46_AM_n2jpdx.jpg?w=400&auto=format&q=60",
-    experience: "10 Years Experience"
+    experience: "9 Years Experience"
+  },
+  {
+    name: 'Asif Alam',
+    profileImage: 'https://res.cloudinary.com/dzhsxv2wq/image/upload/v1784668866/WhatsApp_Image_2026-07-21_at_9.54.21_PM_urqehu.jpg?w=400&auto=format&q=60',
+    experience: '10 Years Experience'
   }
 ];
 
@@ -547,6 +553,7 @@ export default function Home() {
               { title: 'Doorstep Repair Service', icon: <MapPin className="text-blue-400 w-8 h-8" /> },
               { title: 'Quick Turnaround Time', icon: <Clock className="text-blue-400 w-8 h-8" /> },
               { title: 'Trusted By Thousands of Customers', icon: <Users className="text-blue-400 w-8 h-8" /> },
+              { title: '6 Month Warranty', icon: <Calendar className="text-blue-400 w-8 h-8" /> }
 
             ].map((feature, i) => (
               <motion.div
@@ -647,7 +654,7 @@ export default function Home() {
                     TheMobifixx Shop
                   </p>
                   <p className="text-[10px] text-slate-500 font-medium">
-                    {idx === 0 ? "5.4K views • 2 weeks ago" : idx === 1 ? "3.1K views • 3 weeks ago" : idx === 2 ? "1.9K views • 1 month ago" : "900+ views • 1 month ago"}
+                    {idx === 0 ? "5.4K views • 2 weeks ago" : idx === 1 ? "3.1K views • 3 weeks ago" : idx === 2 ? "1.9K views • 1 month ago" : "900+ views • 1 week ago"}
                   </p>
                 </div>
               </div>

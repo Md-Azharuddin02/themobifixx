@@ -25,19 +25,13 @@ export default function Footer() {
               <h4 className="text-slate-200 font-bold text-xs uppercase tracking-wider">Quick Links</h4>
               <ul className="space-y-2.5 text-sm text-slate-300">
                 <li>
-                  <a href="https://www.facebook.com/themobifixx" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition-colors flex items-center gap-2">
-                    <Facebook className="w-4 h-4 text-blue-500" />
-                    <span>Facebook</span>
-                  </a>
-                </li>
-                <li>
-                  <a href="https://www.instagram.com/themobifixx" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition-colors flex items-center gap-2">
+                  <a href="https://www.instagram.com/The_mobifixx" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition-colors flex items-center gap-2">
                     <Instagram className="w-4 h-4 text-pink-500" />
                     <span>Instagram</span>
                   </a>
                 </li>
                 <li>
-                  <a href="https://www.youtube.com/@themobifixx" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition-colors flex items-center gap-2">
+                  <a href="https://youtube.com/@themobifixx?si=dO7H-G9hVmKg2i7E" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition-colors flex items-center gap-2">
                     <Youtube className="w-4 h-4 text-red-500" />
                     <span>YouTube</span>
                   </a>
@@ -108,7 +102,7 @@ export default function Footer() {
           </p>
           <p className="text-xs text-slate-400 leading-relaxed max-w-4xl mx-auto mt-2">
             “TheMobifixx is an independent third-party repair service provider and is not affiliated with or endorsed by any brand mentioned on this website.
-            Please contact us for confirmation of service availability in your locality.”
+            Please contact us for confirmation of service availability in your locality. Service Charges 499Rs”
           </p>
         </div>
       </div>

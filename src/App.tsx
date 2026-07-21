@@ -77,7 +77,7 @@ function FloatingCTAs() {
 
       {}
       <motion.a
-        href="https://www.instagram.com/themobifixx"
+        href="https://www.instagram.com/The_mobifixx"
         target="_blank"
         rel="noopener noreferrer"
         className="w-12 h-12 bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] text-white rounded-full flex items-center justify-center shadow-lg hover:shadow-xl relative group cursor-pointer transition-all duration-200"
