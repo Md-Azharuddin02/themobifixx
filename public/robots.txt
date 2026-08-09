@@ -1,12 +1,19 @@
 User-agent: *
 Allow: /
 
-# Block non-public routes
+# Exclude Private & Non-Public Routes
+Disallow: /admin
+Disallow: /dashboard
+Disallow: /login
+Disallow: /signup
+Disallow: /account
+Disallow: /api
+Disallow: /tracking
 Disallow: /404
 Disallow: /.well-known/
 
-# Sitemap
+# Sitemap Location
 Sitemap: https://themobifixx.com/sitemap.xml
 
-# Crawl-delay for polite crawling
-Crawl-delay: 5
+# Politeness Crawl Delay
+Crawl-delay: 2

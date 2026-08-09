@@ -5,6 +5,7 @@ import { Smartphone, Laptop, Tablet, Watch, ChevronDown, CheckCircle2, Shield, W
 import { TextScramble } from '../pages/TextScramble';
 import { SparklesText } from '../pages/SparklesText';
 import { Testimonial } from '../types';
+import { getSavedReviews, saveUserReview } from '../utils/reviewManager';
 
 const HERO_SLIDES = [
   {
@@ -76,33 +77,7 @@ const TECHNICIANS = [
 ];
 
 const DEFAULT_TESTIMONIALS: Testimonial[] = [
-  {
-    id: "review-1",
-    customerName: "Amit Sharma",
-    rating: 5,
-    review: "Excellent doorstep service! The technician Prince repaired my iPhone screen in just 30 minutes right in front of me. Highly recommended!",
-    image: "",
-    deviceType: "iPhone 15 Pro Max",
-    createdAt: "2026-07-10"
-  },
-  {
-    id: "review-2",
-    customerName: "Sneha Reddy",
-    rating: 5,
-    review: "Super convenient laptop logic board repair. Picked up and delivered back within 24 hours. Very professional and transparent pricing.",
-    image: "",
-    deviceType: "MacBook Pro M2",
-    createdAt: "2026-07-08"
-  },
-  {
-    id: "review-3",
-    customerName: "Rohan Verma",
-    rating: 4,
-    review: "Excellent response time. Booked a service online and the technician arrived within the scheduled slot. The watch battery replacement works great.",
-    image: "",
-    deviceType: "Samsung Watch 6",
-    createdAt: "2026-07-05"
-  }
+  
 ];
 
 export default function Home() {
@@ -110,22 +85,19 @@ export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const [testimonials, setTestimonials] = useState<Testimonial[]>(() => {
-    const saved = localStorage.getItem('themobifixx_reviews');
-    if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch (e) {
-        console.error(e);
-      }
-    }
-    return DEFAULT_TESTIMONIALS;
+    return getSavedReviews(DEFAULT_TESTIMONIALS);
   });
 
   useEffect(() => {
-    localStorage.setItem('themobifixx_reviews', JSON.stringify(testimonials));
-  }, [testimonials]);
-
-  
+    const handleReviewAdded = (event: Event) => {
+      const customEvent = event as CustomEvent<Testimonial>;
+      if (customEvent.detail) {
+        setTestimonials(prev => [customEvent.detail, ...prev.filter(r => r.id !== customEvent.detail.id)]);
+      }
+    };
+    window.addEventListener('themobifixx_review_added', handleReviewAdded);
+    return () => window.removeEventListener('themobifixx_review_added', handleReviewAdded);
+  }, []);
 
   const [newReviewName, setNewReviewName] = useState('');
   const [newReviewDevice, setNewReviewDevice] = useState('');
@@ -150,7 +122,8 @@ export default function Home() {
       createdAt: new Date().toISOString().split('T')[0]
     };
 
-    setTestimonials(prev => [newTestimonial, ...prev]);
+    const updatedList = saveUserReview(newTestimonial, DEFAULT_TESTIMONIALS);
+    setTestimonials(updatedList);
     setReviewSuccess(true);
     setNewReviewName('');
     setNewReviewDevice('');

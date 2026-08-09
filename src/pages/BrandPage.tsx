@@ -75,11 +75,12 @@ const getDeviceCategory = (brandId: string, modelId: string): string => {
   return 'mobile';
 };
 
-export default function BrandPage() {
-  const { brandId } = useParams();
+export default function BrandPage({ brandOverride, categoryOverride }: { brandOverride?: string; categoryOverride?: string } = {}) {
+  const { brandId: paramsBrandId } = useParams();
+  const brandId = brandOverride || paramsBrandId;
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const category = searchParams.get('category');
+  const category = categoryOverride || searchParams.get('category');
   const [searchQuery, setSearchQuery] = useState('');
 
   

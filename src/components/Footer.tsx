@@ -56,17 +56,17 @@ export default function Footer() {
           <div>
             <h4 className="text-slate-200 font-bold mb-6 text-sm uppercase tracking-wider">Our Services</h4>
             <ul className="space-y-3 text-sm text-slate-300">
-              <li><Link to="/contact?tab=booking&device=mobile" className="hover:text-blue-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span> Mobile Repair</Link></li>
-              <li><Link to="/contact?tab=booking&device=laptop" className="hover:text-blue-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span> Laptop Repair</Link></li>
-              <li><Link to="/contact?tab=booking&device=tablet" className="hover:text-blue-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span> Tablet Repair</Link></li>
-              <li><Link to="/contact?tab=booking&device=watches" className="hover:text-blue-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span> Watches Repair</Link></li>
-              <li><Link to="/contact?tab=booking&device=macbook" className="hover:text-blue-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span> Macbook Repair</Link></li>
+              <li><Link to="/services/mobile-repair" className="hover:text-blue-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span> Mobile Phone Repair</Link></li>
+              <li><Link to="/services/laptop-repair" className="hover:text-blue-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span> Laptop Motherboard Repair</Link></li>
+              <li><Link to="/services/macbook-repair" className="hover:text-blue-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span> MacBook Repair</Link></li>
+              <li><Link to="/services/tablet-repair" className="hover:text-blue-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span> Tablet &amp; iPad Repair</Link></li>
+              <li><Link to="/services/doorstep-repair" className="hover:text-blue-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span> Doorstep Service</Link></li>
               <li>
                 <button
                   onClick={() => setIsDesktopModalOpen(true)}
                   className="hover:text-blue-400 transition-colors flex items-center gap-2 cursor-pointer bg-transparent border-0 p-0 text-slate-300 text-sm focus:outline-none"
                 >
-                  <span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span> Desktop Repair
+                  <span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span> Desktop &amp; iMac Repair
                 </button>
               </li>
             </ul>
