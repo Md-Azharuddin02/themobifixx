@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { Search, Menu, X, Phone, Wrench } from 'lucide-react';
+import { Search, Menu, X, Phone, Wrench, Calendar } from 'lucide-react';
 import { DEVICE_MODELS } from '../components/devices';
 
 interface SearchResult {
@@ -11,7 +11,11 @@ interface SearchResult {
   image?: string;
 }
 
-export default function Header() {
+interface HeaderProps {
+  onOpenConsultation?: () => void;
+}
+
+export default function Header({ onOpenConsultation }: HeaderProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -205,7 +209,7 @@ export default function Header() {
 
             {}
 
-            {}
+            {/* Call Direct */}
             <a
               href="tel:+919310112994"
               className="bg-transparent border border-blue-600/40 text-blue-400 hover:bg-blue-600/10 text-xs font-bold px-4 py-2 rounded-full transition-all shadow-md flex items-center gap-1.5"
@@ -213,10 +217,18 @@ export default function Header() {
               <Phone className="w-3.5 h-3.5" /> Call
             </a>
 
-            {}
+            {/* Book Free Consultation CTA Button */}
+            <button
+              onClick={onOpenConsultation}
+              className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold px-5 py-2.5 rounded-full transition-all shadow-lg hover:shadow-blue-500/25 flex items-center gap-1.5 cursor-pointer ring-2 ring-blue-400/30"
+            >
+              <Calendar className="w-3.5 h-3.5" /> Book a free consultation
+            </button>
+
+            {/* Book Repair Link */}
             <Link
               to="/contact?tab=booking"
-              className="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-5 py-2.5 rounded-full transition-all shadow-md flex items-center gap-1.5"
+              className="bg-slate-800/80 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold px-4 py-2 rounded-full transition-all shadow-md flex items-center gap-1.5"
             >
               <Wrench className="w-3.5 h-3.5" /> Book Repair
             </Link>
@@ -342,12 +354,20 @@ export default function Header() {
                 </Link>
 
                 <div className="pt-6 space-y-3">
-                  {}
-                  
+                  <button
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      if (onOpenConsultation) onOpenConsultation();
+                    }}
+                    className="block w-full text-center py-2.5 text-xs font-bold bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full hover:bg-blue-500 transition-colors shadow-md"
+                  >
+                    📅 Book a free consultation
+                  </button>
+
                   <Link
                     to="/contact?tab=booking"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="block w-full text-center py-2.5 text-xs font-bold bg-blue-600 text-white rounded-full hover:bg-blue-500 transition-colors"
+                    className="block w-full text-center py-2.5 text-xs font-bold bg-slate-800 text-slate-200 border border-slate-700 rounded-full hover:bg-slate-700 transition-colors"
                   >
                     Book Repair
                   </Link>

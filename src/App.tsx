@@ -13,6 +13,7 @@ import DeviceRepairPage from './pages/DeviceRepairPage';
 import CategoryPage from './CategoryPage';
 import Services from './pages/Services';
 import ServiceDetail from './pages/ServiceDetail';
+import ConsultationBookingModal from './components/ConsultationBookingModal';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -140,12 +141,14 @@ function FloatingCTAs() {
 }
 
 export default function App() {
+  const [isConsultationOpen, setIsConsultationOpen] = useState(false);
+
   return (
     <BrowserRouter>
       <SEOManager />
       <ScrollToTop />
       <div className="min-h-screen flex flex-col justify-between font-sans bg-[#050B18] text-slate-200 antialiased">
-        <Header />
+        <Header onOpenConsultation={() => setIsConsultationOpen(true)} />
 
         <main className="flex-grow">
           <Routes>
@@ -191,6 +194,11 @@ export default function App() {
         <FloatingCTAs />
 
         <Footer />
+
+        <ConsultationBookingModal 
+          isOpen={isConsultationOpen} 
+          onClose={() => setIsConsultationOpen(false)} 
+        />
       </div>
     </BrowserRouter>
   );
