@@ -1,103 +1,130 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'motion/react';
-import { Search, Cpu, ArrowRight, ShieldCheck, CheckCircle2 } from 'lucide-react';
-import { ServiceCategory } from '../types';
+import { ArrowRight, Search } from 'lucide-react';
+import type { ServiceCategory } from '../types';
+import { SERVICE_CATALOG_DATA } from '../content/services';
+import PageHeader from '../components/ui/PageHeader';
+
+type Filter = 'all' | 'repairs' | 'upgrades' | 'software';
+type Status = 'loading' | 'ready' | 'error';
+
+const FILTERS: { id: Filter; name: string; slugs?: string[] }[] = [
+  { id: 'all', name: 'All Services' },
+  { id: 'repairs', name: 'Device Repairs', slugs: ['laptop-repair', 'macbook-repair', 'mobile-repair', 'tablet-repair', 'motherboard-repair', 'keyboard-repair'] },
+  { id: 'upgrades', name: 'Hardware Upgrades', slugs: ['ssd-upgrade', 'ram-upgrade', 'battery-replacement', 'screen-replacement'] },
+  { id: 'software', name: 'Software & Maintenance', slugs: ['deep-cleaning', 'software-installation', 'virus-removal', 'data-recovery', 'doorstep-repair'] },
+];
+
+// Used when /api/services is unavailable: the service pages that already exist on the site.
+const LOCAL_SERVICES = Object.entries(SERVICE_CATALOG_DATA).map(([slug, s]) => ({ slug, title: s.title, description: s.description }));
 
 export default function Services() {
-    const [services, setServices] = useState<ServiceCategory[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [selectedFilter, setSelectedFilter] = useState<'all' | 'repairs' | 'upgrades' | 'software'>('all');
-    const [searchQuery, setSearchQuery] = useState('');
+  const [services, setServices] = useState<ServiceCategory[]>([]);
+  const [status, setStatus] = useState<Status>('loading');
+  const [filter, setFilter] = useState<Filter>('all');
+  const [query, setQuery] = useState('');
 
-    useEffect(() => {
-        const fetchServices = async () => {
-            try {
-                const res = await fetch('/api/services');
-                const data = await res.json();
-                setServices(data);
-            } catch (err) {
-                console.error('Failed fetching services:', err);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchServices();
-    }, []);
+  useEffect(() => {
+    const controller = new AbortController();
+    (async () => {
+      try {
+        const res = await fetch('/api/services', { signal: controller.signal });
+        if (!res.ok || !res.headers.get('content-type')?.includes('application/json')) throw new Error(`Unexpected response ${res.status}`);
+        const data = await res.json();
+        setServices(Array.isArray(data) ? data : []);
+        setStatus('ready');
+      } catch (err) {
+        if (controller.signal.aborted) return;
+        console.error('Failed fetching services:', err);
+        setStatus('error');
+      }
+    })();
+    return () => controller.abort();
+  }, []);
 
-    const getFilteredServices = () => {
-        return services.filter((s) => {
-            const matchesSearch = s.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                s.description.toLowerCase().includes(searchQuery.toLowerCase());
-            if (!matchesSearch) return false;
-            if (selectedFilter === 'all') return true;
-            if (selectedFilter === 'repairs') {
-                return ['laptop-repair', 'macbook-repair', 'mobile-repair', 'tablet-repair', 'motherboard-repair', 'keyboard-repair'].includes(s.slug);
-            }
-            if (selectedFilter === 'upgrades') {
-                return ['ssd-upgrade', 'ram-upgrade', 'battery-replacement', 'screen-replacement'].includes(s.slug);
-            }
-            if (selectedFilter === 'software') {
-                return ['deep-cleaning', 'software-installation', 'virus-removal', 'data-recovery', 'doorstep-repair'].includes(s.slug);
-            }
-            return true;
-        });
-    };
+  const source = status === 'ready' && services.length > 0 ? services : LOCAL_SERVICES;
+  const q = query.toLowerCase();
+  const slugs = FILTERS.find((f) => f.id === filter)?.slugs;
+  const visible = source.filter(
+    (s) => (s.title.toLowerCase().includes(q) || s.description.toLowerCase().includes(q)) && (!slugs || slugs.includes(s.slug)),
+  );
 
-    const filters = [
-        { id: 'all', name: 'All Services' },
-        { id: 'repairs', name: 'Device Repairs' },
-        { id: 'upgrades', name: 'Hardware Upgrades' },
-        { id: 'software', name: 'Software & Maintenance' },
-    ];
-
-    return (
-        <div className="bg-[#050B18] min-h-screen font-sans text-slate-200 pb-20">
-
-            {}
-            <section className="bg-[#030712]/50 py-16 sm:py-20 border-b border-slate-800/80" id="services-header">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
-
-                    <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight">
-                        Our Professional Catalog
-                    </h1>
-                    <p className="text-sm sm:text-base text-slate-400 max-w-2xl mx-auto leading-relaxed">
-                        Discover our complete list of premium diagnostics, chip-level logic board repairs, and speed optimizations in Delhi NCR.
-                    </p>
-
-                    {}
-                    <div className="max-w-lg mx-auto relative mt-4">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 pointer-events-none" />
-                        <input
-                            type="text"
-                            placeholder="Search services... (e.g., Motherboard, Battery, Screen)"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full pl-12 pr-4 py-3.5 border border-slate-800 rounded-full bg-[#0A1329] text-slate-100 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 shadow-lg transition-all placeholder-slate-500"
-                        />
-                    </div>
-                </div>
-            </section>
-
-            {}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-
-                {}
-                <div className="flex flex-wrap items-center justify-center gap-3 mb-10">
-                    {filters.map((f) => (
-                        <button
-                            key={f.id}
-                            onClick={() => setSelectedFilter(f.id as any)}
-                            className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-colors cursor-pointer ${selectedFilter === f.id
-                                    ? 'bg-blue-600 text-white shadow-md'
-                                    : 'bg-[#0A1329] text-slate-350 border border-slate-800 hover:border-blue-500 hover:text-white'
-                                }`}
-                        >
-                            {f.name}
-                        </button>
-                    ))}
-                </div>
-            </div>
+  return (
+    <>
+      <PageHeader
+        crumbs={[{ label: 'Home', to: '/' }, { label: 'Services' }]}
+        title="Our Professional Catalog"
+        intro="Discover our complete list of premium diagnostics, chip-level logic board repairs, and speed optimizations in Delhi NCR."
+      >
+        <div className="relative mt-6 max-w-lg">
+          <label htmlFor="service-search" className="sr-only">Search services</label>
+          <Search className="pointer-events-none absolute left-3.5 top-3.5 h-4 w-4 text-fg-subtle" aria-hidden="true" />
+          <input
+            id="service-search"
+            type="search"
+            placeholder="Search services, e.g. Battery"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            className="field-input pl-10"
+          />
         </div>
-    );
+      </PageHeader>
+
+      <div className="container-page py-10 md:py-14">
+        <div className="mb-8 flex flex-wrap gap-2" role="group" aria-label="Filter services">
+          {FILTERS.map((f) => (
+            <button
+              key={f.id}
+              type="button"
+              onClick={() => setFilter(f.id)}
+              aria-pressed={filter === f.id}
+              className={`btn btn-sm shrink-0 ${filter === f.id ? 'btn-dark' : 'btn-outline'}`}
+            >
+              {f.name}
+            </button>
+          ))}
+        </div>
+
+        {status === 'loading' ? (
+          <ul className="grid gap-3" aria-busy="true" aria-label="Loading services">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <li key={i} className="card p-5">
+                <div className="h-5 w-1/3 animate-pulse rounded-sm bg-paper-2" />
+                <div className="mt-3 h-4 w-2/3 animate-pulse rounded-sm bg-paper-2" />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <>
+            {status === 'error' && (
+              <p className="mb-6 text-sm text-fg-muted" role="status">
+                The live catalogue couldn't be loaded, so here are our service pages.
+              </p>
+            )}
+            {visible.length > 0 ? (
+              <ul className="grid gap-3 md:grid-cols-2">
+                {visible.map((s) => (
+                  <li key={s.slug}>
+                    <Link to={`/services/${s.slug}`} className="card group flex h-full items-start gap-4 p-5 transition-colors hover:border-accent md:p-6">
+                      <span className="min-w-0 flex-1">
+                        <h2 className="text-lg font-bold group-hover:text-accent">{s.title}</h2>
+                        <p className="mt-1 line-clamp-3 text-sm text-fg-muted">{s.description}</p>
+                      </span>
+                      <ArrowRight className="mt-1 h-5 w-5 shrink-0 text-fg-subtle group-hover:text-accent" aria-hidden="true" />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <div className="card px-6 py-12 text-center">
+                <h2 className="text-xl font-semibold">No services match your search</h2>
+                <p className="mt-2 text-sm text-fg-muted">Try a different keyword or filter, or ask us directly.</p>
+                <Link to="/contact?tab=inquiry" className="btn btn-dark mt-6">Send an inquiry</Link>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    </>
+  );
 }

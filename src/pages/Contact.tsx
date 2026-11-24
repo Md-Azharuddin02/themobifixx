@@ -1,178 +1,130 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Phone, MessageSquare, Clock, MapPin } from 'lucide-react';
+import { Clock, MapPin, Phone } from 'lucide-react';
 import { InquiryForm, RepairBookingForm } from '../components/LeadForms';
+import { CONTACT, WA_GENERAL_MESSAGE, waLink } from '../config/contact';
+import PageHeader from '../components/ui/PageHeader';
+import { WhatsAppIcon } from '../components/ui/primitives';
+
+type Tab = 'booking' | 'inquiry';
 
 export default function Contact() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const activeTabParam = searchParams.get('tab') === 'inquiry' ? 'inquiry' : 'booking';
   const selectedTech = searchParams.get('tech') || '';
-
-  const [activeTab, setActiveTab] = useState<'booking' | 'inquiry'>(activeTabParam);
+  const [activeTab, setActiveTab] = useState<Tab>(searchParams.get('tab') === 'inquiry' ? 'inquiry' : 'booking');
 
   useEffect(() => {
-    if (searchParams.get('tab') === 'inquiry') {
-      setActiveTab('inquiry');
-    } else {
-      setActiveTab('booking');
-    }
+    setActiveTab(searchParams.get('tab') === 'inquiry' ? 'inquiry' : 'booking');
   }, [searchParams]);
 
-  const changeTab = (tab: 'booking' | 'inquiry') => {
+  const changeTab = (tab: Tab) => {
     setActiveTab(tab);
     setSearchParams({ tab });
   };
 
-  const branches = [
-    {
-      city: 'Nehru Place Market (Shop Location)',
-      address: '28°32\'55.5"N 77°15\'03.6"E, Near Blue Dart, Nehru Place Market, New Delhi',
-      landmark: 'Near Blue Dart',
-      phone: '+91 9310112994',
-    }
+  const tabs: { id: Tab; label: string }[] = [
+    { id: 'booking', label: 'Book Repair' },
+    { id: 'inquiry', label: 'General Inquiry' },
   ];
 
   return (
-    <div className="bg-[#050B18] min-h-screen font-sans text-slate-200 pb-20" id="contact-us">
-
-      {}
-      <section className="bg-[#030712]/50 py-16 sm:py-20 border-b border-slate-800/80 text-center" id="contact-header">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight">
-            Get Connected With Us
-          </h1>
-          <p className="text-sm sm:text-base text-slate-400 max-w-2xl mx-auto leading-relaxed">
-            Book a premium doorstep repair or reach out with a custom logic board query. We respond within 15 minutes.
-          </p>
+    <div id="contact-us">
+      <PageHeader
+        crumbs={[{ label: 'Home', to: '/' }, { label: 'Contact' }]}
+        title="Get Connected With Us"
+        intro="Book a repair, ask a question, or reach us directly. We respond within 15 minutes."
+      >
+        <div className="mt-5 grid grid-cols-2 gap-3 sm:flex">
+          <a href={CONTACT.phoneHref} className="btn btn-primary">
+            <Phone className="h-4 w-4" aria-hidden="true" /> Call us
+          </a>
+          <a href={waLink(WA_GENERAL_MESSAGE)} target="_blank" rel="noopener noreferrer" className="btn btn-whatsapp">
+            <WhatsAppIcon /> WhatsApp
+          </a>
         </div>
-      </section>
+      </PageHeader>
 
-      {}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-
-          {}
-          <div className="lg:col-span-5 space-y-6">
-
-            {}
-            <div className="bg-[#0A1329] border border-slate-800 rounded-2xl p-6 md:p-8 space-y-6 shadow-xl">
-              <h3 className="font-bold text-white text-lg border-b border-slate-800 pb-3">Emergency Support</h3>
-              <ul className="space-y-6">
-                <li className="flex items-start gap-4">
-                  <div className="w-10 h-10 bg-blue-600/10 text-blue-400 rounded-xl flex items-center justify-center shrink-0 border border-blue-900/30">
-                    <Phone className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <span className="text-slate-450 text-[10px] block uppercase font-bold tracking-widest mb-1">Direct Hotline</span>
-                    <a
-                      href="tel:+919310112994"
-                      className="text-white font-bold text-lg hover:text-blue-450 transition-colors"
-                    >
-                      +91 9310112994
-                    </a>
-                  </div>
-                </li>
-                <li className="flex items-start gap-4">
-                  <div className="w-10 h-10 bg-blue-600/10 text-blue-400 rounded-xl flex items-center justify-center shrink-0 border border-blue-900/30">
-                    <MessageSquare className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <span className="text-slate-450 text-[10px] block uppercase font-bold tracking-widest mb-1">WhatsApp Support</span>
-                    <a
-                      href="https://wa.me/919310112994?text=Hi,%20I%20would%20like%20to%20know%2520more%20about%20your%20repair%20services.%20Please%20assist%20me."
-                      target="_blank" rel="noopener noreferrer"
-                      className="text-white font-bold text-lg hover:text-blue-450 transition-colors"
-                    >
-                      Chat with us
-                    </a>
-                  </div>
-                </li>
-                <li className="flex items-start gap-4">
-                  <div className="w-10 h-10 bg-blue-600/10 text-blue-400 rounded-xl flex items-center justify-center shrink-0 border border-blue-900/30">
-                    <Clock className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <span className="text-slate-450 text-[10px] block uppercase font-bold tracking-widest mb-1">Business Hours</span>
-                    <span className="text-sm text-slate-200 font-bold block mb-0.5">Mon - Sun: 9:00 AM - 11:59 PM</span>
-                    <span className="text-xs text-slate-400 block">Emergency helpline is active 24/7.</span>
-                  </div>
-                </li>
-              </ul>
-            </div>
-
-            {}
-            <div className="space-y-4">
-              <h3 className="font-bold text-white text-lg px-1">Service Centre Addresses</h3>
-              <div className="space-y-3">
-                {branches.map((b, idx) => (
-                  <div key={idx} className="bg-[#0A1329] border border-slate-800 rounded-2xl p-6 shadow-xl space-y-3 hover:border-slate-750 transition-colors">
-                    <div className="flex items-center gap-2 text-white font-bold text-sm">
-                      <MapPin className="w-5 h-5 text-blue-450" />
-                      <span>{b.city}</span>
-                    </div>
-                    <p className="text-sm text-slate-400 leading-relaxed">{b.address}</p>
-                    <div className="bg-[#0E1B38] p-3 rounded-lg border border-slate-800 mt-2 text-slate-300">
-                       <span className="text-xs block mb-1"><strong>Landmark:</strong> {b.landmark}</span>
-                       <span className="text-xs block"><strong>Hotline:</strong> {b.phone}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {}
-            <div className="bg-[#0A1329] border border-slate-800 rounded-2xl p-5 space-y-4 shadow-xl" id="interactive-map-panel">
-              <h4 className="font-bold text-white text-sm">Location Map</h4>
-              <div className="relative rounded-xl overflow-hidden h-[240px] bg-slate-900 border border-slate-800">
-                <iframe title="TheMobifixx Nehru Place Location"
-                  src="https://maps.google.com/maps?q=28.54875,77.25100&z=17&output=embed"
-                  className="w-full h-full border-0 absolute inset-0 opacity-80 hover:opacity-100 transition-opacity" loading="lazy" allowFullScreen />
-              </div>
-            </div>
+      <div className="container-page grid gap-10 py-8 md:py-14 lg:grid-cols-12">
+        <div className="min-w-0 lg:col-span-7 lg:order-2">
+          <div role="tablist" aria-label="Contact form type" className="mb-4 grid grid-cols-2 rounded-xl bg-paper-2 p-1 sm:inline-grid">
+            {tabs.map((t) => (
+              <button
+                key={t.id}
+                role="tab"
+                type="button"
+                id={`contact-tab-${t.id}`}
+                aria-selected={activeTab === t.id}
+                aria-controls="contact-panel"
+                onClick={() => changeTab(t.id)}
+                className={`min-h-11 rounded-lg px-5 text-sm font-bold transition-colors ${activeTab === t.id ? 'bg-white text-fg shadow-sm' : 'text-fg-muted hover:text-fg'}`}
+              >
+                {t.label}
+              </button>
+            ))}
           </div>
 
-          {}
-          <div className="lg:col-span-7">
-            
-            {}
-            <div className="flex p-1 bg-[#0A1329] border border-slate-800 rounded-full shadow-xl mb-8 max-w-md mx-auto">
-              <button
-                onClick={() => changeTab('booking')}
-                className={`flex-1 py-2.5 text-sm font-bold rounded-full transition-colors ${
-                  activeTab === 'booking' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-400 hover:text-slate-200'
-                }`}
-              >
-                Book Repair
-              </button>
-              <button
-                onClick={() => changeTab('inquiry')}
-                className={`flex-1 py-2.5 text-sm font-bold rounded-full transition-colors ${
-                  activeTab === 'inquiry' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-400 hover:text-slate-200'
-                }`}
-              >
-                General Inquiry
-              </button>
-            </div>
+          <div id="contact-panel" role="tabpanel" aria-labelledby={`contact-tab-${activeTab}`} className="card p-5 md:p-8">
+            {activeTab === 'booking' ? (
+              <>
+                {selectedTech && (
+                  <div className="mb-6 flex items-center justify-between rounded-xl bg-accent-soft px-4 py-3 text-sm font-semibold">
+                    <span>Requesting Technician: {selectedTech}</span>
+                    <button type="button" onClick={() => setSearchParams({ tab: 'booking' })} className="link-underline text-danger">Clear</button>
+                  </div>
+                )}
+                <RepairBookingForm />
+              </>
+            ) : (
+              <InquiryForm />
+            )}
+          </div>
+        </div>
 
-            {}
-            <div className="bg-[#0A1329] border border-slate-800 rounded-2xl p-6 md:p-8 shadow-xl">
-              {activeTab === 'booking' ? (
+        <aside className="min-w-0 space-y-4 lg:col-span-5 lg:order-1">
+          <div className="card p-5 md:p-6">
+            <h2 className="text-lg font-bold">Emergency Support</h2>
+            <dl className="mt-4 space-y-4">
+              <div className="flex gap-3">
+                <Phone className="mt-0.5 h-5 w-5 shrink-0 text-accent" aria-hidden="true" />
                 <div>
-                  {selectedTech && (
-                    <div className="bg-blue-950/40 border border-blue-900/50 rounded-xl p-4 mb-6 text-sm font-bold text-blue-300 flex items-center justify-between">
-                      <span>Requesting Technician: {selectedTech}</span>
-                      <button onClick={() => setSearchParams({ tab: 'booking' })} className="text-rose-450 hover:underline">Clear</button>
-                    </div>
-                  )}
-                  <RepairBookingForm />
+                  <dt className="text-sm text-fg-muted">Direct Hotline</dt>
+                  <dd><a href={CONTACT.phoneHref} className="text-lg font-bold hover:text-accent">{CONTACT.phoneDisplay}</a></dd>
                 </div>
-              ) : (
-                <InquiryForm />
-              )}
-            </div>
-
+              </div>
+              <div className="flex gap-3">
+                <WhatsAppIcon className="mt-0.5 h-5 w-5 text-whatsapp" />
+                <div>
+                  <dt className="text-sm text-fg-muted">WhatsApp Support</dt>
+                  <dd><a href={waLink(WA_GENERAL_MESSAGE)} target="_blank" rel="noopener noreferrer" className="text-lg font-bold hover:text-accent">Chat with us</a></dd>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <Clock className="mt-0.5 h-5 w-5 shrink-0 text-accent" aria-hidden="true" />
+                <div>
+                  <dt className="text-sm text-fg-muted">Business Hours</dt>
+                  <dd className="font-semibold">{CONTACT.hours}</dd>
+                  <dd className="text-sm text-fg-muted">{CONTACT.hoursNote}</dd>
+                </div>
+              </div>
+            </dl>
           </div>
-        </div>
+
+          <div className="card overflow-hidden">
+            <div className="p-5 md:p-6">
+              <h2 className="text-lg font-bold">Service Centre Address</h2>
+              <p className="mt-3 flex gap-3 font-semibold">
+                <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-accent" aria-hidden="true" /> Nehru Place Market (Shop Location)
+              </p>
+              <p className="mt-1 pl-8 text-sm text-fg-muted">
+                {CONTACT.coordinates}, {CONTACT.addressLine}
+              </p>
+              <p className="mt-1 pl-8 text-sm text-fg-muted">Landmark: {CONTACT.landmark}</p>
+            </div>
+            <div className="relative h-60 bg-paper-2">
+              <iframe title="TheMobifixx Nehru Place Location" src={CONTACT.mapEmbed} className="absolute inset-0 h-full w-full border-0" loading="lazy" allowFullScreen />
+            </div>
+          </div>
+        </aside>
       </div>
     </div>
   );
