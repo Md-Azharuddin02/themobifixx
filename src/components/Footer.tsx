@@ -1,238 +1,146 @@
-import React, { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import { Facebook, Instagram, Phone, Mail, Youtube, X, Monitor, MessageSquare, ArrowRight } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import { ArrowRight, ArrowUpRight, Instagram, Monitor, Phone, Youtube } from 'lucide-react';
+import { CONTACT, WA_GENERAL_MESSAGE, waLink } from '../config/contact';
+import Dialog from './ui/Dialog';
+import { WhatsAppIcon } from './ui/primitives';
+
+const SERVICES = [
+  { label: 'Mobile Phone Repair', to: '/services/mobile-repair' },
+  { label: 'Laptop Motherboard Repair', to: '/services/laptop-repair' },
+  { label: 'MacBook Repair', to: '/services/macbook-repair' },
+  { label: 'Tablet & iPad Repair', to: '/services/tablet-repair' },
+  { label: 'Doorstep Service', to: '/services/doorstep-repair' },
+];
+
+function ColumnTitle({ children }: { children: ReactNode }) {
+  return <h2 className="mb-2 font-display text-base font-bold text-white">{children}</h2>;
+}
+
+function DesktopOption({ icon, title, sub, ...rest }: { icon: ReactNode; title: string; sub: string } & ({ to: string; onClick: () => void } | { href: string; external?: boolean })) {
+  const body = (
+    <>
+      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-line bg-paper text-fg">{icon}</span>
+      <span className="min-w-0 flex-1">
+        <span className="block text-sm font-semibold text-fg">{title}</span>
+        <span className="block text-sm text-fg-muted">{sub}</span>
+      </span>
+      <ArrowRight className="h-4 w-4 shrink-0 text-fg-subtle transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+    </>
+  );
+  const cls = 'group flex items-center gap-3 border-b border-line py-3.5 last:border-0';
+  if ('to' in rest) return <Link to={rest.to} onClick={rest.onClick} className={cls}>{body}</Link>;
+  return (
+    <a href={rest.href} className={cls} {...(rest.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
+      {body}
+    </a>
+  );
+}
 
 export default function Footer() {
-  const currentYear = new Date().getFullYear();
-  const [isDesktopModalOpen, setIsDesktopModalOpen] = useState(false);
+  const [desktopOpen, setDesktopOpen] = useState(false);
+  const year = new Date().getFullYear();
+  const linkCls = 'inline-flex min-h-10 items-center gap-2 text-sm text-white/85 transition-colors hover:text-white';
 
   return (
-    <footer className="bg-[#02050c] text-slate-400 font-sans border-t border-slate-800/80">
-      <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 items-start">
-
-          {}
-          <div className="space-y-6">
-            <Link to="/">
-              <img src='https://res.cloudinary.com/dzhsxv2wq/image/upload/v1784028396/WhatsApp_Image_2026-07-14_at_4.48.50_PM_1_rfu6xy.jpg' alt="TheMobifixx" className="h-16 w-auto rounded-xl" />
-            </Link>
-            <p className="text-sm leading-relaxed text-slate-300">
-              India's most trusted doorstep repair service for smartphones, tablets, laptops, and smartwatches. We bring the repair center to you.
-            </p>
-            
-            <div className="space-y-3.5 pt-4 border-t border-slate-900">
-              <h4 className="text-slate-200 font-bold text-xs uppercase tracking-wider">Quick Links</h4>
-              <ul className="space-y-2.5 text-sm text-slate-300">
-                <li>
-                  <a href="https://www.instagram.com/The_mobifixx" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition-colors flex items-center gap-2">
-                    <Instagram className="w-4 h-4 text-pink-500" />
-                    <span>Instagram</span>
-                  </a>
-                </li>
-                <li>
-                  <a href="https://youtube.com/@themobifixx?si=dO7H-G9hVmKg2i7E" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition-colors flex items-center gap-2">
-                    <Youtube className="w-4 h-4 text-red-500" />
-                    <span>YouTube</span>
-                  </a>
-                </li>
-                <li>
-                  <a href="tel:+919310112994" className="hover:text-blue-400 transition-colors flex items-center gap-2">
-                    <Phone className="w-4 h-4 text-green-500" />
-                    <span>+91 9310112994</span>
-                  </a>
-                </li>
-                <li>
-                  <a href="mailto:themobifixx@gmail.com" className="hover:text-blue-400 transition-colors flex items-center gap-2">
-                    <Mail className="w-4 h-4 text-blue-400" />
-                    <span>themobifixx@gmail.com</span>
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          {/* Services */}
+    <footer className="band">
+      <div className="container-page grid grid-cols-2 gap-x-6 gap-y-9 py-12 md:py-16 lg:grid-cols-12">
+        <div className="col-span-2 space-y-6 lg:col-span-5">
           <div>
-            <h4 className="text-slate-200 font-bold mb-6 text-sm uppercase tracking-wider">Our Services</h4>
-            <ul className="space-y-3 text-sm text-slate-300">
-              <li><Link to="/services/mobile-repair" className="hover:text-blue-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span> Mobile Phone Repair</Link></li>
-              <li><Link to="/services/laptop-repair" className="hover:text-blue-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span> Laptop Motherboard Repair</Link></li>
-              <li><Link to="/services/macbook-repair" className="hover:text-blue-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span> MacBook Repair</Link></li>
-              <li><Link to="/services/tablet-repair" className="hover:text-blue-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span> Tablet &amp; iPad Repair</Link></li>
-              <li><Link to="/services/doorstep-repair" className="hover:text-blue-400 transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span> Doorstep Service</Link></li>
-              <li>
-                <button
-                  onClick={() => setIsDesktopModalOpen(true)}
-                  className="hover:text-blue-400 transition-colors flex items-center gap-2 cursor-pointer bg-transparent border-0 p-0 text-slate-300 text-sm focus:outline-none"
-                >
-                  <span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span> Desktop &amp; iMac Repair
-                </button>
-              </li>
-            </ul>
+            <ColumnTitle>Store Address</ColumnTitle>
+            <address className="text-sm not-italic leading-relaxed text-white/85">
+              {CONTACT.addressLine}
+              <br />({CONTACT.coordinates})
+            </address>
           </div>
-
-          {/* Google Maps Embed */}
-          <div className="space-y-4">
-            <h4 className="text-slate-200 font-bold text-sm uppercase tracking-wider">Our Location</h4>
-            <p className="text-sm text-slate-300">
-              (28°32'55.5"N 77°15'03.6"E ), Near Blue Dart, Nehru Place Market, New Delhi
+          <div>
+            <ColumnTitle>Contact</ColumnTitle>
+            <p className="text-sm leading-relaxed text-white/85">
+              <a href={CONTACT.phoneHref} className="hover:underline">{CONTACT.phoneDisplay}</a>
+              <br />
+              <a href={`mailto:${CONTACT.email}`} className="hover:underline">{CONTACT.email}</a>
+              <br />
+              {CONTACT.hours}
             </p>
-            <div className="w-full h-48 md:h-56 rounded-2xl overflow-hidden border border-slate-800 shadow-lg relative bg-[#0A1329]">
-              <iframe
-                title="TheMobifixx Shop Location"
-                src="https://maps.google.com/maps?q=28.54875,77.25100&z=17&output=embed"
-                className="absolute inset-0 w-full h-full border-0"
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-              />
-            </div>
           </div>
+          <div className="flex gap-3">
+            <a href={CONTACT.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="flex h-10 w-10 items-center justify-center rounded-lg hover:bg-white/10"><Instagram className="h-5 w-5" aria-hidden="true" /></a>
+            <a href={CONTACT.youtube} target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="flex h-10 w-10 items-center justify-center rounded-lg hover:bg-white/10"><Youtube className="h-5 w-5" aria-hidden="true" /></a>
+          </div>
+        </div>
 
+        <div className="col-span-2 lg:col-span-3">
+          <ColumnTitle>Services</ColumnTitle>
+          <ul>
+            {SERVICES.map((s) => (
+              <li key={s.to}><Link to={s.to} className={linkCls}>{s.label}</Link></li>
+            ))}
+            <li>
+              <button type="button" onClick={() => setDesktopOpen(true)} className={`${linkCls} cursor-pointer text-left`}>
+                Desktop &amp; iMac Repair
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <div className="lg:col-span-2">
+          <ColumnTitle>Company</ColumnTitle>
+          <ul>
+            <li><Link to="/about" className={linkCls}>About Us</Link></li>
+            <li><Link to="/contact" className={linkCls}>Contact Us</Link></li>
+            <li><Link to="/terms-and-conditions" className={linkCls}>Terms &amp; Conditions</Link></li>
+            <li><Link to="/privacy-policy" className={linkCls}>Privacy Policy</Link></li>
+          </ul>
+        </div>
+
+        <div className="lg:col-span-2">
+          <ColumnTitle>Support</ColumnTitle>
+          <ul>
+            <li><Link to="/contact?tab=booking" className={linkCls}>Book Repair</Link></li>
+            <li><Link to="/faq" className={linkCls}>FAQ</Link></li>
+            <li><a href={waLink(WA_GENERAL_MESSAGE)} target="_blank" rel="noopener noreferrer" className={linkCls}>WhatsApp Us</a></li>
+            <li><a href={CONTACT.phoneHref} className={linkCls}>Call Us</a></li>
+          </ul>
         </div>
       </div>
 
-      {}
-      <div className="border-t border-slate-900 bg-[#010307]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center">
-          <h5 className="font-bold text-sm text-slate-200 mb-4">Disclaimer</h5>
-          <p className="text-xs text-slate-400 leading-relaxed max-w-4xl mx-auto">
+      <div className="border-t border-white/15">
+        <div className="container-page py-6 text-xs leading-relaxed text-white/70">
+          <p>
             All trademarks, logos, and brand names are the property of their respective owners and are used for identification purposes only.
-          </p>
-          <p className="text-xs text-slate-400 leading-relaxed max-w-4xl mx-auto mt-2">
             “TheMobifixx is an independent third-party repair service provider and is not affiliated with or endorsed by any brand mentioned on this website.
             Please contact us for confirmation of service availability in your locality. Service Charges 499Rs”
           </p>
         </div>
       </div>
 
-      {}
-      <div className="border-t border-slate-900 bg-black">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col md:flex-row items-center justify-between text-xs text-slate-500 gap-4">
-          <p>© {currentYear} TheMobifixx. All rights reserved. | Designed & Developed by <a href="https://www.arbormit.com" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 font-bold transition-all underline decoration-dashed decoration-blue-500/50 underline-offset-4 hover:decoration-solid">Arbormit.com</a></p>
-          <div className="flex gap-6">
-            <Link to="/privacy-policy" className="hover:text-slate-300 transition-colors">Privacy Policy</Link>
-            <Link to="/terms-and-conditions" className="hover:text-slate-300 transition-colors">Terms of Service</Link>
-          </div>
-        </div>
+      <div className="container-page flex flex-col items-center gap-3 pb-24 pt-2 text-center text-xs text-white/75 md:pb-8">
+        <Link to="/" aria-label="TheMobifixx home" className="rounded-xl bg-ink px-2.5 py-1.5">
+          <img src={CONTACT.logo} alt="TheMobifixx" loading="lazy" className="h-8 w-auto" />
+        </Link>
+        <p>
+          © {year} TheMobifixx. All rights reserved. | Designed &amp; Developed by{' '}
+          <a href="https://www.arbormit.com" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2">Arbormit.com</a>
+        </p>
       </div>
-      {}
-      <AnimatePresence>
-        {isDesktopModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-sm p-4">
-            {}
-            <div className="absolute inset-0 cursor-default" onClick={() => setIsDesktopModalOpen(false)}></div>
-            
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              transition={{ duration: 0.3, ease: 'easeOut' }}
-              className="bg-[#0A1329] border border-slate-800 rounded-3xl w-full max-w-xl overflow-hidden relative shadow-2xl p-6 md:p-8 space-y-6 z-10"
-            >
-              {}
-              <button
-                onClick={() => setIsDesktopModalOpen(false)}
-                className="absolute top-4 right-4 text-slate-400 hover:text-white bg-slate-900/60 p-2 rounded-full border border-slate-800 hover:border-slate-700 transition-all cursor-pointer focus:outline-none"
-              >
-                <X className="w-5 h-5" />
-              </button>
 
-              {}
-              <div className="flex items-start gap-4 text-left">
-                <div className="w-12 h-12 rounded-2xl bg-blue-600/10 border border-blue-900/30 flex items-center justify-center text-blue-400 shrink-0">
-                  <Monitor className="w-6 h-6" />
-                </div>
-                <div className="space-y-1">
-                  <h3 className="text-xl md:text-2xl font-bold text-white tracking-tight">Desktop &amp; iMac Repair</h3>
-                  <p className="text-xs md:text-sm text-slate-400 leading-relaxed">
-                    Premium doorstep and carry-in repair services for iMac, Mac Mini, Custom Gaming PCs, and Workstations.
-                  </p>
-                </div>
-              </div>
-
-              {}
-              <div className="space-y-3.5">
-                {}
-                <Link
-                  to="/category/desktop"
-                  onClick={() => setIsDesktopModalOpen(false)}
-                  className="flex items-center justify-between p-4 bg-[#0E1B38] border border-slate-800 rounded-2xl hover:border-blue-500 hover:bg-[#122347] transition-all group shadow-sm text-left"
-                >
-                  <div className="flex items-center gap-3.5">
-                    <div className="w-10 h-10 rounded-xl bg-blue-600/10 border border-blue-900/20 flex items-center justify-center text-blue-400 group-hover:bg-blue-600/20 group-hover:text-blue-300 transition-colors shrink-0">
-                      <Monitor className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <span className="text-sm font-bold text-white block">Select Desktop Model</span>
-                      <span className="text-xs text-slate-450">iMac, Mac Mini, or specific brand PC models</span>
-                    </div>
-                  </div>
-                  <ArrowRight className="w-5 h-5 text-slate-500 group-hover:text-blue-400 group-hover:translate-x-1 transition-all shrink-0" />
-                </Link>
-
-                {}
-                <Link
-                  to="/contact?tab=booking&device=desktop"
-                  onClick={() => setIsDesktopModalOpen(false)}
-                  className="flex items-center justify-between p-4 bg-[#0E1B38] border border-slate-800 rounded-2xl hover:border-blue-500 hover:bg-[#122347] transition-all group shadow-sm text-left"
-                >
-                  <div className="flex items-center gap-3.5">
-                    <div className="w-10 h-10 rounded-xl bg-blue-600/10 border border-blue-900/20 flex items-center justify-center text-blue-400 group-hover:bg-blue-600/20 group-hover:text-blue-300 transition-colors shrink-0">
-                      <ArrowRight className="w-5 h-5 rotate-[-45deg]" />
-                    </div>
-                    <div>
-                      <span className="text-sm font-bold text-white block">Book Doorstep Pickup</span>
-                      <span className="text-xs text-slate-450">Fill details directly to schedule technician pickup</span>
-                    </div>
-                  </div>
-                  <ArrowRight className="w-5 h-5 text-slate-500 group-hover:text-blue-400 group-hover:translate-x-1 transition-all shrink-0" />
-                </Link>
-
-                {}
-                <a
-                  href="https://wa.me/919310112994?text=Hi,%20I%20would%20like%20to%20get%20a%20repair%20quote%20for%20my%20Desktop%20PC%20/%20iMac.%20Please%20assist%20me."
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-between p-4 bg-emerald-950/10 border border-emerald-900/30 rounded-2xl hover:border-emerald-500 hover:bg-emerald-900/10 transition-all group shadow-sm text-left"
-                >
-                  <div className="flex items-center gap-3.5">
-                    <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">
-                      <MessageSquare className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <span className="text-sm font-bold text-white block flex items-center gap-1.5">
-                        WhatsApp Live Chat
-                        <span className="bg-emerald-500 text-black text-[9px] font-black uppercase px-1.5 py-0.5 rounded-full shrink-0 animate-pulse">Live</span>
-                      </span>
-                      <span className="text-xs text-slate-450">Chat with a technician for custom builds or hardware issues</span>
-                    </div>
-                  </div>
-                  <ArrowRight className="w-5 h-5 text-slate-500 group-hover:text-emerald-400 group-hover:translate-x-1 transition-all shrink-0" />
-                </a>
-
-                {}
-                <a
-                  href="tel:+919310112994"
-                  className="flex items-center justify-between p-4 bg-[#0E1B38] border border-slate-800 rounded-2xl hover:border-blue-500 hover:bg-[#122347] transition-all group shadow-sm text-left"
-                >
-                  <div className="flex items-center gap-3.5">
-                    <div className="w-10 h-10 rounded-xl bg-blue-600/10 border border-blue-900/20 flex items-center justify-center text-blue-400 group-hover:bg-blue-600/20 group-hover:text-blue-300 transition-colors shrink-0">
-                      <Phone className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <span className="text-sm font-bold text-white block">Call Nehru Place Center</span>
-                      <span className="text-xs text-slate-450">+91 9310112994 — Speak with an engineer</span>
-                    </div>
-                  </div>
-                  <ArrowRight className="w-5 h-5 text-slate-500 group-hover:text-blue-400 group-hover:translate-x-1 transition-all shrink-0" />
-                </a>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+      <Dialog open={desktopOpen} onClose={() => setDesktopOpen(false)} title="Desktop & iMac Repair" className="max-w-lg rounded-2xl bg-card p-6 md:p-8">
+        <p className="-mt-2 mb-4 text-sm leading-relaxed text-fg-muted">
+          Premium doorstep and carry-in repair services for iMac, Mac Mini, Custom Gaming PCs, and Workstations.
+        </p>
+        <div>
+          <DesktopOption to="/category/desktop" onClick={() => setDesktopOpen(false)} icon={<Monitor className="h-5 w-5" aria-hidden="true" />} title="Select Desktop Model" sub="iMac, Mac Mini, or specific brand PC models" />
+          <DesktopOption to="/contact?tab=booking&device=desktop" onClick={() => setDesktopOpen(false)} icon={<ArrowUpRight className="h-5 w-5" aria-hidden="true" />} title="Book Doorstep Pickup" sub="Fill details directly to schedule technician pickup" />
+          <DesktopOption
+            href={waLink('Hi, I would like to get a repair quote for my Desktop PC / iMac. Please assist me.')}
+            external
+            icon={<WhatsAppIcon className="h-5 w-5 text-whatsapp" />}
+            title="WhatsApp Live Chat"
+            sub="Chat with a technician for custom builds or hardware issues"
+          />
+          <DesktopOption href={CONTACT.phoneHref} icon={<Phone className="h-5 w-5" aria-hidden="true" />} title="Call Nehru Place Center" sub={`${CONTACT.phoneDisplay} — Speak with an engineer`} />
+        </div>
+      </Dialog>
     </footer>
   );
 }

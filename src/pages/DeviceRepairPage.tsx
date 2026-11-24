@@ -1,8 +1,12 @@
 import { useState } from 'react';
-import { useParams, Link, useSearchParams } from 'react-router-dom';
-import { ChevronRight, Battery, Maximize, CircleDashed, Mic, Speaker, Wifi, Smartphone, ShieldCheck, Clock, MessageSquare, CheckCircle2, AlertTriangle, Cpu, HardDrive, Monitor, Keyboard, BatteryCharging, Settings, HelpCircle, Database } from 'lucide-react';
-
-
+import { useParams, useSearchParams } from 'react-router-dom';
+import {
+  Battery, BatteryCharging, Check, CircleDashed, Cpu, Database, HardDrive, HelpCircle, Keyboard, Maximize, Mic,
+  Monitor, Settings, Smartphone, Speaker, Wifi, X,
+} from 'lucide-react';
+import { waLink } from '../config/contact';
+import PageHeader from '../components/ui/PageHeader';
+import { WhatsAppIcon, type Crumb } from '../components/ui/primitives';
 
 const LAPTOP_SERVICES = [
   { id: 'laptop-screen', name: 'Screen Replacement', icon: Monitor },
@@ -16,8 +20,6 @@ const LAPTOP_SERVICES = [
   { id: 'laptop-other', name: 'Other Issues (Body/Hinges/Overheating)', icon: HelpCircle },
 ];
 
-
-
 const MOBILE_SERVICES = [
   { id: 'screen-replacement', name: 'Screen Replacement', icon: Maximize },
   { id: 'back-glass', name: 'Back Glass Replacement', icon: CircleDashed },
@@ -30,8 +32,6 @@ const MOBILE_SERVICES = [
   { id: 'mobile-other', name: 'Other Issue / Upgrades', icon: HelpCircle },
 ];
 
-
-
 const TABLET_SERVICES = [
   { id: 'tablet-screen', name: 'Screen Replacement', icon: Monitor },
   { id: 'tablet-battery', name: 'Battery Replacement', icon: Battery },
@@ -39,8 +39,6 @@ const TABLET_SERVICES = [
   { id: 'tablet-speaker', name: 'Speaker & Mic Repair', icon: Speaker },
   { id: 'tablet-other', name: 'Other Software or Hardware Issue', icon: HelpCircle },
 ];
-
-
 
 const WATCH_SERVICES = [
   { id: 'watch-screen', name: 'Screen & Touch Glass Repair', icon: Monitor },
@@ -50,8 +48,6 @@ const WATCH_SERVICES = [
   { id: 'watch-sensor', name: 'Sensor & Back Glass Repair', icon: HelpCircle },
   { id: 'watch-other', name: 'Other Watch Issues', icon: HelpCircle },
 ];
-
-
 
 const DESKTOP_SERVICES = [
   { id: 'desktop-screen', name: 'iMac Screen Replacement', icon: Monitor },
@@ -66,8 +62,6 @@ const DESKTOP_SERVICES = [
   { id: 'desktop-other', name: 'Other Hardware/Software Issue', icon: HelpCircle },
 ];
 
-
-
 const getDeviceType = (brand: string, model: string, queryCategory: string | null): 'laptop' | 'mobile' | 'tablet' | 'watch' | 'desktop' => {
   if (queryCategory) {
     const cat = queryCategory.toLowerCase();
@@ -79,19 +73,10 @@ const getDeviceType = (brand: string, model: string, queryCategory: string | nul
   }
   const b = brand.toLowerCase();
   const m = model.toLowerCase();
-  
-  if (
-    m.includes('desktop') ||
-    m.startsWith('imac') ||
-    m.startsWith('mac-mini') ||
-    m.startsWith('mac-studio') ||
-    m.includes('thinkcentre') ||
-    m.includes('ideacentre') ||
-    m.includes('optiplex')
-  ) {
+
+  if (m.includes('desktop') || m.startsWith('imac') || m.startsWith('mac-mini') || m.startsWith('mac-studio') || m.includes('thinkcentre') || m.includes('ideacentre') || m.includes('optiplex')) {
     return 'desktop';
   }
-  
   if (b === 'apple') {
     if (m.startsWith('macbook')) return 'laptop';
     if (m.startsWith('ipad')) return 'tablet';
@@ -103,219 +88,126 @@ const getDeviceType = (brand: string, model: string, queryCategory: string | nul
     if (m.includes('watch')) return 'watch';
     return 'mobile';
   }
-  if (b === 'lenovo') {
-    if (m.includes('tab')) return 'tablet';
-    return 'laptop';
-  }
-  if (b === 'asus') {
-    if (m.includes('phone')) return 'mobile';
-    return 'laptop';
-  }
-  if (b === 'microsoft') {
-    if (m.includes('laptop')) return 'laptop';
-    return 'tablet';
-  }
-  if (['xiaomi', 'realme', 'redmipad'].includes(b)) {
-    if (m.includes('pad')) return 'tablet';
-    return 'mobile';
-  }
-  if (['hp', 'dell', 'acer', 'intel', 'msi', 'nvidia', 'alienware'].includes(b)) {
-    return 'laptop';
-  }
+  if (b === 'lenovo') return m.includes('tab') ? 'tablet' : 'laptop';
+  if (b === 'asus') return m.includes('phone') ? 'mobile' : 'laptop';
+  if (b === 'microsoft') return m.includes('laptop') ? 'laptop' : 'tablet';
+  if (['xiaomi', 'realme', 'redmipad'].includes(b)) return m.includes('pad') ? 'tablet' : 'mobile';
+  if (['hp', 'dell', 'acer', 'intel', 'msi', 'nvidia', 'alienware'].includes(b)) return 'laptop';
   return 'mobile';
 };
+
+const SERVICES_BY_TYPE = { desktop: DESKTOP_SERVICES, laptop: LAPTOP_SERVICES, tablet: TABLET_SERVICES, watch: WATCH_SERVICES, mobile: MOBILE_SERVICES };
 
 export default function DeviceRepairPage() {
   const { brandId, modelId } = useParams();
   const [searchParams] = useSearchParams();
   const category = searchParams.get('category');
-  const [selectedRepairs, setSelectedRepairs] = useState<string[]>([]);
-  
-  const deviceType = getDeviceType(brandId || '', modelId || '', category);
-  const getActiveServices = () => {
-    switch (deviceType) {
-      case 'desktop': return DESKTOP_SERVICES;
-      case 'laptop': return LAPTOP_SERVICES;
-      case 'tablet': return TABLET_SERVICES;
-      case 'watch': return WATCH_SERVICES;
-      default: return MOBILE_SERVICES;
-    }
-  };
-  const activeServices = getActiveServices();
+  const [selected, setSelected] = useState<string[]>([]);
 
-  
+  const activeServices = SERVICES_BY_TYPE[getDeviceType(brandId || '', modelId || '', category)];
 
   const formattedBrand = brandId ? brandId.charAt(0).toUpperCase() + brandId.slice(1) : '';
-  const formattedModel = modelId ? modelId.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') : 'Device';
+  const formattedModel = modelId ? modelId.split('-').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') : 'Device';
 
-  const getWhatsAppLink = () => {
-    const selectedIssuesNames = selectedRepairs.map(id => activeServices.find(s => s.id === id)?.name).join(', ');
-    const text = `Hi, I want to repair my ${formattedBrand} ${formattedModel}. Issues: ${selectedIssuesNames || 'None selected'}`;
-    return `https://wa.me/919310112994?text=${encodeURIComponent(text)}`;
-  };
+  const selectedServices = selected.map((id) => activeServices.find((s) => s.id === id)).filter((s) => !!s);
+  const whatsappHref = waLink(
+    `Hi, I want to repair my ${formattedBrand} ${formattedModel}. Issues: ${selectedServices.map((s) => s.name).join(', ') || 'None selected'}`,
+  );
 
-  
+  const toggle = (id: string) => setSelected((prev) => (prev.includes(id) ? prev.filter((r) => r !== id) : [...prev, id]));
 
-  const toggleRepair = (id: string) => {
-    setSelectedRepairs(prev =>
-      prev.includes(id)
-        ? prev.filter(r => r !== id)
-        : [...prev, id]
-    );
-  };
+  const crumbs: Crumb[] = [
+    { label: 'Home', to: '/' },
+    ...(category
+      ? [{ label: category, to: `/category/${category}` }, { label: formattedBrand, to: `/brand/${brandId}?category=${category}` }]
+      : [{ label: 'Brands', to: '/?scroll=brands' }, { label: formattedBrand, to: `/brand/${brandId}` }]),
+    { label: formattedModel },
+  ];
+
+  const sendButton = (
+    <a
+      href={whatsappHref}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-disabled={selected.length === 0}
+      onClick={(e) => selected.length === 0 && e.preventDefault()}
+      className="btn btn-whatsapp w-full"
+    >
+      <WhatsAppIcon /> Send WhatsApp Inquiry
+    </a>
+  );
 
   return (
-    <div className="min-h-screen bg-[#050B18] pt-20 pb-12 text-slate-200">
-      {}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-xs font-medium text-slate-450 flex items-center gap-2 overflow-x-auto whitespace-nowrap">
-        <Link to="/" className="hover:text-blue-400 transition-colors">Home</Link>
-        <ChevronRight className="w-3 h-3 shrink-0" />
-        {category ? (
-          <>
-            <Link to={`/category/${category}`} className="hover:text-blue-400 transition-colors capitalize">{category}</Link>
-            <ChevronRight className="w-3 h-3 shrink-0" />
-            <Link to={`/brand/${brandId}?category=${category}`} className="hover:text-blue-400 transition-colors">{formattedBrand}</Link>
-          </>
-        ) : (
-          <>
-            <Link to="/#brands" className="hover:text-blue-400 transition-colors">Brands</Link>
-            <ChevronRight className="w-3 h-3 shrink-0" />
-            <Link to={`/brand/${brandId}`} className="hover:text-blue-400 transition-colors">{formattedBrand}</Link>
-          </>
-        )}
-        <ChevronRight className="w-3 h-3 shrink-0" />
-        <span className="text-slate-300">{formattedModel}</span>
+    <>
+      <PageHeader crumbs={crumbs} step={4} title={`${formattedModel} Repair Services`} intro="Select every issue your device has. We'll send the list to our technicians on WhatsApp." />
+
+      <div className="container-page grid gap-10 pb-32 pt-10 md:pt-14 lg:grid-cols-12 lg:pb-20">
+        <fieldset className="lg:col-span-8">
+          <legend className="mb-3 text-sm font-semibold text-fg-muted">{selected.length} of {activeServices.length} selected</legend>
+          <ul className="grid gap-3 sm:grid-cols-2">
+            {activeServices.map((service) => {
+              const isOn = selected.includes(service.id);
+              return (
+                <li key={service.id}>
+                  <label className={`card flex cursor-pointer items-center gap-4 p-4 transition-colors ${isOn ? '!border-accent bg-accent-soft' : 'hover:border-line-strong'}`}>
+                    <input type="checkbox" checked={isOn} onChange={() => toggle(service.id)} className="peer sr-only" />
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-[0.9375rem] font-medium text-fg">{service.name}</span>
+                      <span className="block text-sm text-fg-subtle">Doorstep Diagnostics &amp; Setup</span>
+                    </span>
+                    <span
+                      className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-md border peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-accent ${
+                        isOn ? 'border-accent bg-accent text-white' : 'border-line-strong bg-white'
+                      }`}
+                      aria-hidden="true"
+                    >
+                      {isOn && <Check className="h-3.5 w-3.5" />}
+                    </span>
+                  </label>
+                </li>
+              );
+            })}
+          </ul>
+        </fieldset>
+
+        <aside className="hidden lg:col-span-4 lg:block" aria-label="Your list of issues">
+          <div className="card sticky top-24 p-6">
+            <h2 className="text-lg font-semibold">Your List of Issues</h2>
+            <p className="mt-0.5 text-sm text-fg-subtle">{formattedBrand} · {formattedModel}</p>
+            <div className="my-5 min-h-32 border-y border-line py-3">
+              {selectedServices.length === 0 ? (
+                <div className="flex h-full flex-col items-center justify-center py-6 text-center">
+                  <Smartphone className="h-7 w-7 text-line-strong" aria-hidden="true" />
+                  <p className="mt-2 text-sm font-medium">No repairs selected yet.</p>
+                  <p className="mt-1 max-w-[14rem] text-sm text-fg-subtle">Choose one or more issues from the left to request diagnostics.</p>
+                </div>
+              ) : (
+                <ul>
+                  {selectedServices.map((s) => (
+                    <li key={s.id} className="flex items-center justify-between gap-3 py-2 text-sm">
+                      <span>{s.name}</span>
+                      <button type="button" onClick={() => toggle(s.id)} className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-fg-subtle hover:bg-paper-2 hover:text-fg" aria-label={`Remove ${s.name}`}>
+                        <X className="h-4 w-4" aria-hidden="true" />
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            {sendButton}
+          </div>
+        </aside>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-2">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-
-          {}
-          <div className="lg:col-span-8 space-y-8">
-
-            {}
-            <div>
-              <h1 className="text-2xl font-bold text-white mb-6">{formattedModel} Repair Services</h1>
-
-              {}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {activeServices.map(service => {
-                  const Icon = service.icon;
-                  const isSelected = selectedRepairs.includes(service.id);
-                  return (
-                    <button
-                      key={service.id}
-                      onClick={() => toggleRepair(service.id)}
-                      className={`flex items-center gap-4 p-4 rounded-2xl border text-left transition-all duration-200 cursor-pointer shadow-lg ${isSelected
-                        ? 'bg-blue-950/40 border-blue-500 ring-1 ring-blue-500/50'
-                        : 'bg-[#0A1329] border-slate-800 hover:border-blue-500/40'
-                        }`}
-                    >
-                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors border ${isSelected ? 'bg-blue-600 text-white border-blue-500' : 'bg-slate-900/60 text-slate-400 border-slate-800'
-                        }`}>
-                        <Icon className="w-5 h-5" />
-                      </div>
-                      <div className="flex-grow min-w-0">
-                        <div className={`font-bold text-sm ${isSelected ? 'text-white' : 'text-slate-200'}`}>
-                          {service.name}
-                        </div>
-                        <div className="text-slate-400 text-xs mt-1">
-                          Doorstep Diagnostics & Setup
-                        </div>
-                      </div>
-                      <div className="shrink-0 pl-2">
-                        {isSelected ? (
-                          <div className="w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center border border-blue-500">
-                            <CheckCircle2 className="w-3.5 h-3.5 text-white" />
-                          </div>
-                        ) : (
-                          <div className="w-5 h-5 border-2 border-slate-700 rounded-full" />
-                        )}
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-
-          {}
-          <div className="lg:col-span-4">
-            <div className="bg-[#0A1329] rounded-3xl p-6 shadow-2xl border border-slate-800 sticky top-28 flex flex-col h-auto lg:h-[calc(100vh-160px)] lg:min-h-[400px] lg:max-h-[600px]">
-
-              <div className="pb-4 border-b border-slate-800 shrink-0">
-                <h3 className="font-bold text-white flex items-center gap-2">
-                  <AlertTriangle className="w-5 h-5 text-blue-400" />
-                  Your List of Issues
-                </h3>
-                <p className="text-xs text-slate-450 mt-1 capitalize">{formattedBrand} • {formattedModel}</p>
-              </div>
-
-              {}
-              <div className="flex-grow overflow-y-auto py-4 space-y-4 pr-2 custom-scrollbar">
-                {selectedRepairs.length === 0 ? (
-                  <div className="h-full flex flex-col items-center justify-center text-center text-slate-500 space-y-2">
-                    <Smartphone className="w-8 h-8 opacity-20" />
-                    <p className="text-sm">No repairs selected yet.</p>
-                    <p className="text-xs max-w-[200px]">Choose one or more issues from the left to request diagnostics.</p>
-                  </div>
-                ) : (
-                  selectedRepairs.map(id => {
-                    const service = activeServices.find(s => s.id === id);
-                    if (!service) return null;
-                    return (
-                      <div key={id} className="flex justify-between items-start gap-4 text-sm bg-[#0E1B38] p-3 rounded-xl border border-slate-800">
-                        <span className="font-semibold text-slate-200 leading-snug">{service.name}</span>
-                        <span className="font-bold text-emerald-400 shrink-0">Selected</span>
-                      </div>
-                    );
-                  })
-                )}
-              </div>
-
-              {}
-              <div className="pt-4 border-t border-slate-800 shrink-0 space-y-4">
-                {}
-
-                {}
-
-                <a
-                  href={getWhatsAppLink()}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={(e) => {
-                    if (selectedRepairs.length === 0) {
-                      e.preventDefault();
-                    }
-                  }}
-                  className={`w-full py-4 rounded-xl flex items-center justify-center gap-2 font-bold transition-all shadow-lg text-center ${selectedRepairs.length > 0
-                    ? 'bg-[#25D366] hover:bg-[#20ba56] text-white cursor-pointer'
-                    : 'bg-slate-800 text-slate-505 cursor-not-allowed shadow-none pointer-events-none'
-                    }`}
-                >
-                  <MessageSquare className="w-4 h-4 text-white" />
-                  <span>Send WhatsApp Inquiry</span>
-                </a>
-
-                <div className="flex items-center justify-center gap-3 pt-2">
-                  <div className="flex items-center gap-1 text-[10px] text-slate-400 font-bold uppercase">
-                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-                    Data Secure
-                  </div>
-                  <div className="flex items-center gap-1 text-[10px] text-slate-400 font-bold uppercase">
-                    <Clock className="w-3.5 h-3.5 text-blue-450" />
-                    60 Min Repair
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
+      {/* Mobile summary bar */}
+      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-card/95 px-4 py-3 backdrop-blur lg:hidden">
+        <div className="mx-auto flex max-w-xl items-center gap-3">
+          <p className="min-w-0 flex-1 whitespace-nowrap text-sm" aria-live="polite">
+            <span className="font-semibold">{selected.length}</span> selected
+          </p>
+          <div className="shrink-0">{sendButton}</div>
         </div>
       </div>
-
-      {}
-    </div>
+    </>
   );
 }

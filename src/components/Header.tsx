@@ -1,382 +1,144 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'motion/react';
-import { Search, Menu, X, Phone, Wrench, Calendar } from 'lucide-react';
-import { DEVICE_MODELS } from '../components/devices';
-
-interface SearchResult {
-  id: string;
-  name: string;
-  brand: string;
-  image?: string;
-}
+import { useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Menu, Phone, Search, X } from 'lucide-react';
+import { CONTACT } from '../config/contact';
+import Dialog from './ui/Dialog';
+import DeviceSearch from './DeviceSearch';
 
 interface HeaderProps {
   onOpenConsultation?: () => void;
 }
 
+const NAV: { label: string; section?: string; to?: string }[] = [
+  { label: 'Home', section: 'home' },
+  { label: 'Book Repair', to: '/contact?tab=booking' },
+  { label: 'Services', section: 'services' },
+  { label: 'Contact Us', to: '/contact' },
+];
+
 export default function Header({ onOpenConsultation }: HeaderProps) {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
-
-  const menuRef = useRef<HTMLDivElement>(null);
-  const searchRef = useRef<HTMLDivElement>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const navigate = useNavigate();
+  const { pathname, search } = useLocation();
 
   useEffect(() => {
-    function handleScroll() {
-      if (window.scrollY > 50) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-    }
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    setSearchOpen(false);
+    setMenuOpen(false);
+  }, [pathname]);
 
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setIsMobileMenuOpen(false);
-      }
-    }
-    function handleClickOutsideSearch(event: MouseEvent) {
-      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
-        setIsSearchOpen(false);
-        setSearchQuery('');
-        setSearchResults([]);
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    document.addEventListener('mousedown', handleClickOutsideSearch);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('mousedown', handleClickOutsideSearch);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (searchQuery.trim().length > 1) {
-      const allDevices: SearchResult[] = [];
-      for (const brand in DEVICE_MODELS) {
-        DEVICE_MODELS[brand].forEach(device => {
-          if (device.name.toLowerCase().includes(searchQuery.toLowerCase())) {
-            allDevices.push({ ...device, brand });
-          }
-        });
-      }
-      setSearchResults(allDevices.slice(0, 10));
-    } else {
-      setSearchResults([]);
-    }
-  }, [searchQuery]);
-
-  const handleResultClick = () => {
-    setSearchQuery('');
-    setSearchResults([]);
-  };
-
-  
-
-
-  const handleNavClick = (sectionId: string) => {
-    setIsMobileMenuOpen(false);
+  const goToSection = (sectionId: string) => {
+    setMenuOpen(false);
     if (window.location.pathname !== '/') {
       navigate(`/?scroll=${sectionId}`);
     } else {
-      const el = document.getElementById(sectionId);
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
-      }
+      document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
+  const isActive = (item: (typeof NAV)[number]) =>
+    item.to ? pathname === item.to.split('?')[0] && (item.label === 'Book Repair') === new URLSearchParams(search).has('tab') : item.section === 'home' && pathname === '/';
+  const navItem = 'relative whitespace-nowrap py-2 text-[0.9375rem] font-medium text-fg transition-colors hover:text-accent';
+  const iconBtn = 'h-11 w-11 items-center justify-center rounded-xl text-fg hover:bg-paper-2';
+
   return (
-    <header className={`w-full font-sans sticky top-0 z-50 border-b border-slate-800/80 transition-all duration-100 ease-in-out ${isMobileMenuOpen ? 'bg-[#050B18]' : 'bg-[#050B18]/90 backdrop-blur-md'} ${isScrolled ? 'shadow-lg' : ''}`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between py-3 gap-4">
-          
-          {}
-          <div className="flex-shrink-0 flex items-center gap-4">
-            <button 
-              className="lg:hidden p-2 text-slate-300 hover:text-blue-400 transition-colors" 
-              onClick={() => setIsMobileMenuOpen(true)}
-              aria-label="Toggle Mobile Menu"
-            >
-              <Menu className="h-6 w-6" />
-            </button>
-            <Link to="/" className="flex items-center">
-              <img src='https://res.cloudinary.com/dzhsxv2wq/image/upload/v1784028396/WhatsApp_Image_2026-07-14_at_4.48.50_PM_1_rfu6xy.jpg' alt="TheMobifixx" className="h-12 sm:h-14 lg:h-16 w-auto object-contain rounded-xl" />
-            </Link>
-          </div>
+    <header className="sticky top-0 z-50 bg-white shadow-[0_1px_0_var(--color-line)]">
+      <div className="container-page flex h-16 items-center gap-2 md:h-[4.75rem]">
+        <Link to="/" className="mr-auto flex shrink-0 items-center rounded-xl bg-ink px-2.5 py-1.5" aria-label="TheMobifixx home">
+          <img src={CONTACT.logo} alt="TheMobifixx" width={1414} height={363} className="h-8 w-auto md:h-10" />
+        </Link>
 
-          {}
-          <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
-            <button 
-              onClick={() => handleNavClick('home')} 
-              className="text-sm font-bold text-slate-200 hover:text-blue-400 transition-colors cursor-pointer"
-            >
-              Home
-            </button>
-            <button 
-              onClick={() => handleNavClick('about-us')} 
-              className="text-sm font-bold text-slate-200 hover:text-blue-400 transition-colors cursor-pointer"
-            >
-              About Us
-            </button>
-            <button 
-              onClick={() => handleNavClick('brands')} 
-              className="text-sm font-bold text-slate-200 hover:text-blue-400 transition-colors cursor-pointer"
-            >
-              Services
-            </button>
-
-            <Link 
-              to="/contact" 
-              className="text-sm font-bold text-slate-200 hover:text-blue-400 transition-colors cursor-pointer"
-            >
-              Contact Us
-            </Link>
-
-            {}
-            <div className="relative flex items-center" ref={searchRef}>
-              <AnimatePresence>
-                {isSearchOpen && (
-                  <motion.div
-                    initial={{ width: 0, opacity: 0 }}
-                    animate={{ width: 220, opacity: 1 }}
-                    exit={{ width: 0, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                    className="absolute right-8 z-50 flex items-center bg-[#0a1329] border border-slate-800 rounded-full"
-                  >
-                    <input
-                      type="text"
-                      placeholder="Search device..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full bg-transparent text-slate-100 text-xs rounded-full pl-3 pr-8 py-1.5 focus:outline-none placeholder-slate-500"
-                      autoFocus
-                    />
-                    {searchQuery.trim() && (
-                      <button
-                        onClick={() => setSearchQuery('')}
-                        className="absolute right-3 text-slate-400 hover:text-white"
-                      >
-                        <X className="w-3.5 h-3.5" />
-                      </button>
-                    )}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-              <button
-                onClick={() => setIsSearchOpen(!isSearchOpen)}
-                className="p-2 text-slate-300 hover:text-blue-400 transition-colors cursor-pointer"
-                aria-label="Search"
-              >
-                <Search className="h-4 w-4" />
+        <nav aria-label="Primary" className="hidden items-center gap-8 lg:flex">
+          {NAV.map((item) => {
+            const active = isActive(item);
+            const cls = `${navItem} ${active ? 'after:absolute after:inset-x-0 after:-bottom-0.5 after:h-0.5 after:rounded-full after:bg-fg' : ''}`;
+            return item.to ? (
+              <Link key={item.label} to={item.to} className={cls} aria-current={active ? 'page' : undefined}>
+                {item.label}
+              </Link>
+            ) : (
+              <button key={item.label} type="button" onClick={() => goToSection(item.section!)} className={`${cls} cursor-pointer`} aria-current={active ? 'page' : undefined}>
+                {item.label}
               </button>
+            );
+          })}
+        </nav>
 
-              {}
-              {isSearchOpen && searchQuery.trim() && searchResults.length > 0 && (
-                <div className="absolute top-full right-0 mt-2 w-72 bg-[#0a1329] border border-slate-800 rounded-2xl shadow-2xl overflow-hidden z-50">
-                  <ul className="divide-y divide-slate-800 max-h-80 overflow-y-auto">
-                    {searchResults.map(result => (
-                      <li key={`${result.brand}-${result.id}`}>
-                        <Link
-                          to={`/repair/${result.brand}/${result.id}`}
-                          onClick={() => { handleResultClick(); setIsSearchOpen(false); }}
-                          className="flex items-center gap-3 p-3 hover:bg-slate-800 transition-colors"
-                        >
-                          <div className="w-8 h-8 bg-slate-850 rounded-lg flex items-center justify-center overflow-hidden shrink-0 border border-slate-800">
-                            {result.image ? (
-                              <img src={result.image} alt={result.name} className="w-full h-full object-cover" />
-                            ) : (
-                              <Wrench className="w-4 h-4 text-slate-400" />
-                            )}
-                          </div>
-                          <span className="text-xs font-bold text-slate-200">{result.name}</span>
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
-
-            {}
-
-            {/* Call Direct */}
-            <a
-              href="tel:+919310112994"
-              className="bg-transparent border border-blue-600/40 text-blue-400 hover:bg-blue-600/10 text-xs font-bold px-4 py-2 rounded-full transition-all shadow-md flex items-center gap-1.5"
-            >
-              <Phone className="w-3.5 h-3.5" /> Call
-            </a>
-
-            {/* Book Free Consultation CTA Button */}
-            <button
-              onClick={onOpenConsultation}
-              className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold px-5 py-2.5 rounded-full transition-all shadow-lg hover:shadow-blue-500/25 flex items-center gap-1.5 cursor-pointer ring-2 ring-blue-400/30"
-            >
-              <Calendar className="w-3.5 h-3.5" /> Book a free consultation
-            </button>
-
-            {/* Book Repair Link */}
-            <Link
-              to="/contact?tab=booking"
-              className="bg-slate-800/80 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold px-4 py-2 rounded-full transition-all shadow-md flex items-center gap-1.5"
-            >
-              <Wrench className="w-3.5 h-3.5" /> Book Repair
-            </Link>
-          </nav>
-
-          {}
-          <div className="flex lg:hidden items-center gap-2">
-            {}
-            <div className="relative" ref={searchRef}>
-              <AnimatePresence>
-                {isSearchOpen && (
-                  <motion.div
-                    initial={{ width: 0, opacity: 0 }}
-                    animate={{ width: 160, opacity: 1 }}
-                    exit={{ width: 0, opacity: 0 }}
-                    className="absolute right-8 top-1/2 -translate-y-1/2 z-50 flex items-center bg-[#0a1329] border border-slate-800 rounded-full"
-                  >
-                    <input
-                      type="text"
-                      placeholder="Search..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full bg-transparent text-slate-100 text-xs rounded-full pl-3 pr-6 py-1 focus:outline-none placeholder-slate-500"
-                      autoFocus
-                    />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-              <button 
-                onClick={() => setIsSearchOpen(!isSearchOpen)} 
-                className="p-2 text-slate-300 hover:text-blue-400 transition-colors"
-                aria-label="Search mobile"
-              >
-                <Search className="h-5 w-5" />
-              </button>
-            </div>
-
-            <a
-              href="tel:+919310112994"
-              className="bg-blue-650 hover:bg-blue-600 text-white p-2.5 rounded-full transition-colors"
-              aria-label="Call direct line"
-            >
-              <Phone className="w-4 h-4" />
-            </a>
-          </div>
-
-        </div>
+        <button
+          type="button"
+          onClick={() => setSearchOpen((v) => !v)}
+          className={`${iconBtn} ml-4 hidden lg:inline-flex`}
+          aria-label={searchOpen ? 'Close device search' : 'Search devices'}
+          aria-expanded={searchOpen}
+          aria-controls="header-search"
+        >
+          {searchOpen ? <X className="h-5 w-5" aria-hidden="true" /> : <Search className="h-5 w-5" aria-hidden="true" />}
+        </button>
+        <a href={CONTACT.phoneHref} className={`${iconBtn} inline-flex lg:hidden`} aria-label={`Call ${CONTACT.phoneDisplay}`}>
+          <Phone className="h-5 w-5" aria-hidden="true" />
+        </a>
+        <button type="button" className={`${iconBtn} -mr-2 inline-flex lg:hidden`} onClick={() => setMenuOpen(true)} aria-label="Open menu">
+          <Menu className="h-6 w-6" aria-hidden="true" />
+        </button>
       </div>
 
-      {}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] lg:hidden flex justify-start mobile-overlay-solid-bg"
-          >
-            <motion.div
-              initial={{ translateX: '-100%' }}
-              animate={{ translateX: 0 }}
-              exit={{ translateX: '-100%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              ref={menuRef}
-              className="w-4/5 max-w-sm h-full shadow-2xl flex flex-col border-r border-slate-800 mobile-sidebar-solid-bg"
-              style={{ backgroundColor: '#050B18' }}
-            >
-              <div className="p-4 border-b border-slate-800/80 flex items-center justify-between">
-                <img src='https://res.cloudinary.com/dzhsxv2wq/image/upload/v1784028396/WhatsApp_Image_2026-07-14_at_4.48.50_PM_1_rfu6xy.jpg' alt="TheMobifixx" className="h-12 w-auto rounded-lg" />
-                <button
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="p-2 text-slate-400 hover:text-white rounded-full transition-colors"
-                  aria-label="Close Mobile Menu"
-                >
-                  <X className="h-5 w-5" />
-                </button>
-              </div>
+      {/* Info strip under the header (the reference uses this slot for an offer; we state real service facts). */}
+      <p className="bg-accent-soft px-4 py-1.5 text-center text-xs font-medium text-fg md:text-[0.8125rem]">
+        Free pickup &amp; drop across Delhi NCR
+        <span className="hidden sm:inline">
+          {' '}· Call <a href={CONTACT.phoneHref} className="font-bold text-accent">{CONTACT.phoneDisplay}</a>
+        </span>
+      </p>
 
-              {}
-              {searchQuery.trim() && searchResults.length > 0 && (
-                <div className="px-4 py-2 border-b border-slate-800 max-h-48 overflow-y-auto bg-[#0a1329]/40">
-                  <ul className="divide-y divide-slate-850">
-                    {searchResults.map(result => (
-                      <li key={`${result.brand}-${result.id}`}>
-                        <Link
-                          to={`/repair/${result.brand}/${result.id}`}
-                          onClick={() => { handleResultClick(); setIsMobileMenuOpen(false); }}
-                          className="flex items-center gap-3 py-2.5"
-                        >
-                          <span className="text-xs font-bold text-slate-300">{result.name}</span>
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+      {searchOpen && (
+        <div id="header-search" className="border-t border-line bg-white py-4">
+          <div className="container-page max-w-2xl">
+            <DeviceSearch autoFocus onDone={() => setSearchOpen(false)} />
+          </div>
+        </div>
+      )}
 
-              <nav className="flex-1 p-4 space-y-4">
-                <button
-                  onClick={() => handleNavClick('home')}
-                  className="w-full text-left block py-2.5 px-3 text-sm font-bold text-slate-200 hover:text-blue-400 transition-colors border-b border-slate-800/50"
-                >
-                  Home
-                </button>
-                <button
-                  onClick={() => handleNavClick('about-us')}
-                  className="w-full text-left block py-2.5 px-3 text-sm font-bold text-slate-200 hover:text-blue-400 transition-colors border-b border-slate-800/50"
-                >
-                  About Us
-                </button>
-                <button
-                  onClick={() => handleNavClick('brands')}
-                  className="w-full text-left block py-2.5 px-3 text-sm font-bold text-slate-200 hover:text-blue-400 transition-colors border-b border-slate-800/50"
-                >
-                  Services
-                </button>
-                <Link
-                  to="/contact"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="w-full text-left block py-2.5 px-3 text-sm font-bold text-slate-200 hover:text-blue-400 transition-colors border-b border-slate-800/50"
-                >
-                  Contact Us
-                </Link>
-
-                <div className="pt-6 space-y-3">
-                  <button
-                    onClick={() => {
-                      setIsMobileMenuOpen(false);
-                      if (onOpenConsultation) onOpenConsultation();
-                    }}
-                    className="block w-full text-center py-2.5 text-xs font-bold bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full hover:bg-blue-500 transition-colors shadow-md"
-                  >
-                    📅 Book a free consultation
-                  </button>
-
-                  <Link
-                    to="/contact?tab=booking"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="block w-full text-center py-2.5 text-xs font-bold bg-slate-800 text-slate-200 border border-slate-700 rounded-full hover:bg-slate-700 transition-colors"
-                  >
-                    Book Repair
+      <Dialog open={menuOpen} onClose={() => setMenuOpen(false)} title="Menu" hideTitle placement="right" className="bg-white p-5">
+        <p className="text-lg font-bold">Menu</p>
+        <div className="mt-5">
+          <DeviceSearch onDone={() => setMenuOpen(false)} />
+        </div>
+        <nav aria-label="Mobile" className="mt-4">
+          <ul>
+            {NAV.map((item) => (
+              <li key={item.label} className="border-b border-line">
+                {item.to ? (
+                  <Link to={item.to} onClick={() => setMenuOpen(false)} className="flex min-h-13 items-center text-base font-semibold">
+                    {item.label}
                   </Link>
-                </div>
-              </nav>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                ) : (
+                  <button type="button" onClick={() => goToSection(item.section!)} className="flex min-h-13 w-full items-center text-left text-base font-semibold">
+                    {item.label}
+                  </button>
+                )}
+              </li>
+            ))}
+          </ul>
+        </nav>
+        <div className="mt-6 grid gap-3">
+          <Link to="/contact?tab=booking" onClick={() => setMenuOpen(false)} className="btn btn-primary w-full">
+            Book Repair
+          </Link>
+          <button
+            type="button"
+            onClick={() => {
+              setMenuOpen(false);
+              onOpenConsultation?.();
+            }}
+            className="btn btn-outline w-full"
+          >
+            Book a free consultation
+          </button>
+          <a href={CONTACT.phoneHref} className="btn btn-outline w-full">
+            <Phone className="h-4 w-4" aria-hidden="true" /> {CONTACT.phoneDisplay}
+          </a>
+        </div>
+      </Dialog>
     </header>
   );
 }

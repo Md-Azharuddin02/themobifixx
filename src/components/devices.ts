@@ -46,26 +46,26 @@ export const DEVICE_MODELS: Record<string, { id: string; name: string; image?: s
         { id: 'iphone-5', name: 'iphone 5', image: ''},
         { id: 'iphone-se-2', name: 'iphone SE 2nd Gen', image: ''},
         { id: 'iphone-se', name: 'iphone SE', image: ''},
-        { id: 'ipad-pro-12-9', name: 'iPad Pro 12.9', image: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&q=80&w=200' },
-        { id: 'ipad-pro-11', name: 'iPad Pro 11', image: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&q=80&w=200' },
-        { id: 'ipad-air', name: 'iPad Air', image: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&q=80&w=200' },
-        { id: 'ipad-mini', name: 'iPad Mini', image: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&q=80&w=200' },
-        { id: 'macbook-pro-14', name: 'MacBook Pro 14"', image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&q=80&w=200' },
-        { id: 'macbook-pro-16', name: 'MacBook Pro 16"', image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&q=80&w=200' },
-        { id: 'macbook-air-m2', name: 'MacBook Air M2', image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&q=80&w=200' },
-        { id: 'macbook-air-m3', name: 'MacBook Air M3', image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&q=80&w=200' },
-        { id: 'apple-watch-ultra-2', name: 'Apple Watch Ultra 2', image: 'https://images.unsplash.com/photo-1434494878577-86c23bcb06b9?auto=format&fit=crop&q=80&w=200' },
+        { id: 'ipad-pro-12-9', name: 'iPad Pro 12.9' },
+        { id: 'ipad-pro-11', name: 'iPad Pro 11' },
+        { id: 'ipad-air', name: 'iPad Air' },
+        { id: 'ipad-mini', name: 'iPad Mini' },
+        { id: 'macbook-pro-14', name: 'MacBook Pro 14"' },
+        { id: 'macbook-pro-16', name: 'MacBook Pro 16"' },
+        { id: 'macbook-air-m2', name: 'MacBook Air M2' },
+        { id: 'macbook-air-m3', name: 'MacBook Air M3' },
+        { id: 'apple-watch-ultra-2', name: 'Apple Watch Ultra 2' },
         { id: 'apple-watch-ultra', name: 'Apple Watch Ultra' },
         { id: 'apple-watch-s10', name: 'Apple Watch Series 10' },
         { id: 'apple-watch-s9', name: 'Apple Watch Series 9' },
         { id: 'apple-watch-s8', name: 'Apple Watch Series 8' },
         { id: 'apple-watch-se', name: 'Apple Watch SE' },
-        { id: 'imac-24-m3', name: 'iMac 24" M3', image: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&q=80&w=200' },
-        { id: 'imac-24-m1', name: 'iMac 24" M1', image: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&q=80&w=200' },
-        { id: 'imac-27-intel', name: 'iMac 27" (Intel)', image: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&q=80&w=200' },
-        { id: 'mac-mini-m2', name: 'Mac Mini M2', image: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&q=80&w=200' },
-        { id: 'mac-mini-m1', name: 'Mac Mini M1', image: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&q=80&w=200' },
-        { id: 'mac-studio-m2', name: 'Mac Studio M2', image: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&q=80&w=200' }
+        { id: 'imac-24-m3', name: 'iMac 24" M3' },
+        { id: 'imac-24-m1', name: 'iMac 24" M1' },
+        { id: 'imac-27-intel', name: 'iMac 27" (Intel)' },
+        { id: 'mac-mini-m2', name: 'Mac Mini M2' },
+        { id: 'mac-mini-m1', name: 'Mac Mini M1' },
+        { id: 'mac-studio-m2', name: 'Mac Studio M2' }
     ],
     samsung: [
         { id: 'samsung-galaxy-s26-ultra', name: 'Galaxy S26 Ultra', image: 'https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783509702/galaxys26ultra_wfqxfu.jpg' },
@@ -103,10 +103,10 @@ export const DEVICE_MODELS: Record<string, { id: string; name: string; image?: s
         { id: 'Samsung-galaxy-book-2', name: 'Samsung Galaxy Book 2', image: ''},
         { id: 'Samsung-galaxy-book-2-ssd', name: 'Samsung Galaxy Book 2 SSD', image: ''},
 
-        { id: 'samsung-galaxy-tab-s9-ultra', name: 'Galaxy Tab S9 Ultra', image: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&q=80&w=200' },
-        { id: 'samsung-galaxy-tab-s9-plus', name: 'Galaxy Tab S9+', image: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&q=80&w=200' },
-        { id: 'samsung-galaxy-tab-a9', name: 'Galaxy Tab A9', image: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&q=80&w=200' },
-        { id: 'samsung-galaxy-watch-ultra', name: 'Galaxy Watch Ultra', image: 'https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?auto=format&fit=crop&q=80&w=200' },
+        { id: 'samsung-galaxy-tab-s9-ultra', name: 'Galaxy Tab S9 Ultra' },
+        { id: 'samsung-galaxy-tab-s9-plus', name: 'Galaxy Tab S9+' },
+        { id: 'samsung-galaxy-tab-a9', name: 'Galaxy Tab A9' },
+        { id: 'samsung-galaxy-watch-ultra', name: 'Galaxy Watch Ultra' },
         { id: 'samsung-galaxy-watch-7', name: 'Galaxy Watch 7' },
         { id: 'samsung-galaxy-watch-6-classic', name: 'Galaxy Watch 6 Classic' },
         { id: 'samsung-galaxy-watch-6', name: 'Galaxy Watch 6' },
@@ -344,46 +344,46 @@ export const DEVICE_MODELS: Record<string, { id: string; name: string; image?: s
         { id: 'asus-zenfone-10', name: 'Asus Zenfone 10', image: 'https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783519662/asuszenphone10_fvtnvf.webp' },
         { id: 'asus-rog-phone-7', name: 'Asus ROG Phone 7', image: 'https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783519661/asusrog7_za3dj6.png'},
         { id: 'asus-rog-phone-6', name: 'Asus ROG Phone 6', image: 'https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783519661/asusrog6_itsxqj.png' },
-        { id: 'asus-zenbook-14', name: 'Zenbook 14', image: 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&q=80&w=200' },
-        { id: 'asus-rog-zephyrus-g14', name: 'ROG Zephyrus G14', image: 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?auto=format&fit=crop&q=80&w=200' },
-        { id: 'asus-vivobook-15', name: 'Vivobook 15', image: 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&q=80&w=200' },
-        { id: 'asus-tuf-gaming-a15', name: 'TUF Gaming A15', image: 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?auto=format&fit=crop&q=80&w=200' }
+        { id: 'asus-zenbook-14', name: 'Zenbook 14' },
+        { id: 'asus-rog-zephyrus-g14', name: 'ROG Zephyrus G14' },
+        { id: 'asus-vivobook-15', name: 'Vivobook 15' },
+        { id: 'asus-tuf-gaming-a15', name: 'TUF Gaming A15' }
     ],
     lenovo: [
-        { id: 'thinkpad-x1-carbon', name: 'ThinkPad X1 Carbon', image: 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&q=80&w=200' },
-        { id: 'thinkpad-t14', name: 'ThinkPad T14', image: 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&q=80&w=200' },
-        { id: 'lenovo-legion-5', name: 'Legion 5', image: 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?auto=format&fit=crop&q=80&w=200' },
-        { id: 'lenovo-yoga-7i', name: 'Yoga 7i', image: 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&q=80&w=200' },
-        { id: 'ideapad-slim-3', name: 'IdeaPad Slim 3', image: 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&q=80&w=200' },
-        { id: 'lenovo-tab-m10', name: 'Lenovo Tab M10', image: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&q=80&w=200' },
-        { id: 'lenovo-tab-p11', name: 'Lenovo Tab P11', image: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&q=80&w=200' },
+        { id: 'thinkpad-x1-carbon', name: 'ThinkPad X1 Carbon' },
+        { id: 'thinkpad-t14', name: 'ThinkPad T14' },
+        { id: 'lenovo-legion-5', name: 'Legion 5' },
+        { id: 'lenovo-yoga-7i', name: 'Yoga 7i' },
+        { id: 'ideapad-slim-3', name: 'IdeaPad Slim 3' },
+        { id: 'lenovo-tab-m10', name: 'Lenovo Tab M10' },
+        { id: 'lenovo-tab-p11', name: 'Lenovo Tab P11' },
         { id: 'lenovo-thinkcentre', name: 'Lenovo ThinkCentre' },
         { id: 'lenovo-ideacentre', name: 'Lenovo IdeaCentre' },
         { id: 'lenovo-legion-desktop', name: 'Lenovo Legion Gaming Desktop' }
     ],
     acer: [
-        { id: 'acer-predator-helios-16', name: 'Predator Helios 16', image: 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?auto=format&fit=crop&q=80&w=200' },
-        { id: 'acer-nitro-5', name: 'Nitro 5', image: 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?auto=format&fit=crop&q=80&w=200' },
-        { id: 'acer-swift-go-14', name: 'Swift Go 14', image: 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&q=80&w=200' },
-        { id: 'acer-aspire-5', name: 'Aspire 5', image: 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&q=80&w=200' }
+        { id: 'acer-predator-helios-16', name: 'Predator Helios 16' },
+        { id: 'acer-nitro-5', name: 'Nitro 5' },
+        { id: 'acer-swift-go-14', name: 'Swift Go 14' },
+        { id: 'acer-aspire-5', name: 'Aspire 5' }
     ],
     microsoft: [
-        { id: 'surface-pro-9', name: 'Surface Pro 9', image: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&q=80&w=200' },
-        { id: 'surface-pro-8', name: 'Surface Pro 8', image: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&q=80&w=200' },
-        { id: 'surface-laptop-5', name: 'Surface Laptop 5', image: 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&q=80&w=200' },
-        { id: 'surface-go-3', name: 'Surface Go 3', image: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&q=80&w=200' }
+        { id: 'surface-pro-9', name: 'Surface Pro 9' },
+        { id: 'surface-pro-8', name: 'Surface Pro 8' },
+        { id: 'surface-laptop-5', name: 'Surface Laptop 5' },
+        { id: 'surface-go-3', name: 'Surface Go 3' }
     ],
     intel: [
-        { id: 'intel-nuc-13', name: 'Intel NUC 13 Laptop', image: 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&q=80&w=200' },
-        { id: 'intel-reference-evo', name: 'Intel Evo Laptop Reference', image: 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&q=80&w=200' }
+        { id: 'intel-nuc-13', name: 'Intel NUC 13 Laptop' },
+        { id: 'intel-reference-evo', name: 'Intel Evo Laptop Reference' }
     ],
     msi: [
-        { id: 'msi-raider-ge78', name: 'MSI Raider GE78', image: 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?auto=format&fit=crop&q=80&w=200' },
-        { id: 'msi-stealth-16', name: 'MSI Stealth 16', image: 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?auto=format&fit=crop&q=80&w=200' },
-        { id: 'msi-katana-15', name: 'MSI Katana 15', image: 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?auto=format&fit=crop&q=80&w=200' }
+        { id: 'msi-raider-ge78', name: 'MSI Raider GE78' },
+        { id: 'msi-stealth-16', name: 'MSI Stealth 16' },
+        { id: 'msi-katana-15', name: 'MSI Katana 15' }
     ],
     nvidia: [
-        { id: 'nvidia-studio-ref', name: 'Nvidia Studio Laptop', image: 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?auto=format&fit=crop&q=80&w=200' }
+        { id: 'nvidia-studio-ref', name: 'Nvidia Studio Laptop' }
     ],
     redmi: [
         { id: 'redmi-note-13-pro-plus', name: 'Redmi Note 13 Pro+', image: 'https://res.cloudinary.com/dzhsxv2wq/image/upload/v1783512040/redminote13pro_bm14xi.webp' },
@@ -405,12 +405,12 @@ export const DEVICE_MODELS: Record<string, { id: string; name: string; image?: s
         { id: 'nokia-105', name: 'Nokia 105 (Classic)' }
     ],
     alienware: [
-        { id: 'alienware-m16-r2', name: 'Alienware m16 R2', image: 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?auto=format&fit=crop&q=80&w=200' },
+        { id: 'alienware-m16-r2', name: 'Alienware m16 R2' },
         { id: 'alienware-x16-r2', name: 'Alienware x16 R2' },
         { id: 'alienware-m18-r2', name: 'Alienware m18 R2' }
     ],
     redmipad: [
-        { id: 'redmi-pad-se', name: 'Redmi Pad SE', image: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&q=80&w=200' },
+        { id: 'redmi-pad-se', name: 'Redmi Pad SE' },
         { id: 'redmi-pad-pro', name: 'Redmi Pad Pro' },
         { id: 'xiaomi-pad-6', name: 'Xiaomi Pad 6' }
     ]
